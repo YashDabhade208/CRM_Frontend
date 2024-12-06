@@ -1,0 +1,35 @@
+.appointments {
+    text-align: center;
+    
+  }
+  
+  .appointments-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .appointment-slot {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 150px;
+    cursor: pointer;
+   border-radius : 10px;
+  }
+  
+  .appointment-slot.available {
+    background-color: #27a827; /* Green for available slots */
+  }
+  
+  .appointment-slot.booked {
+    background-color: #891b1b; /* Red for booked slots */
+  }
+  
+  .book-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
