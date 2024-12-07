@@ -1,69 +1,97 @@
-import React, { useState, useEffect } from 'react';
-import './Appointments.css';
+import React, { useState } from "react";
+import axios from "axios";
 
 const Appointments = () => {
-  const [appointments, setAppointments] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [formData, setFormData] = useState({
+    patient_id: "",
+    name: "",
+    appointment_time: "",
+    status: "PENDING",
+  });
 
-  // Fetch appointments from the API
-  useEffect(() => {
-    const fetchAppointments = async ()=>{
-            const res =await fetch('http://localhost:3000/api/getappointments');
+  const [message, setMessage] = useState("");
 
-            if(!res.ok){
-                throw new error;
-                console.log("kldgnb");
-                
-            }
-            else{
-                const results = await  res.json();
-                console.log(res);
-                
-                setAppointments(results);
-            }
-    }
-    fetchAppointments();
-  }, []);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
-  // Book a selected slot
-  const bookSlot = async (appointmentId) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      const response = await axios.post(`/api/appointments/book/${appointmentId}`); // Replace with your booking endpoint
-      if (response.status === 200) {
-        alert("Slot booked successfully!");
-        setAppointments(appointments.map((app) =>
-          app.appointment_id === appointmentId
-            ? { ...app, status: "completed" } // Update status in local state
-            : app
-        ));
-      }
+      const response = await axios.post("http://localhost:3000/api/appointments", formData);
+      setMessage("Appointment successfully booked!");
+      console.log(response.data);
     } catch (error) {
-      console.error("Error booking the slot:", error);
-      alert("Failed to book the slot.");
+      setMessage(
+        error.response?.data?.message || "An error occurred while booking the appointment."
+      );
+      console.error(error);
     }
   };
 
   return (
-    <div className="appointments">
-      <h2>Appointment Slots</h2>
-      <div className="appointments-grid">
-        {appointments.map((appointment) => (
-          <div
-            key={appointment.appointment_id}
-            className={`appointment-slot ${appointment.status === "completed" ? "booked" : "available"}`}
-            onClick={() => appointment.status !== "completed" && setSelectedSlot(appointment.appointment_id)}
+    <div className="appointment-container">
+      <h2>Book an Appointment</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="patient_id">Patient ID:</label>
+          <input
+            type="text"
+            id="patient_id"
+            name="patient_id"
+            value={formData.patient_id}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="name">Doctor Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="appointment_time">Appointment Time:</label>
+          <input
+            type="datetime-local"
+            id="appointment_time"
+            name="appointment_time"
+            value={formData.appointment_time}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="status">Status:</label>
+          <select
+            id="status"
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
           >
-            <p>Date: {appointment.appointment_date}</p>
-            <p>Time: {appointment.appointment_time}</p>
-            <p>Status: {appointment.status}</p>
-          </div>
-        ))}
-      </div>
-      {selectedSlot && (
-        <button onClick={() => bookSlot(selectedSlot)} className="book-button">
-          Book Selected Slot
-        </button>
-      )}
+            <option value="Scheduled">Scheduled</option>
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+
+        <button type="submit">Book Appointment</button>
+      </form>
+
+      {message && <p>{message}</p>}
     </div>
   );
 };
