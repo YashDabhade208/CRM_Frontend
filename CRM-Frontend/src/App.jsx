@@ -18,7 +18,7 @@ function App() {
 
       <Routes>
         {/* Default route renders the Login component */}
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/child" element={<Child />} />
         <Route path="/parent" element={<Parent />} />
@@ -28,7 +28,7 @@ function App() {
         
         {/* Appointment page */}
         <Route path="/appointment" element={<Appointment />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
