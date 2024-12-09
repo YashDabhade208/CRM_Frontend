@@ -37,6 +37,7 @@ const BookAppointment = () => {
     });
   };
 
+
   const handleTimeChange = (e) => {
     const { value } = e.target;
     console.log("Selected Time:", value); // Debug log
@@ -144,6 +145,7 @@ const BookAppointment = () => {
       {message && <p>{message}</p>}
     </div>
   );
+  //lamao dead
 };
 
 export default BookAppointment;
