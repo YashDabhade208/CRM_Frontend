@@ -78,10 +78,9 @@ function Dashboard() {
         fetchAppointments();
     }, []);
 
-    return (<>
-      
+    return (
         <div className="leaderboard">
-            <header className="leaderboard">
+            <header className="leaderboard__header">
                 <div className="leaderboard__title">
                     <span className="leaderboard__title--top">Doctor's Dashboard</span>
                     <span className="leaderboard__title--bottom">Appointments</span>
@@ -105,11 +104,11 @@ function Dashboard() {
                 </div>
             </div>
 
-            <div className=" leaderboard__profiles">
+            <div className="appointments leaderboard__profiles">
                 <h2 className="leaderboard__title">Appointments</h2>
-                <ul className="leaderboard__profile">
+                <ul>
                     {appointments.map((appointment) => (
-                        <li key={appointment.appointment_id} className="leaderboard__profile">
+                        <li key={appointment.appointment_id}>
                             <div className="leaderboard__name">
                                 <strong>ID:</strong> {appointment.appointment_id} <br />
                                 <strong>Patient ID:</strong> {appointment.patient_id} <br />
@@ -129,7 +128,6 @@ function Dashboard() {
                 </ul>
             </div>
         </div>
-        </>
     );
 }
 

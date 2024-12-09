@@ -32,4 +32,16 @@
     font-size: 16px;
     cursor: pointer;
   }
+  .slot-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+  }
+  .slot-card.available {
+    background-color: #d4edda;
+  }
+  .slot-card.booked {
+    background-color: #f8d7da;
+  }
   
