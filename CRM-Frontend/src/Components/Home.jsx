@@ -1,60 +1,75 @@
-
-// src/components/Home.jsx
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-between bg-gray-50">
-      {/* Navigation Bar */}
-      <nav className="w-full bg-blue-500 shadow py-4 px-8 flex justify-between items-center">
-        <h1 className="text-white text-xl font-bold">Appointment Booking</h1>
-        <div>
-          <button
-            onClick={() => navigate('/login')}
-            className="bg-white text-blue-500 px-4 py-2 rounded-lg shadow hover:bg-gray-100 mr-2"
-          >
-            Login
-          </button>
-          <button
-            onClick={() => navigate('/register')}
-            className="bg-white text-blue-500 px-4 py-2 rounded-lg shadow hover:bg-gray-100"
-          >
-            Register
-          </button>
-        </div>
-      </nav>
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center lg:pt-32">
+      <p className="mx-auto -mt-4 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">
+        Welcome to{" "}
+        <span className="border-b border-dotted border-slate-300">XYZ</span>
+      </p>
 
-      {/* Main Content */}
-      <main className="flex flex-col items-center justify-center text-center flex-grow">
-        <h2 className="text-4xl font-bold text-gray-800 mb-4">
-          Welcome to the Appointment Booking System
-        </h2>
-        <p className="text-gray-600 max-w-lg mb-6">
-          Book appointments with your preferred doctors at your convenience. Effortless scheduling, hassle-free experience.
-        </p>
-        <div>
-          <button
-            onClick={() => navigate('/login')}
-            className="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-600 transition-all mr-4"
-          >
-            Login
-          </button>
-          <button
-            onClick={() => navigate('/register')}
-            className="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-600 transition-all"
-          >
-            Register
-          </button>
-        </div>
-      </main>
+      <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl">
+        <span className="inline-block">
+          Book{" "}
+          <span className="relative whitespace-nowrap text-blue-600">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 418 42"
+              className="absolute top-2/3 left-0 h-[0.58em] w-full fill-blue-300/70"
+              preserveAspectRatio="none"
+            >
+              <path d="..." />
+            </svg>
+            <span className="relative">Appointments</span>
+          </span>
+        </span>{" "}
+        <span className="inline-block">Online</span>
+      </h1>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 w-full py-4 text-center text-gray-400">
-        <p>© 2024 Appointment Booking. All Rights Reserved.</p>
-      </footer>
+      <p className="mx-auto mt-9 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">
+        <span className="inline-block">
+          Save time spent on coordinating appointments over the phone
+        </span>
+        <span className="inline-block">Accept online bookings 24x7</span>
+      </p>
+
+      <div className="mt-12 flex flex-col justify-center gap-y-5 sm:mt-10 sm:flex-row sm:gap-y-0 sm:gap-x-6">
+        {/* Book Appointment Button */}
+        <div className="relative inline-flex group">
+          <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+          <Link
+            to="/appointment"
+            title="Get quote now"
+            className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+            role="button"
+          >
+            Book Appointment now
+          </Link>
+        </div>
+        {/* Navigate to Dashboard Button */}
+        {/* <button
+          className="group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-none ring-slate-200 text-slate-700 hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300 animate-fade-in-right"
+          onClick={() => navigate("/dashboard")}
+        >
+          <svg
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            role="img"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="h-3 w-3 flex-none fill-current text-blue-600"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="..." />
+          </svg>
+          <span className="ml-3">Dashboard</span>
+        </button> */}
+      </div>
     </div>
   );
 };
