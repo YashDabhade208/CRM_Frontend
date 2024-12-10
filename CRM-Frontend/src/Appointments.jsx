@@ -10,16 +10,17 @@ const BookAppointment = () => {
   });
   const [message, setMessage] = useState("");
   const [slots, setSlots] = useState([]);
+  const [doctor, setDoctor] = useState([])
 
   useEffect(() => {
     const fetchSlots = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/getslots");
         if (response.status === 200) {
-         
+
           setSlots(response.data.data);
-          console.log(response.data.data[0].start_time);
-           }
+          //console.log(response.data.data[0].start_time);
+        }
       } catch (error) {
         console.error("Error fetching slots data", error);
         setMessage("Failed to load slots data.");
@@ -27,6 +28,27 @@ const BookAppointment = () => {
     };
 
     fetchSlots();
+  }, []);
+
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/getalldoctors");
+        if (response.status === 200) {
+
+          setDoctor(response.data.data);
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching doctor data", error);
+        setMessage("Failed to load doctor data.");
+      }
+      
+      
+    };
+
+    fetchDoctors();
   }, []);
 
   const handleChange = (e) => {
@@ -37,6 +59,14 @@ const BookAppointment = () => {
     });
   };
 
+  const handleDoctorChange=(e)=>{
+    const {value} = e.target;
+
+    setFormData({
+      ...formData,
+      name:value
+    })
+  }
 
   const handleTimeChange = (e) => {
     const { value } = e.target;
@@ -45,7 +75,7 @@ const BookAppointment = () => {
     // const formattedTime = new Date(value).toISOString().slice(0, 19).replace('T', ' ');
     setFormData({
       ...formData,
-       appointment_time: value,
+      appointment_time: value,
     });
   };
 
@@ -73,8 +103,9 @@ const BookAppointment = () => {
       );
       console.error("Error:", error);
     }
-    
+
   };
+  
 
 
 
@@ -95,49 +126,57 @@ const BookAppointment = () => {
         </div>
 
         <div>
-          <label htmlFor="name">Doctor Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
+
+          <select
+            id="doctorname"
+            name="doctorname"
             value={formData.name}
-            onChange={handleChange}
+            onChange={handleDoctorChange}
             required
-          />
+          >
+            <option value="">Select doctor</option>
+            {doctor.map((doc, index) => (
+
+              <option key={index} value={doc.name}>
+               {doc.name}
+              </option>
+
+            ))}
+          </select>
         </div>
 
         {slots.length > 0 ? (
-  <select
-    id="appointment_time"
-    name="appointment_time"
-    value={formData.appointment_time}
-    onChange={handleTimeChange}
-    required
-  >
-    <option value="">Select a time</option>
-    {slots.map((slot, index) => (
-      slot.status === 'AVAILABLE' && (
-        <option key={index} value={slot.start_time.slice(0, 19).replace('T', ' ')}>
-          {new Date(`1970-01-01T${slot.start_time}Z`).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true,
-          })} to {new Date(`1970-01-01T${slot.end_time}Z`).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true,
-          })}
-        </option>
-      )
-    ))}
-  </select>
-) : (
-  <p>Loading available slots...</p>
-)}
+          <select
+            id="appointment_time"
+            name="appointment_time"
+            value={formData.appointment_time}
+            onChange={handleTimeChange}
+            required
+          >
+            <option value="">Select a time</option>
+            {slots.map((slot, index) => (
+
+              <option key={index} value={slot.start_time.slice(0, 19).replace('T', ' ')}>
+                {new Date(`1970-01-01T${slot.start_time}Z`).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: true,
+                })} to {new Date(`1970-01-01T${slot.end_time}Z`).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: true,
+                })} {slot.status}
+              </option>
+
+            ))}
+          </select>
+        ) : (
+          <p>Loading available slots...</p>
+        )}
 
 
 
-       
+
 
         <button type="submit">Book Appointment</button>
       </form>
