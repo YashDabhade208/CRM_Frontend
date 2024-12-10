@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const BookAppointment = () => {
+
+const Appointment = () => {
+
   const [formData, setFormData] = useState({
     patient_id: "",
     name: "",
@@ -10,7 +12,9 @@ const BookAppointment = () => {
   });
   const [message, setMessage] = useState("");
   const [slots, setSlots] = useState([]);
-  const [doctor, setDoctor] = useState([])
+
+  const [doctor, setDoctor] = useState([]);
+
 
   useEffect(() => {
     const fetchSlots = async () => {
@@ -34,7 +38,9 @@ const BookAppointment = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/getalldoctors");
+        const response = await axios.get(
+          "http://localhost:3000/api/getalldoctors"
+        );
         if (response.status === 200) {
 
           setDoctor(response.data.data);
@@ -44,8 +50,6 @@ const BookAppointment = () => {
         console.error("Error fetching doctor data", error);
         setMessage("Failed to load doctor data.");
       }
-      
-      
     };
 
     fetchDoctors();
@@ -59,14 +63,15 @@ const BookAppointment = () => {
     });
   };
 
-  const handleDoctorChange=(e)=>{
-    const {value} = e.target;
+  const handleDoctorChange = (e) => {
+    const { value } = e.target;
 
     setFormData({
       ...formData,
-      name:value
-    })
-  }
+      name: value,
+    });
+  };
+
 
   const handleTimeChange = (e) => {
     const { value } = e.target;
@@ -99,7 +104,8 @@ const BookAppointment = () => {
       console.log("Response:", response.data);
     } catch (error) {
       setMessage(
-        error.response?.data?.message || "An error occurred while booking the appointment."
+        error.response?.data?.message ||
+          "An error occurred while booking the appointment."
       );
       console.error("Error:", error);
     }
@@ -126,7 +132,6 @@ const BookAppointment = () => {
         </div>
 
         <div>
-
           <select
             id="doctorname"
             name="doctorname"
@@ -138,7 +143,7 @@ const BookAppointment = () => {
             {doctor.map((doc, index) => (
 
               <option key={index} value={doc.name}>
-               {doc.name}
+                {doc.name}
               </option>
 
             ))}
@@ -156,16 +161,28 @@ const BookAppointment = () => {
             <option value="">Select a time</option>
             {slots.map((slot, index) => (
 
-              <option key={index} value={slot.start_time.slice(0, 19).replace('T', ' ')}>
-                {new Date(`1970-01-01T${slot.start_time}Z`).toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  hour12: true,
-                })} to {new Date(`1970-01-01T${slot.end_time}Z`).toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  hour12: true,
-                })} {slot.status}
+              <option
+                key={index}
+                value={slot.start_time.slice(0, 19).replace("T", " ")}
+              >
+                {new Date(`1970-01-01T${slot.start_time}Z`).toLocaleTimeString(
+                  [],
+                  {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  }
+                )}{" "}
+                to{" "}
+                {new Date(`1970-01-01T${slot.end_time}Z`).toLocaleTimeString(
+                  [],
+                  {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  }
+                )}{" "}
+                {slot.status}
               </option>
 
             ))}
@@ -173,9 +190,6 @@ const BookAppointment = () => {
         ) : (
           <p>Loading available slots...</p>
         )}
-
-
-
 
 
         <button type="submit">Book Appointment</button>
@@ -187,4 +201,5 @@ const BookAppointment = () => {
   //lamao dead
 };
 
-export default BookAppointment;
+export default Appointment;
+
