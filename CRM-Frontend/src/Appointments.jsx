@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+
 const Appointment = () => {
+
   const [formData, setFormData] = useState({
     patient_id: "",
     name: "",
@@ -10,13 +12,16 @@ const Appointment = () => {
   });
   const [message, setMessage] = useState("");
   const [slots, setSlots] = useState([]);
+
   const [doctor, setDoctor] = useState([]);
+
 
   useEffect(() => {
     const fetchSlots = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/getslots");
         if (response.status === 200) {
+
           setSlots(response.data.data);
           //console.log(response.data.data[0].start_time);
         }
@@ -29,6 +34,7 @@ const Appointment = () => {
     fetchSlots();
   }, []);
 
+
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
@@ -36,6 +42,7 @@ const Appointment = () => {
           "http://localhost:3000/api/getalldoctors"
         );
         if (response.status === 200) {
+
           setDoctor(response.data.data);
           console.log(response.data);
         }
@@ -64,6 +71,7 @@ const Appointment = () => {
       name: value,
     });
   };
+
 
   const handleTimeChange = (e) => {
     const { value } = e.target;
@@ -101,7 +109,11 @@ const Appointment = () => {
       );
       console.error("Error:", error);
     }
+
   };
+  
+
+
 
   return (
     <div className="appointment-container">
@@ -129,9 +141,11 @@ const Appointment = () => {
           >
             <option value="">Select doctor</option>
             {doctor.map((doc, index) => (
+
               <option key={index} value={doc.name}>
                 {doc.name}
               </option>
+
             ))}
           </select>
         </div>
@@ -146,6 +160,7 @@ const Appointment = () => {
           >
             <option value="">Select a time</option>
             {slots.map((slot, index) => (
+
               <option
                 key={index}
                 value={slot.start_time.slice(0, 19).replace("T", " ")}
@@ -169,11 +184,13 @@ const Appointment = () => {
                 )}{" "}
                 {slot.status}
               </option>
+
             ))}
           </select>
         ) : (
           <p>Loading available slots...</p>
         )}
+
 
         <button type="submit">Book Appointment</button>
       </form>
@@ -185,3 +202,4 @@ const Appointment = () => {
 };
 
 export default Appointment;
+
