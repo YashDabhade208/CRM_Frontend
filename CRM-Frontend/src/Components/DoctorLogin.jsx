@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Ensure axios is imported
-import Register from './Register';
+import Register from './Login';
 const DoctorLogin = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
