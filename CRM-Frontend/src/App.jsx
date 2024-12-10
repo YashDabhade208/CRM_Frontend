@@ -15,6 +15,7 @@ function App() {
       {/* Navbar should be outside Routes to appear globally */}
       <Navbar />
       <Routes>
+
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/child" element={<Child />} />
