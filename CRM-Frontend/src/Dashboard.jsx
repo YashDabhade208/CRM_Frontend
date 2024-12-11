@@ -27,7 +27,7 @@ const Dashboard = () => {
       if (response.ok) {
         const result = await response.json();
         setDoctorInfo(result.data);
-        setIsDoctorActive(result.data.status === "Active");
+        setIsDoctorActive(result.data.status);
       } else {
         console.error("Error fetching doctor information");
       }

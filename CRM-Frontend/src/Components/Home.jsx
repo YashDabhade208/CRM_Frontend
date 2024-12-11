@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 
+
 const Home = () => {
   const navigate = useNavigate();
   return (
@@ -70,6 +71,7 @@ const Home = () => {
           <span className="ml-3">Dashboard</span>
         </button> */}
       </div>
+    
     </div>
   );
 };
