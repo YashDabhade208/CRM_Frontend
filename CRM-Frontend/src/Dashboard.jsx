@@ -132,7 +132,7 @@ const Dashboard = () => {
                 className="bg-white p-6 rounded-lg shadow-md"
               >
                 <h3 className="text-lg font-semibold text-gray-800">
-                  Appointment ID: {appointment.appointment_id}
+                  TOKEN NUMBER: {appointment.token_id}
                 </h3>
                 <p className="text-gray-600">
                   <strong>Patient ID:</strong> {appointment.patient_id}
