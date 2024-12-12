@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const Appointment = () => {
   const [formData, setFormData] = useState({
@@ -11,12 +12,14 @@ const Appointment = () => {
   });
   const [message, setMessage] = useState("");
   const [slots, setSlots] = useState([]);
-  const [doctor, setDoctor] = useState([]);
-  const doctor_id =1;
+  const [doctorName, setDoctorName] = useState("");
+  const { doctorid } = useParams();
+
   useEffect(() => {
+    // Fetch slots for the doctor
     const fetchSlots = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/getslots/${doctor_id}`);
+        const response = await axios.get(`http://localhost:3000/api/getslots/${doctorid}`);
         if (response.status === 200) {
           setSlots(response.data.data);
         }
@@ -26,40 +29,44 @@ const Appointment = () => {
       }
     };
 
+    // Fetch doctor details
+    
     fetchSlots();
+
   }, []);
 
+
+  
   useEffect(() => {
-    const fetchDoctors = async () => {
+    const fetchDoctorName = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/getalldoctors"
-        );
+        const response = await axios.get("http://localhost:3000/api/getalldoctors");
         if (response.status === 200) {
-          setDoctor(response.data.data);
+          const doctorData = response.data.data.find(
+            (doc) => String(doc.doctor_id) === String(doctorid) // Ensure type match
+          );
+          if (doctorData) {
+            setDoctorName(doctorData.name); // Set the state
+          } else {
+            console.error("Doctor not found");
+            setMessage("Doctor not found.");
+          }
         }
       } catch (error) {
         console.error("Error fetching doctor data", error);
         setMessage("Failed to load doctor data.");
       }
     };
-
-    fetchDoctors();
-  }, []);
+  
+    fetchDoctorName();
+  }, [doctorid]);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
-    });
-  };
-
-  const handleDoctorChange = (e) => {
-    const { value } = e.target;
-    setFormData({
-      ...formData,
-      name: value,
     });
   };
 
@@ -82,7 +89,7 @@ const Appointment = () => {
 
       const response = await axios.post(
         "http://localhost:3000/api/appointments",
-        formData,
+        { ...formData, name: doctorName }, // Add doctor name to formData
         config
       );
       setMessage("Appointment successfully booked!");
@@ -93,6 +100,8 @@ const Appointment = () => {
       );
     }
   };
+  console.log(doctorName);
+  
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md">
@@ -117,21 +126,14 @@ const Appointment = () => {
           <label htmlFor="doctorname" className="block font-medium mb-1">
             Doctor:
           </label>
-          <select
+          <input
+            type="text"
             id="doctorname"
             name="doctorname"
-            value={formData.name}
-            onChange={handleDoctorChange}
-            required
-            className="w-full p-2 border rounded-md"
-          >
-            <option value="">Select doctor</option>
-            {doctor.map((doc, index) => (
-              <option key={index} value={doc.name}>
-                {doc.name}
-              </option>
-            ))}
-          </select>
+            value={doctorName}
+            readOnly
+            className="w-full p-2 border rounded-md bg-gray-100"
+          />
         </div>
 
         <div>
@@ -148,31 +150,31 @@ const Appointment = () => {
               className="w-full p-2 border rounded-md"
             >
               <option value="">Select a time</option>
-              {slots.map((slot, index) => (
-                <option
-                  key={index}
-                  value={slot.start_time.slice(0, 19).replace("T", " ")}
-                >
-                  {new Date(`1970-01-01T${slot.start_time}Z`).toLocaleTimeString(
-                    [],
-                    {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    }
-                  )}{" "}
-                  to{" "}
-                  {new Date(`1970-01-01T${slot.end_time}Z`).toLocaleTimeString(
-                    [],
-                    {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    }
-                  )}{" "}
-                  ({slot.status})
-                </option>
-              ))}
+              {slots.map((slot, index) => {
+                const startTime = new Date(`1970-01-01T${slot.start_time}Z`);
+                const endTime = new Date(`1970-01-01T${slot.end_time}Z`);
+
+                const formattedStartTime = startTime.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                });
+
+                const formattedEndTime = endTime.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                });
+
+                return (
+                  <option
+                    key={index}
+                    value={slot.start_time}
+                  >
+                    {slot.start_time} to {slot.end_time} ({slot.status})
+                  </option>
+                );
+              })}
             </select>
           ) : (
             <p>Loading available slots...</p>
@@ -203,7 +205,13 @@ const Appointment = () => {
       </form>
 
       {message && (
-        <p className={`mt-4 p-2 rounded-md ${message.includes("successfully") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+        <p
+          className={`mt-4 p-2 rounded-md ${
+            message.includes("successfully")
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
           {message}
         </p>
       )}

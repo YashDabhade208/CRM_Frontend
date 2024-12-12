@@ -6,7 +6,9 @@ import Register from "./Components/Register";
 import Dashboard from "./Dashboard";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
+import DoctorLogin from "./Components/DoctorLogin";
 import UpcomingAppointment from "./Components/UpcommingAppointment";
+import DoctorCard from "./Components/DoctorCard";
 
 function App() {
   return (
@@ -17,10 +19,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot" element={<Forgot />} />
-        <Route path="/appointment" element={<Appointment />} />
+        <Route path="/appointment/:doctorid" element={<Appointment />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Home />} />
         <Route path="/UpcomingAppointment" element={<UpcomingAppointment />} />
+        <Route path="/doctorCard" element={<DoctorCard/>}/>
       </Routes>
     </Router>
   );
