@@ -2,26 +2,47 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 
 const UserDashboard = () => {
-    const [appointments, setAppointments] = useState([{}]);
+    const [appointments, setAppointments] = useState([]);
     const [error, setError] = useState(null);
     const [id, setId] = useState(1); // Initialize with a default id
 
     useEffect(() => {
         const fetchAppointments = async () => {
             try {
-                const response = await axios.post("http://localhost:3000/api/upcomingappointments", { id });
-                if (response.status === 200) {
-                    setAppointments(response.data.data); // Assuming `data` contains appointments
+                const response = await axios.post(`http://localhost:3000/api/upcomingappointments`, { id });
+             
+    
+                if (response.status ===200 ) {
+                    
+                   
+                    
+                    setAppointments(response.data);
+                   
+                    
+                  
+
+                    // Display appointments
+                 
                 } else {
-                    setError("Failed to fetch appointments.");
+                    setError("Invalid response format. Expected an array of appointments.");
                 }
             } catch (error) {
                 setError("Error fetching appointments.");
-                console.error(error);
+                console.error("Error Details:", error);
             }
         };
+    
         fetchAppointments();
-    }, [id])
+    }, [id]);
+
+    console.log(appointments,"kjdr");
+    
+    
+    
+   
+
+  
+  
     return (
 
 
@@ -172,16 +193,50 @@ const UserDashboard = () => {
                                     <div>
                                     <div className="space-y-4">
                                         <h2 className="text-2xl font-bold mb-4">Upcoming Appointments</h2>
-                                        {appointments.map((appointment)=>(<><div className="flex justify-between" key={appointment.appointment_id}>
-                                                    <div className="text-gray-400 text-xs">{appointment.status}</div>
-                                                    <div className="text-gray-400 text-xs">4h</div>
-                                                </div>
-                                                <a href="javascript:void(0)" className="font-bold hover:text-yellow-800 hover:underline">Blog and social posts</a>
-                                                <div className="text-sm text-gray-600">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" className="text-gray-800 inline align-middle mr-1" viewBox="0 0 16 16">
-                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                                                    </svg>Deadline is today
-                                                </div></>))}
+                                      
+                                        <div>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          Appointments
+        </h2>
+        {appointments.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {appointments.map((appointment) => (
+              <div
+                key={appointment.appointment_id}
+                className="bg-white p-6 rounded-lg shadow-md"
+              >
+                <h3 className="text-lg font-semibold text-gray-800">
+                  TOKEN NUMBER: {appointment.token_id}
+                </h3>
+                <p className="text-gray-600">
+                  <strong>Patient ID:</strong> {appointment.patient_id}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Status:</strong> {appointment.status}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Time:</strong>{" "}
+                  {new Date(appointment.appointment_time).toLocaleString()}
+                </p>
+                {appointment.status !== "COMPLETED" && (
+                  <button
+                    onClick={() =>
+                      completeAppointment(appointment.appointment_id)
+                    }
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  >
+                    Mark as Complete
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-600">No appointments available</p>
+        )}
+      </div>
+
+
                                        
                                             <div className="p-4 bg-white border rounded-xl text-gray-800 space-y-2">
                                                
