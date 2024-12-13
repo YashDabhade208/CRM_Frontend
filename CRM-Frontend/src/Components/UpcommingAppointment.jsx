@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const UpcomingAppointment = () => {
@@ -28,6 +28,9 @@ const UpcomingAppointment = () => {
       );
     }
   };
+  // useEffect(()=>{
+  //   fetchAppointments
+  // },[])
 
   return (
     <div className="w-full max-w-5xl mx-auto mt-10 bg-white shadow-lg rounded-lg p-5">
@@ -42,7 +45,7 @@ const UpcomingAppointment = () => {
             htmlFor="id"
             className="block mb-2 text-sm font-medium text-gray-700"
           >
-            Enter Patient ID
+            Enter User ID
           </label>
           <input
             type="text"

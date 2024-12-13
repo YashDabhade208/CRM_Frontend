@@ -22,7 +22,7 @@ const Home = () => {
               className="absolute top-2/3 left-0 h-[0.58em] w-full fill-blue-300/70"
               preserveAspectRatio="none"
             >
-              <path d="..." />
+              {/* <path d="..." /> */}
             </svg>
             <span className="relative">Appointments</span>
           </span>

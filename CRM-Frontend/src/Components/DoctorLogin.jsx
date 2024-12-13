@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Ensure axios is imported
-import Register from './Login';
+import "../Css/DoctorLogin.css"
+
 const DoctorLogin = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -21,12 +22,12 @@ const DoctorLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/login', { name, email, password });
+      const response = await axios.post('http://localhost:3000/api/doctorlogin', { name, email, password });
       // Check if response is successful
       if (response.status === 200) {
         setMessage('Login successful');
         sessionStorage.setItem('jwtToken', response.data.token);
-        navigate('/appointment')
+        navigate('/home')
          // Example: Navigate to the dashboard page after successful login
       }
     } catch (error) {
