@@ -1,28 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ClipLoader } from 'react-spinners'; // Importing ClipLoader from react-spinners
+import { DNA } from 'react-loader-spinner';
 
 const DoctorCard = () => {
     const [doctorInfo, setDoctorInfo] = useState([]);
     const [isLoading, setIsLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null); // Error state
     const navigate = useNavigate();
 
-    const fetchDoctorInfo = async () => {
+    const fetchDoctorInfo = async (retries = 3) => {
         try {
-            setIsLoading(true); // Show spinner while fetching data
+            setError(null); // Clear previous errors
             const response = await fetch(`http://localhost:3000/api/getalldoctors`);
             if (response.ok) {
                 const result = await response.json();
                 setDoctorInfo(result.data);
                 console.log(result.data);
+                setIsLoading(false)
             } else {
-                console.error("Error fetching doctor information");
+                throw new Error(`Error: ${response.status} - ${response.statusText}`);
             }
         } catch (error) {
             console.error("Error fetching doctor information", error);
+            setError(error.message); // Set error message
+            if (retries > 0) {
+                console.log(`Retrying... (${3 - retries + 1})`);
+                setTimeout(() => fetchDoctorInfo(retries - 1), 2000); // Retry after 2 seconds
+            }
         } finally {
-            setIsLoading(false); // Hide spinner after fetching is complete
+            if (retries === 0) {
+                setIsLoading(false); // Stop loader after final retry
+            }
         }
     };
 
@@ -37,11 +46,38 @@ const DoctorCard = () => {
     return (
         <div className="p-6 pt-8">
             {isLoading ? (
-                // Show spinner when loading
-                <div className="flex justify-center items-center h-screen">
-                    <ClipLoader color="#3b82f6" size={50} /> {/* Blue spinner */}
+                // Show spinner during loading and retries
+                <div className="flex flex-col items-center">
+                    <DNA
+                        visible={true}
+                        height="80"
+                        width="80"
+                        ariaLabel="dna-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="dna-wrapper"
+                    />
+                    {error && (
+                        <p className="text-red-600 text-center font-semibold mt-4">
+                           
+                        </p>
+                    )}
+                </div>
+            ) : error ? (
+                // Show error message and retry button after retries are exhausted
+                <div className="text-center text-red-600 font-semibold">
+                    <p>{error}</p>
+                    <button
+                        onClick={() => {
+                            setIsLoading(true);
+                            fetchDoctorInfo();
+                        }}
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+                    >
+                        Retry
+                    </button>
                 </div>
             ) : (
+                // Display doctor cards if data is successfully fetched
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {doctorInfo.map((doc, index) => (
                         <motion.div
