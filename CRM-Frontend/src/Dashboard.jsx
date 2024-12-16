@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const Dashboard = () => {
   const [doctorInfo, setDoctorInfo] = useState({});
   const [isDoctorActive, setIsDoctorActive] = useState(false);
   const [appointments, setAppointments] = useState([]);
 
+  const a = useParams()
+  const doctor_id =a.id;
+  console.log(doctor_id.id);
+  
   const toggleDoctorStatus = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/toggledoctor/1`, {
+      const response = await fetch(`http://localhost:3000/api/toggledoctor/${doctor_id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
@@ -23,7 +28,7 @@ const Dashboard = () => {
 
   const fetchDoctorInfo = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/getdoctors/1`);
+      const response = await fetch(`http://localhost:3000/api/getdoctors/${doctor_id}`);
       if (response.ok) {
         const result = await response.json();
         setDoctorInfo(result.data);
@@ -38,10 +43,17 @@ const Dashboard = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/getappointments`);
+      const response = await fetch(`http://localhost:3000/api/getappointments`, {
+        method: 'POST', // Specify POST method
+        headers: {
+          'Content-Type': 'application/json', // Set appropriate headers
+        },
+        body: JSON.stringify({ id: doctor_id }), // Include any necessary data in the body
+      });
+  
       if (response.ok) {
         const result = await response.json();
-        setAppointments(result.data);
+        setAppointments(result.data); // Process the response data
       } else {
         console.error("Error fetching appointments");
       }
@@ -49,6 +61,7 @@ const Dashboard = () => {
       console.error("Error fetching appointments", error);
     }
   };
+  
 
   const completeAppointment = async (id) => {
     try {

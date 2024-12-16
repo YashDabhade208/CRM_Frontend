@@ -8,6 +8,8 @@ export const UserProvider = ({ children }) => {
     const savedUser = sessionStorage.getItem('user');
   return savedUser ? JSON.parse(savedUser) : null
   }); 
+
+  const [doctor,setDoctor] =useState()
   const [loggedin,setloggedIn] = useState(false)
   
 
@@ -17,10 +19,18 @@ export const UserProvider = ({ children }) => {
     if (user) {
       const { id, name, email } = user;
       sessionStorage.setItem('user', JSON.stringify({id, name}));
+      sessionStorage.setItem('loginState', JSON.stringify(loggedin))
     } else {
       sessionStorage.removeItem('user');
+      sessionStorage.removeItem('loginState');
+
     }
   }, [user]);
+  
+
+
+
+
   return (
     <UserContext.Provider value={{ user, setUser ,loggedin,setloggedIn}}>
       {children}

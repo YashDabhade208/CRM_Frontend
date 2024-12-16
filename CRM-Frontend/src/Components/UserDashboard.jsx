@@ -6,24 +6,24 @@ import { useNavigate } from 'react-router-dom';
 const UserDashboard = () => {
     const [appointments, setAppointmnets] = useState([])
     const [id, setId] = useState(0)
-    const { user,setUser } = useUser();
-    const navigate =useNavigate()
-    const [currentStep, setCurrentStep] = useState(2)
+    const { user, setUser } = useUser();
+    const navigate = useNavigate()
+    const [currentStep, setCurrentStep] = useState(1)
     const steps = [
         { id: 1, title: "Step 1", description: "Appointment Scheduled" },
         { id: 2, title: "Step 2", description: "Appointment Confirmed" },
         { id: 3, title: "Step 3", description: "Appointment Completed" },
-      ];
-    
-    
-    if(user){
+    ];
+
+
+    if (user) {
         console.log(user.id);
 
-      useEffect(()=>{setId(user.id)} ,[])  
+        useEffect(() => { setId(user.id) }, [])
     }
-    
-   
-console.log(id,"i");
+
+
+    console.log(id, "i");
 
     const fetchAppointments = async () => {
         try {
@@ -31,7 +31,7 @@ console.log(id,"i");
             if (response.status === 200) {
                 const result = await response.json
                 setAppointmnets(response.data.result)
-              
+
             }
         }
         catch (error) {
@@ -45,9 +45,9 @@ console.log(id,"i");
     const handleLogout = () => {
         setUser(null); // Clear user context
         navigate('/')
-        
-      };
-      
+
+    };
+
 
 
     return (<body className="relative bg-yellow-50 overflow-hidden max-h-screen">
@@ -138,7 +138,7 @@ console.log(id,"i");
                                 <div className="text-gray-400 text-xs">Members<br />connected</div>
                                 <div className="h-100 border-l mx-4"></div>
                                 <div className="flex flex-nowrap -space-x-3">
-                                    
+
                                 </div>
                             </div>
                             <div className="flex items-center gap-x-2">
@@ -184,66 +184,63 @@ console.log(id,"i");
                                             <div className="mt-2">5 of 8 completed</div>
                                         </div>
                                     </div>
-                                    
-                                  {/* { appointments.map((apoint,index)=>(<div key={index}><ol className="overflow-hidden space-y-8">
-      {steps.map((step, index) => (
-        <li
-          key={step.id}
-          className={`relative flex-1 ${
-            index < currentStep - 1
-              ? "after:bg-indigo-600"
-              : "after:bg-gray-200"
-          } after:content-[''] after:w-0.5 after:h-full after:inline-block after:absolute after:-bottom-11 after:left-4 lg:after:left-5`}
-        >
-          <a
-            className="flex items-center font-medium w-full"
-            href="#"
-          >
-            <span
-              className={`w-8 h-8 ${
-                index < currentStep
-                  ? "bg-indigo-600 text-white border-transparent"
-                  : index === currentStep
-                  ? "bg-indigo-50 text-indigo-600 border-indigo-600"
-                  : "bg-gray-50 text-gray-600 border-gray-200"
-              } border-2 rounded-full flex justify-center items-center mr-3 text-sm lg:w-10 lg:h-10`}
-            >
-              {index < currentStep ? (
-                <svg
-                  className="w-5 h-5 stroke-white"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M5 12L9.28722 16.2923C9.62045 16.6259 9.78706 16.7927 9.99421 16.7928C10.2014 16.7929 10.3681 16.6262 10.7016 16.2929L20 7"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              ) : (
-                index + 1
-              )}
-            </span>
-            <div className="block">
-              <h4
-                className={`text-lg ${
-                  index < currentStep
-                    ? "text-indigo-600"
-                    : index === currentStep
-                    ? "text-indigo-600"
-                    : "text-gray-900"
-                }`}
-              >
-                {step.title}
-              </h4>
-              <span className="text-sm">{step.description}</span>
-            </div>
-          </a>
-        </li>
-      ))}
-    </ol></div>))}  */}
+
+                                    {appointments.map((apoint, index) => (<div key={index}><ol className="overflow-hidden space-y-8">
+                                        {steps.map((step, index) => (
+                                            <li
+                                                key={step.id}
+                                                className={`relative flex-1 ${index < currentStep - 1
+                                                        ? "after:bg-indigo-600"
+                                                        : "after:bg-gray-200"
+                                                    } after:content-[''] after:w-0.5 after:h-full after:inline-block after:absolute after:-bottom-11 after:left-4 lg:after:left-5`}
+                                            >
+                                                <a
+                                                    className="flex items-center font-medium w-full"
+                                                    href="#"
+                                                >
+                                                    <span
+                                                        className={`w-8 h-8 ${index < currentStep
+                                                                ? "bg-indigo-600 text-white border-transparent"
+                                                                : index === currentStep
+                                                                    ? "bg-indigo-50 text-indigo-600 border-indigo-600"
+                                                                    : "bg-gray-50 text-gray-600 border-gray-200"
+                                                            } border-2 rounded-full flex justify-center items-center mr-3 text-sm lg:w-10 lg:h-10`}
+                                                    >
+                                                        {index < currentStep ? (
+                                                            <svg
+                                                                className="w-5 h-5 stroke-white"
+                                                                viewBox="0 0 24 24"
+                                                                fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                            >
+                                                                <path
+                                                                    d="M5 12L9.28722 16.2923C9.62045 16.6259 9.78706 16.7927 9.99421 16.7928C10.2014 16.7929 10.3681 16.6262 10.7016 16.2929L20 7"
+                                                                    strokeWidth="1.6"
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                />
+                                                            </svg>
+                                                        ) : (
+                                                            index + 1
+                                                        )}
+                                                    </span>
+                                                    <div className="block">
+                                                        <h4
+                                                            className={`text-lg ${index < currentStep
+                                                                    ? "text-indigo-600"
+                                                                    : index === currentStep
+                                                                        ? "text-indigo-600"
+                                                                        : "text-gray-900"
+                                                                }`}
+                                                        >
+                                                            {step.title}
+                                                        </h4>
+                                                        <span className="text-sm">{step.description}</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ol></div>))}
 
 
                                 </div>
@@ -252,19 +249,19 @@ console.log(id,"i");
                                 <h2 className="text-2xl font-bold mb-4">Your Upcoming Appointmnets</h2>
 
                                 <div className="space-y-4">
-                                   {appointments.map((appoint,index)=>( <div className="p-4 bg-white border rounded-xl text-gray-800 space-y-2">
+                                    {appointments.map((appoint, index) => (<div className="p-4 bg-white border rounded-xl text-gray-800 space-y-2">
                                         <div className="flex justify-between">
                                             <div className="text-gray-400 text-xs">Patient Id:{appoint.patient_id}</div>
-                                            <div className="text-gray-400 text-xs">Appointment Time:{  appoint.appointment_time}</div>
+                                            <div className="text-gray-400 text-xs">Appointment Time:{appoint.appointment_time}</div>
                                         </div>
-                                            {}
+                                        { }
                                         <div className="text-sm text-gray-600">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" className="text-gray-800 inline align-middle mr-1" viewBox="0 0 16 16">
                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
                                             </svg>{appoint.status}
                                         </div>
                                     </div>))}
-                                    
+
 
                                 </div>
                             </div>

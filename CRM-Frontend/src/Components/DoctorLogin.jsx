@@ -11,12 +11,12 @@ const DoctorLogin = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
- 
+ let doctor_id;
   const handleNavigation = () => {
     navigate('/Forgot');
   };
   const handleregister = () => {
-    navigate('/register');
+    navigate('/doctorregistration');
   };
 
   const handleLogin = async (e) => {
@@ -26,8 +26,9 @@ const DoctorLogin = () => {
       // Check if response is successful
       if (response.status === 200) {
         setMessage('Login successful');
+        doctor_id = response.data.user.doctor_id;
         sessionStorage.setItem('jwtToken', response.data.token);
-        navigate('/home')
+        navigate(`/dashboard/${doctor_id}`)
          // Example: Navigate to the dashboard page after successful login
       }
     } catch (error) {
