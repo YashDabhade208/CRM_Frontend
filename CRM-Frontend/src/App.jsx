@@ -11,11 +11,12 @@ import UpcomingAppointment from "./Components/UpcommingAppointment";
 import DoctorCard from "./Components/DoctorCard";
 import UserDashboard from "./Components/UserDashboard";
 import DoctorRegistration from "./Components/DoctorRegistration";
+import PatientRegistration from "./Components/PatientRegistration";
 
 function App() {
   return (
     <Router>
-      {/* Navbar should be outside Routes to appear globally */}
+      
       <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -29,6 +30,7 @@ function App() {
         <Route path="/doctorlogin" element={<DoctorLogin/>}/>
         <Route path="/userdashboard" element ={<UserDashboard/>}/>
         <Route path="/doctorregistration" element ={<DoctorRegistration/>}/>
+        <Route path= "/patientregistration" element ={<PatientRegistration/>}/>
       </Routes>
     </Router>
   );

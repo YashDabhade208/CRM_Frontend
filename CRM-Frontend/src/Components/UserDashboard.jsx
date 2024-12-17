@@ -2,9 +2,12 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useUser } from '../Contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { DNA } from 'react-loader-spinner';
 
 const UserDashboard = () => {
     const [appointments, setAppointmnets] = useState([])
+    const [isLoading, setIsLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null); // Error state
     const [id, setId] = useState(0)
     const { user, setUser } = useUser();
     const navigate = useNavigate()
@@ -25,17 +28,32 @@ const UserDashboard = () => {
 
     console.log(id, "i");
 
-    const fetchAppointments = async () => {
+    const fetchAppointments = async ( retries=3) => {
         try {
             const response = await axios.post(`http://localhost:3000/api/upcomingappointments`, { id })
             if (response.status === 200) {
                 const result = await response.json
                 setAppointmnets(response.data.result)
+                setIsLoading(false)
 
+            }
+            else{
+                throw new Error(`Error: ${response.status} - ${response.statusText}`);
             }
         }
         catch (error) {
             console.error(error)
+            setError(error.message)
+            if (retries > 0) {
+                console.log(`Retrying... (${3 - retries + 1})`);
+                setTimeout(() => fetchAppointments(retries - 1), 2000); // Retry after 2 seconds
+            }
+        }
+        finally{
+
+            if (retries === 0) {
+                setIsLoading(false); // Stop loader after final retry
+            }
         }
     }
     useEffect(() => {
@@ -50,7 +68,36 @@ const UserDashboard = () => {
 
 
 
-    return (<body className="relative bg-yellow-50 overflow-hidden max-h-screen">
+    return (<>
+                {isLoading ?(<div className="flex flex-col items-center">
+                                    <DNA
+                                        visible={true}
+                                        height="80"
+                                        width="80"
+                                        ariaLabel="dna-loading"
+                                        wrapperStyle={{}}
+                                        wrapperClass="dna-wrapper"
+                                    />
+                                    {error && (
+                                        <p className="text-red-600 text-center font-semibold mt-4">
+                                           
+                                        </p>
+                                    )}
+                                </div>):error ? (
+                // Show error message and retry button after retries are exhausted
+                <div className="text-center text-red-600 font-semibold">
+                    <p>{error}</p>
+                    <button
+                        onClick={() => {
+                            setIsLoading(true);
+                            fetchAppointments();
+                        }}
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+                    >
+                        Retry
+                    </button>
+                </div>
+            ) :(<body className="relative bg-yellow-50 overflow-hidden max-h-screen">
         <header className="fixed right-0 top-0 left-60 bg-yellow-50 py-3 px-4 h-16">
             <div className="max-w-4xl mx-auto">
                 <div className="flex items-center justify-between">
@@ -190,8 +237,8 @@ const UserDashboard = () => {
                                             <li
                                                 key={step.id}
                                                 className={`relative flex-1 ${index < currentStep - 1
-                                                        ? "after:bg-indigo-600"
-                                                        : "after:bg-gray-200"
+                                                    ? "after:bg-indigo-600"
+                                                    : "after:bg-gray-200"
                                                     } after:content-[''] after:w-0.5 after:h-full after:inline-block after:absolute after:-bottom-11 after:left-4 lg:after:left-5`}
                                             >
                                                 <a
@@ -200,10 +247,10 @@ const UserDashboard = () => {
                                                 >
                                                     <span
                                                         className={`w-8 h-8 ${index < currentStep
-                                                                ? "bg-indigo-600 text-white border-transparent"
-                                                                : index === currentStep
-                                                                    ? "bg-indigo-50 text-indigo-600 border-indigo-600"
-                                                                    : "bg-gray-50 text-gray-600 border-gray-200"
+                                                            ? "bg-indigo-600 text-white border-transparent"
+                                                            : index === currentStep
+                                                                ? "bg-indigo-50 text-indigo-600 border-indigo-600"
+                                                                : "bg-gray-50 text-gray-600 border-gray-200"
                                                             } border-2 rounded-full flex justify-center items-center mr-3 text-sm lg:w-10 lg:h-10`}
                                                     >
                                                         {index < currentStep ? (
@@ -227,10 +274,10 @@ const UserDashboard = () => {
                                                     <div className="block">
                                                         <h4
                                                             className={`text-lg ${index < currentStep
+                                                                ? "text-indigo-600"
+                                                                : index === currentStep
                                                                     ? "text-indigo-600"
-                                                                    : index === currentStep
-                                                                        ? "text-indigo-600"
-                                                                        : "text-gray-900"
+                                                                    : "text-gray-900"
                                                                 }`}
                                                         >
                                                             {step.title}
@@ -270,7 +317,11 @@ const UserDashboard = () => {
                 </div>
             </div>
         </main>
-    </body>
+    </body>)}
+        
+    
+    
+    </>
 
 
     )

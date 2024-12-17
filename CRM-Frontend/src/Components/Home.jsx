@@ -1,10 +1,14 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import DoctorCard from "./DoctorCard";
+import { useUser } from '../Contexts/UserContext';
 
 
 const Home = () => {
   const navigate = useNavigate();
+  const {user} = useUser()
+  console.log(user);
+  
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center lg:pt-32">
       <p className="mx-auto -mt-4 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">
