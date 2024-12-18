@@ -18,6 +18,8 @@ const Register = () => {
             const response = await axios.post('http://localhost:3000/api/register', { name, email, password });
             setMessage(response.data.message);
         } catch (error) {
+            console.log(error);
+            
             setMessage(error.response?.data?.message || 'Registration failed');
         }
     };

@@ -1,19 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import DoctorCard from "./DoctorCard";
-import { useUser } from '../Contexts/UserContext';
-import {useAuth0} from '@auth0/auth0-react'
-
-
+import axios from "axios";
+import { useUser } from "../Contexts/UserContext";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Home = () => {
   const navigate = useNavigate();
-  const {user} = useUser()
- 
+  const { setUser } = useUser();
+  const { loginWithRedirect, isAuthenticated, isLoading, logout, user } = useAuth0();
 
-const {  loginWithRedirect, isAuthenticated, isLoading,logout } = useAuth0();
+  useEffect(() => {
+    const registerUser = async () => {
+      if (isAuthenticated && user) {
+        try {
+          const { email, name } = user;
+          const response = await axios.post("http://localhost:3000/api/register", {
+            name,
+            email,
+            password: null, // Assuming password is not required for Auth0 users
+          });
+          console.log("Registration successful:", response.data.message);
+        } catch (error) {
+          console.error("Registration failed:", error.response?.data?.message || error.message);
+        }
+      }
+    };
 
-  
+    registerUser();
+  }, [isAuthenticated, user]);
+
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center lg:pt-32">
       <p className="mx-auto -mt-4 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">
@@ -30,9 +45,7 @@ const {  loginWithRedirect, isAuthenticated, isLoading,logout } = useAuth0();
               viewBox="0 0 418 42"
               className="absolute top-2/3 left-0 h-[0.58em] w-full fill-blue-300/70"
               preserveAspectRatio="none"
-            >
-              {/* <path d="..." /> */}
-            </svg>
+            />
             <span className="relative">Appointments</span>
           </span>
         </span>{" "}
@@ -59,29 +72,7 @@ const {  loginWithRedirect, isAuthenticated, isLoading,logout } = useAuth0();
             Book Appointment now
           </Link>
         </div>
-        {/* Navigate to Dashboard Button */}
-        {/* <button
-          className="group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-none ring-slate-200 text-slate-700 hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300 animate-fade-in-right"
-          onClick={() => navigate("/dashboard")}
-        >
-          <svg
-            stroke="currentColor"
-            fill="currentColor"
-            strokeWidth="0"
-            role="img"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            className="h-3 w-3 flex-none fill-current text-blue-600"
-            height="1em"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="..." />
-          </svg>
-          <span className="ml-3">Dashboard</span>
-        </button> */}
       </div>
-    
     </div>
   );
 };
