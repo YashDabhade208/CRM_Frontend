@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import {useAuth0} from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import { useUser } from '../Contexts/UserContext'; // Import useUser hook
 import '../Css/Login.css'
+import {useAuth0} from '@auth0/auth0-react'
+
+
 
 
 const Login = () => {
-  const { user, loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { user, loginWithRedirect, isAuthenticated, isLoading,logout } = useAuth0();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

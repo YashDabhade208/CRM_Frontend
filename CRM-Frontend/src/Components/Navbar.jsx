@@ -1,12 +1,21 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../Contexts/UserContext';
+import {useAuth0} from '@auth0/auth0-react'
+
+
 
 const Navbar = () => {
   const navigate = useNavigate();
   const {user,loggedin,setUser,setloggedIn} =useUser()
+  const {loginWithRedirect, isAuthenticated, isLoading,logout } = useAuth0();
+
+
   const handleLogout = () => {
     setUser(null); 
+    sessionStorage.setItem("authUser",null)
+    sessionStorage.setItem("userUser",null)
+    logout()
     navigate('/')
     setloggedIn(false)
   };

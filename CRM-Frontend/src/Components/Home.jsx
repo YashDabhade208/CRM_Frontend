@@ -2,12 +2,17 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import DoctorCard from "./DoctorCard";
 import { useUser } from '../Contexts/UserContext';
+import {useAuth0} from '@auth0/auth0-react'
+
 
 
 const Home = () => {
   const navigate = useNavigate();
   const {user} = useUser()
-  console.log(user);
+ 
+
+const {  loginWithRedirect, isAuthenticated, isLoading,logout } = useAuth0();
+
   
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center lg:pt-32">
