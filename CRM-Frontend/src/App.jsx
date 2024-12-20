@@ -13,6 +13,7 @@ import UserDashboard from "./Components/UserDashboard";
 import DoctorRegistration from "./Components/DoctorRegistration";
 import PatientRegistration from "./Components/PatientRegistration";
 
+
 function App() {
   return (
     <Router>

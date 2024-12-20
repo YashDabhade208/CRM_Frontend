@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useUser } from '../Contexts/UserContext';
 
 const PatientRegistration = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [userName ,setuserName] = useState("")
     const {user} = useUser()
-    console.log(user.id);
+    //console.log(user.name);
+
+   
+
+
     
     const [formData, setFormData] = useState({
         first_name: "",
@@ -15,8 +20,50 @@ const PatientRegistration = () => {
         dob: "",
         gender: "Male",
         address: "",
-        user_id: user.id, // Assuming this is a fixed value for now
+        user_id: user.id, 
+        age :1// Assuming this is a fixed value for now
     });
+
+    useEffect(() => {
+        if (user?.name) {
+            setuserName(user.name);
+        }
+    }, [user]);
+
+    // Fetch user ID
+    const fetchUserID = async () => {
+     
+        try {
+            setIsLoading(true);
+          
+            
+            const response = await axios.post("http://localhost:3000/api/getuserid", { userName });
+            if (response.status === 200) {
+                const  {result}  = response.data;
+                // console.log(result.id);
+
+                // Update formData with user_id
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    user_id: result.id, // Correctly setting user_id
+                }));
+            } else {
+                throw new Error("Error fetching user ID");
+            }
+        } catch (error) {
+            console.error(error);
+            setError("Failed to fetch user ID");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (userName) {
+            fetchUserID();
+        }
+    }, [userName]);
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -139,6 +186,18 @@ const PatientRegistration = () => {
                         className="w-full border rounded p-2"
                         required
                     ></textarea>
+                </div>
+                <div>
+                    <label htmlFor="age" className="block font-medium">Age</label>
+                    <input
+                        type="age"
+                        id="age"
+                        name="age"
+                        value={formData.age}
+                        onChange={handleChange}
+                        className="w-full border rounded p-2"
+                        required
+                    />
                 </div>
 
                 <button

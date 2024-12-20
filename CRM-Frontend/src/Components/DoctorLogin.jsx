@@ -10,7 +10,7 @@ const DoctorLogin = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  
  let doctor_id;
   const handleNavigation = () => {
     navigate('/Forgot');

@@ -20,13 +20,13 @@ const UserDashboard = () => {
 
 
     if (user) {
-        console.log(user.id);
+        console.log(user.name);
 
         useEffect(() => { setId(user.id) }, [])
     }
 
 
-    console.log(id, "i");
+    
 
     const fetchAppointments = async ( retries=3) => {
         try {
