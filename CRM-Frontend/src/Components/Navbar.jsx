@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../Contexts/UserContext';
 import {useAuth0} from '@auth0/auth0-react'
+import logo from '../assets/logo.png'
 
 
 
@@ -35,7 +36,7 @@ const Navbar = () => {
             >
               <img
                 className="h-10 w-auto"
-                src="https://clipart-library.com/images/8T65bLqyc.png"
+                src={logo}
                 alt="Logo"
               />
               <p className="sr-only">Website Title</p>
