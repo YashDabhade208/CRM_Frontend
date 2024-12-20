@@ -11,7 +11,8 @@ module.exports = {
   darkMode: "class",
   theme: {
     // rest of the code
-  },
+  }, 
+  
   plugins: [
     // rest of the code
     addVariablesForColors,
