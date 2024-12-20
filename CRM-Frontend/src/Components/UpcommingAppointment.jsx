@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const UpcomingAppointment = () => {
+const UpcomingAppointment = (props) => {
   const [id, setId] = useState("");
   const [appointments, setAppointments] = useState([]);
   const [message, setMessage] = useState("");
 
-  const fetchAppointments = async (e) => {
-    e.preventDefault();
-    try {
+useEffect(()=>{
+  setId(props.id)
+  ;
+  
+},[])
+
+
+   
+  const fetchAppointments = async (retries = 3) => {
+      try {
       const response = await axios.post(
         "http://localhost:3000/api/upcomingappointments",
         { id }
@@ -22,15 +29,21 @@ const UpcomingAppointment = () => {
         setMessage("No appointments found.");
       }
     } catch (error) {
-      setAppointments([]);
-      setMessage(
-        error.response?.data?.message || "Failed to fetch appointments."
-      );
-    }
+      console.error(error);
+      setError(error.message);
+      if (retries > 0) {
+        console.log(`Retrying...(${3 - retries + 1})`);
+        setTimeout(() => fetchAppointments(retries - 1), 2000); // Retry after 2 seconds
+      }
+    } finally {
+      if (retries === 0) {
+        setIsLoading(false);
+      }
   };
-  // useEffect(()=>{
-  //   fetchAppointments
-  // },[])
+}
+  useEffect(()=>{
+    fetchAppointments()
+  },[id])
 
   return (
     <div className="w-full max-w-5xl mx-auto mt-10 bg-white shadow-lg rounded-lg p-5">
@@ -39,31 +52,7 @@ const UpcomingAppointment = () => {
       </h2>
 
       {/* Form Section */}
-      <form onSubmit={fetchAppointments} className="mb-5">
-        <div className="mb-4">
-          <label
-            htmlFor="id"
-            className="block mb-2 text-sm font-medium text-gray-700"
-          >
-            Enter User ID
-          </label>
-          <input
-            type="text"
-            id="id"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-            className="block w-full px-4 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            placeholder="Enter your Patient ID"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full py-2.5 px-4 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
-        >
-          Fetch Appointments
-        </button>
-      </form>
+      
 
       {/* Message Section */}
       {message && <p className="text-red-500 text-center mb-5">{message}</p>}
