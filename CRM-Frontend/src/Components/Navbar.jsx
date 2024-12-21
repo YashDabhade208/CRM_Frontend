@@ -11,6 +11,7 @@ const Navbar = () => {
   const {user,loggedin,setUser,setloggedIn} =useUser()
   const {loginWithRedirect, isAuthenticated, isLoading,logout } = useAuth0();
 
+console.log(loggedin);
 
   const handleLogout = () => {
     setUser(null); 

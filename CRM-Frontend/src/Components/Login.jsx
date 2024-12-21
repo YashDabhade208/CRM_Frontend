@@ -12,17 +12,21 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { setUser, setloggedIn } = useUser();
+  const { setUser, setloggedIn,loggedIn } = useUser();
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      // Auth0 login detected
-      setUser(user);
-      setloggedIn(true);
-      sessionStorage.setItem("userUser", JSON.stringify(user));
-      navigate("/"); // Redirect after successful login
-    }
-  }, [isAuthenticated, user, setUser, setloggedIn, navigate]);
+  
+  
+  // useEffect(() => {
+  //   if (isAuthenticated && user) {
+  //     // Auth0 login detected
+  //     setUser(user);
+  //     setloggedIn(true); // Explicitly set loggedIn to true
+  //     console.log("state updated");
+  //     sessionStorage.setItem("userUser", JSON.stringify(user));
+  //     navigate("/"); // Redirect after successful login
+  //   }
+  // }, [isAuthenticated, user, setUser, navigate]);
+  
 
   const handleLogin = async (e) => {
     e.preventDefault();

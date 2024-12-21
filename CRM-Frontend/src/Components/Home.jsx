@@ -4,10 +4,25 @@ import axios from "axios";
 import { useUser } from "../Contexts/UserContext";
 import { useAuth0 } from "@auth0/auth0-react";
 
+
 const Home = () => {
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  const { setUser ,setloggedIn} = useUser();
   const { loginWithRedirect, isAuthenticated, isLoading, logout, user } = useAuth0();
+
+
+  useEffect(() => {
+      if (isAuthenticated && user) {
+        // Auth0 login detected
+        setUser(user);
+        setloggedIn(true); // Explicitly set loggedIn to true
+        console.log("state updated");
+        sessionStorage.setItem("userUser", JSON.stringify(user));
+        navigate("/"); // Redirect after successful login
+      }
+    }, [isAuthenticated, user, setUser, navigate]);
+    
+
 
   useEffect(() => {
     const registerUser = async () => {
@@ -28,6 +43,8 @@ const Home = () => {
 
     registerUser();
   }, [isAuthenticated, user]);
+ 
+  
 
   return (
     <div className="mx-auto px-4 sm:px-6 text-center">
