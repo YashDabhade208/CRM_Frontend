@@ -10,7 +10,7 @@ const UserDashboard = () => {
   const [isLoading, setIsLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
   const [id, setId] = useState(10);
-  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const { user, setUser } = useUser();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
@@ -24,18 +24,20 @@ const UserDashboard = () => {
   // Set username on mount
   useEffect(() => {
     if (user) {
-      setUserName(user.name);
+      setEmail(user.email);
     }
   }, [user]);
 
+
+  
+
   // Fetch user ID
   const fetchUserID = async () => {
-    console.log(userName);
-    
+
     try {
       setIsLoading(true);
-      const response = await axios.post('http://localhost:3000/api/getuserid', { userName });
-      console.log(userName);
+      const response = await axios.post('http://localhost:3000/api/getuserid', { email });
+      
       
       if (response.status === 200) {
         const { result } = await response.data;
@@ -53,10 +55,13 @@ const UserDashboard = () => {
   };
 
   useEffect(() => {
-    if (userName) {
+    if (email) {
 fetchUserID();}
-  }, []);
+  }, [email]);
 
+
+
+  
   
 
 

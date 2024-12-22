@@ -23,8 +23,8 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     // Sync user and login state with sessionStorage
     if (user) {
-      const { id, name } = user; // Limit stored data to essentials
-      sessionStorage.setItem('user', JSON.stringify({ id, name }));
+      const { id, name,email} = user; // Limit stored data to essentials
+      sessionStorage.setItem('user', JSON.stringify({ id, name,email}));
     } else {
       sessionStorage.removeItem('user');
     }

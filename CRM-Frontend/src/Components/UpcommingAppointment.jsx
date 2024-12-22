@@ -12,15 +12,25 @@ const UpcomingAppointment = ({ id: propId }) => {
     setId(propId);
   }, [propId]);
 
+  
+ console.log(propId);
+ 
+  
+
   const fetchAppointments = async () => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/upcomingappointments",
-        { id }
+        {id}
       );
-      const result = response.data?.result;
-      if (result && result.length > 0) {
+        const result = response.data.result;
+        console.log(response.data.result);
+      if (result ) {
         setAppointments(result);
+        
+        
+   
+        
         setMessage("");
       } else {
         setAppointments([]);
@@ -38,13 +48,16 @@ const UpcomingAppointment = ({ id: propId }) => {
     fetchAppointments();
   }, [id]);
 
+ 
+  
+
   const getStatusColor = (status) => {
     switch (status) {
-      case "Confirmed":
+      case "CONFIRMED":
         return "bg-green-100 text-green-700";
-      case "Pending":
+      case "PENDING":
         return "bg-yellow-100 text-yellow-700";
-      case "Cancelled":
+      case "CANCELLED":
         return "bg-red-100 text-red-700";
       default:
         return "bg-gray-100 text-gray-700";

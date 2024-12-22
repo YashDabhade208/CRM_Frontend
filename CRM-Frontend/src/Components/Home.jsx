@@ -15,9 +15,11 @@ const Home = () => {
       if (isAuthenticated && user) {
         // Auth0 login detected
         setUser(user);
+        console.log(user,"l");
+        
         setloggedIn(true); // Explicitly set loggedIn to true
         console.log("state updated");
-        sessionStorage.setItem("userUser", JSON.stringify(user));
+       // sessionStorage.setItem("userUser", JSON.stringify(user));
         navigate("/"); // Redirect after successful login
       }
     }, [isAuthenticated, user, setUser, navigate]);

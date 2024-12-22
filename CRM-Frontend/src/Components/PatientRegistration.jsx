@@ -8,6 +8,7 @@ const PatientRegistration = () => {
     const [userName ,setuserName] = useState("")
     const [age ,setAge] = useState(0)
     const {user} = useUser()
+    const [email,setEmail] = useState("")
     //console.log(user.name);
 
    
@@ -26,8 +27,8 @@ const PatientRegistration = () => {
     });
 
     useEffect(() => {
-        if (user?.name) {
-            setuserName(user.name);
+        if (user?.email) {
+           setEmail(user.email);
         }
     }, [user]);
 
@@ -38,7 +39,7 @@ const PatientRegistration = () => {
             setIsLoading(true);
           
             
-            const response = await axios.post("http://localhost:3000/api/getuserid", { userName });
+            const response = await axios.post("http://localhost:3000/api/getuserid", { email });
             if (response.status === 200) {
                 const  {result}  = response.data;
                 // console.log(result.id);
@@ -60,10 +61,10 @@ const PatientRegistration = () => {
     };
 
     useEffect(() => {
-        if (userName) {
+        if (email) {
             fetchUserID();
         }
-    }, [userName]);
+    }, [email]);
     
 
     const handleChange = (e) => {

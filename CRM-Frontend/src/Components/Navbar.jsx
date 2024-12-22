@@ -11,16 +11,31 @@ const Navbar = () => {
   const {user,loggedin,setUser,setloggedIn} =useUser()
   const {loginWithRedirect, isAuthenticated, isLoading,logout } = useAuth0();
 
+
+
+const handleLogout = async () => {
+  try {
+    // Clear session storage
+    sessionStorage.removeItem("authUser");
+    sessionStorage.removeItem("userUser");
+
+    // Update state
+    setUser(null);
+    setloggedIn(false);
+
+    // Call Auth0 logout
+    await logout({
+      returnTo: window.location.origin, // Redirect to the homepage or specific logout URL
+    });
+
+    // Navigate to the homepage
+    navigate('/');
+  } catch (error) {
+    console.error("Error during logout:", error);
+  }
+};
 console.log(loggedin);
 
-  const handleLogout = () => {
-    setUser(null); 
-    sessionStorage.setItem("authUser",null)
-    sessionStorage.setItem("userUser",null)
-    logout()
-    navigate('/')
-    setloggedIn(false)
-  };
   
   return (
     <>

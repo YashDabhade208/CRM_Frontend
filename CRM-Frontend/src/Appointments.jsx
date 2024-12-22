@@ -15,35 +15,86 @@ const Appointment = () => {
   const [slots, setSlots] = useState([]);
   const [doctorName, setDoctorName] = useState("");
   const [date, setDate] = useState("");
-  const [patientData,setPatientData]=useState([])
-  
+  const [patientData, setPatientData] = useState([])
+  const [email, setEmail] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
+
   const { doctorid } = useParams();
-    const { user } = useUser();
-  console.log(user.emailId)      
-  const [id,setId] = useState(10)
-  
+  const { user, setUser } = useUser();
+
+  const [id, setId] = useState(0)
+
   // Updated slot object structure
   const slotobj = {
     doctor_id: doctorid,
     date: date,
   };
 
- useEffect(()=>{ const fetchPatients = async ()=>{
-      try{
-        const response = await axios.post(`http://localhost:3000/api/getpatientbyuserid`,{
+  // fetch userid for fetching patients 
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email);
+    }
+  }, [user]);
+
+  console.log(user.email);
+
+
+  // Fetch user ID
+  const fetchUserID = async () => {
+
+    try {
+      setIsLoading(true);
+      const response = await axios.post('http://localhost:3000/api/getuserid', { email });
+
+
+      if (response.status === 200) {
+        const { result } = await response.data;
+        setId(result.id);
+        console.log(result);
+
+        // setIsLoading(false)
+      } else {
+        throw new Error('Error fetching user ID');
+      }
+    } catch (error) {
+      console.error(error);
+      setError('Failed to fetch user ID');
+    } finally {
+      //setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (email) {
+      fetchUserID();
+    }
+  }, [email]);
+
+
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await axios.post(`http://localhost:3000/api/getpatientbyuserid`, {
           id
         })
-        if(response.status===200){
-          setPatientData(response.data.reult)
+        if (response.status === 200) {
+          setPatientData(response.data.result)
           console.log(response.data.result);
-        }
-       
-      }
-      catch(err){
-          console.log(err);
           
+
+        }
       }
- } ;fetchPatients()},[user])
+      catch (err) {
+        console.log(err);
+
+      }
+    }; fetchPatients()
+  }, [])
+
+
+
 
   useEffect(() => {
     if (doctorid && date) {
@@ -56,8 +107,8 @@ const Appointment = () => {
           );
           if (response.status === 200) {
             setSlots(response.data.data);
-            console.log(response.data.data);
-            
+
+
           }
         } catch (error) {
           console.error("Error fetching slots data", error);
@@ -112,18 +163,18 @@ const Appointment = () => {
 
   const handleTimeChange = (e) => {
     const { value } = e.target;
-    
+
     setFormData({
       ...formData,
       appointment_time: value,
     });
-   
+
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-    
+
     const token = localStorage.getItem("jwtToken");
 
     try {
@@ -140,7 +191,7 @@ const Appointment = () => {
     } catch (error) {
       setMessage(
         error.response?.data?.message ||
-          "An error occurred while booking the appointment."
+        "An error occurred while booking the appointment."
       );
     }
   };
@@ -153,15 +204,22 @@ const Appointment = () => {
           <label htmlFor="patient_id" className="block font-medium mb-1">
             Patient ID:
           </label>
-          <input
-            type="text"
+          <select
             id="patient_id"
             name="patient_id"
             value={formData.patient_id}
             onChange={handleChange}
             required
             className="w-full p-2 border rounded-md"
-          />
+          >
+            <option value="">Select a patient</option>
+            {patientData.map((patient, index) => (
+              <option key={index} value={patient.patient_id}>
+                {patient.first_name} {patient.last_name} {patient.age}
+              </option>
+            ))}
+          </select>
+
         </div>
 
         <div>
@@ -245,11 +303,10 @@ const Appointment = () => {
 
       {message && (
         <p
-          className={`mt-4 p-2 rounded-md ${
-            message.includes("successfully")
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
+          className={`mt-4 p-2 rounded-md ${message.includes("successfully")
+            ? "bg-green-100 text-green-700"
+            : "bg-red-100 text-red-700"
+            }`}
         >
           {message}
         </p>
