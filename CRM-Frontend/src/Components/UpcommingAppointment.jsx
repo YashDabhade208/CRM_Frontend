@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Calendar, Clock, User, ChevronDown, ChevronUp } from "lucide-react";
 
-const UpcomingAppointment = () => {
-  const [id, setId] = useState("");
+const UpcomingAppointment = ({ id: propId }) => {
+  const [id, setId] = useState(propId || 0);
   const [appointments, setAppointments] = useState([]);
   const [message, setMessage] = useState("");
+  const [isOpen, setIsOpen] = useState(true);
 
-  const fetchAppointments = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    setId(propId);
+  }, [propId]);
+
+  const fetchAppointments = async () => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/upcomingappointments",
@@ -28,77 +33,99 @@ const UpcomingAppointment = () => {
       );
     }
   };
-  // useEffect(()=>{
-  //   fetchAppointments
-  // },[])
+
+  useEffect(() => {
+    fetchAppointments();
+  }, [id]);
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Confirmed":
+        return "bg-green-100 text-green-700";
+      case "Pending":
+        return "bg-yellow-100 text-yellow-700";
+      case "Cancelled":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  const formatTime = (timeString) => {
+    return new Date(`1970-01-01T${timeString}Z`).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   return (
-    <div className="w-full max-w-5xl mx-auto mt-10 bg-white shadow-lg rounded-lg p-5">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-5">
-        Upcoming Appointments
-      </h2>
-
-      {/* Form Section */}
-      <form onSubmit={fetchAppointments} className="mb-5">
-        <div className="mb-4">
-          <label
-            htmlFor="id"
-            className="block mb-2 text-sm font-medium text-gray-700"
-          >
-            Enter User ID
-          </label>
-          <input
-            type="text"
-            id="id"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-            className="block w-full px-4 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            placeholder="Enter your Patient ID"
-            required
-          />
-        </div>
+    <div className="w-full max-w-4xl mx-auto p-4">
+      <div className="border rounded-lg shadow-sm bg-white">
         <button
-          type="submit"
-          className="w-full py-2.5 px-4 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full px-4 py-3 flex items-center justify-between text-left bg-gray-50 hover:bg-gray-100 rounded-t-lg"
         >
-          Fetch Appointments
+          <span className="text-lg font-semibold text-gray-800">
+            Upcoming Appointments
+          </span>
+          {isOpen ? (
+            <ChevronUp className="w-5 h-5" />
+          ) : (
+            <ChevronDown className="w-5 h-5" />
+          )}
         </button>
-      </form>
 
-      {/* Message Section */}
-      {message && <p className="text-red-500 text-center mb-5">{message}</p>}
+        {isOpen && (
+          <div className="p-4">
+            {appointments.length > 0 ? (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {appointments.map((appointment) => (
+                  <div
+                    key={appointment.appointment_id}
+                    className="bg-white rounded-lg border shadow-sm p-4 hover:shadow-md transition-shadow duration-200"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <span
+                        className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                          appointment.status
+                        )}`}
+                      >
+                        {appointment.status}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        ID: {appointment.appointment_id}
+                      </span>
+                    </div>
 
-      {/* Appointments Section */}
-      {appointments.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {appointments.map((appointment) => (
-            <div
-              key={appointment.appointment_id}
-              className="p-4 bg-gray-100 border border-gray-300 rounded-lg shadow-sm"
-            >
-              <h3 className="text-lg font-semibold text-gray-800">
-                Appointment ID: {appointment.appointment_id}
-              </h3>
-              <p className="text-sm text-gray-600">
-                <strong>Time:</strong> {appointment.appointment_time}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Status:</strong> {appointment.status}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Doctor ID:</strong> {appointment.doctor_id}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Slot ID:</strong> {appointment.slot_id}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Created At:</strong>{" "}
-                {new Date(appointment.created_at).toLocaleString()}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
+                    <div className="space-y-2">
+                      <div className="flex items-center text-gray-600">
+                        <User className="w-4 h-4 mr-2" />
+                        <span>Patient ID: {appointment.patient_id}</span>
+                      </div>
+
+                      <div className="flex items-center text-gray-600">
+                        <Calendar className="w-4 h-4 mr-2" />
+                        <span>{formatDate(appointment.appointment_date)}</span>
+                      </div>
+
+                      <div className="flex items-center text-gray-600">
+                        <Clock className="w-4 h-4 mr-2" />
+                        <span>{formatTime(appointment.appointment_time)}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 text-sm">{message}</p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

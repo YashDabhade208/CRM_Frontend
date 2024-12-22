@@ -6,6 +6,7 @@ const PatientRegistration = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [userName ,setuserName] = useState("")
+    const [age ,setAge] = useState(0)
     const {user} = useUser()
     //console.log(user.name);
 
@@ -72,6 +73,16 @@ const PatientRegistration = () => {
             [name]: value,
         });
     };
+    const handleDob = (e) => {
+        const { name, value } = e.target; // `name` is usually the key in your form, `value` is the DOB entered
+        const age = calcAge(value); // Calculate the age based on the DOB
+      setAge(age)
+        setFormData({
+          ...formData,
+          [name]: value, // Update the DOB field
+          age: age, // Update the calculated age
+        });
+      };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -100,6 +111,26 @@ const PatientRegistration = () => {
             setIsLoading(false);
         }
     };
+
+    const calcAge = (dob)=>{
+        const today = new Date(); // Current date
+        const birthDate = new Date(dob); // Convert DOB to Date object
+        let age = today.getFullYear() - birthDate.getFullYear(); // Calculate year difference
+      
+        // Check if the birthday has not occurred yet this year
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+        if (
+          monthDifference < 0 || // Current month is earlier than birth month
+          (monthDifference === 0 && today.getDate() < birthDate.getDate()) // Same month but earlier date
+        ) {
+          age--; // Adjust age
+        }
+        if(age<0){
+            return 0;
+        }
+      
+        return age;
+    }
 
     return (
         <div className="container mx-auto p-4">
@@ -154,7 +185,7 @@ const PatientRegistration = () => {
                         id="dob"
                         name="dob"
                         value={formData.dob}
-                        onChange={handleChange}
+                        onChange={handleDob}
                         className="w-full border rounded p-2"
                         required
                     />
@@ -193,7 +224,7 @@ const PatientRegistration = () => {
                         type="age"
                         id="age"
                         name="age"
-                        value={formData.age}
+                        value={age}
                         onChange={handleChange}
                         className="w-full border rounded p-2"
                         required

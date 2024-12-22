@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useUser } from "./Contexts/UserContext";
 
 const Appointment = () => {
   const [formData, setFormData] = useState({
@@ -13,37 +14,68 @@ const Appointment = () => {
   const [message, setMessage] = useState("");
   const [slots, setSlots] = useState([]);
   const [doctorName, setDoctorName] = useState("");
+  const [date, setDate] = useState("");
+  const [patientData,setPatientData]=useState([])
+  
   const { doctorid } = useParams();
+    const { user } = useUser();
+  console.log(user.emailId)      
+  const [id,setId] = useState(10)
+  
+  // Updated slot object structure
+  const slotobj = {
+    doctor_id: doctorid,
+    date: date,
+  };
+
+ useEffect(()=>{ const fetchPatients = async ()=>{
+      try{
+        const response = await axios.post(`http://localhost:3000/api/getpatientbyuserid`,{
+          id
+        })
+        if(response.status===200){
+          setPatientData(response.data.reult)
+          console.log(response.data.result);
+        }
+       
+      }
+      catch(err){
+          console.log(err);
+          
+      }
+ } ;fetchPatients()},[user])
 
   useEffect(() => {
-    // Fetch slots for the doctor
-    const fetchSlots = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/api/getslots/${doctorid}`);
-        if (response.status === 200) {
-          setSlots(response.data.data);
+    if (doctorid && date) {
+      // Fetch slots for the doctor
+      const fetchSlots = async () => {
+        try {
+          const response = await axios.post(
+            `http://localhost:3000/api/getslots/`,
+            slotobj
+          );
+          if (response.status === 200) {
+            setSlots(response.data.data);
+            console.log(response.data.data);
+            
+          }
+        } catch (error) {
+          console.error("Error fetching slots data", error);
+          setMessage("Failed to load slots data.");
         }
-      } catch (error) {
-        console.error("Error fetching slots data", error);
-        setMessage("Failed to load slots data.");
-      }
-    };
+      };
 
-    // Fetch doctor details
-    
-    fetchSlots();
+      fetchSlots();
+    }
+  }, [doctorid, date]); // Depend on doctorid and date
 
-  }, []);
-
-
-  
   useEffect(() => {
     const fetchDoctorName = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/getalldoctors");
         if (response.status === 200) {
           const doctorData = response.data.data.find(
-            (doc) => String(doc.doctor_id) === String(doctorid) // Ensure type match
+            (doc) => String(doc.doctor_id) === String(doctorid)
           );
           if (doctorData) {
             setDoctorName(doctorData.name); // Set the state
@@ -57,10 +89,18 @@ const Appointment = () => {
         setMessage("Failed to load doctor data.");
       }
     };
-  
+
     fetchDoctorName();
   }, [doctorid]);
-  
+
+  const handleDate = (e) => {
+    setDate(e.target.value); // Update the date
+
+    setFormData({
+      ...formData,
+      appointment_date: e.target.value,
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,14 +112,18 @@ const Appointment = () => {
 
   const handleTimeChange = (e) => {
     const { value } = e.target;
+    
     setFormData({
       ...formData,
       appointment_time: value,
     });
+   
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData);
+    
     const token = localStorage.getItem("jwtToken");
 
     try {
@@ -100,8 +144,6 @@ const Appointment = () => {
       );
     }
   };
-  console.log(doctorName);
-  
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md">
@@ -137,6 +179,21 @@ const Appointment = () => {
         </div>
 
         <div>
+          <label htmlFor="appointment_date" className="block font-medium mb-1">
+            Appointment Date:
+          </label>
+          <input
+            type="date"
+            id="appointment_date"
+            name="appointment_date"
+            value={date}
+            onChange={handleDate}
+            required
+            className="w-full p-2 border rounded-md"
+          />
+        </div>
+
+        <div>
           <label htmlFor="appointment_time" className="block font-medium mb-1">
             Appointment Time:
           </label>
@@ -167,11 +224,8 @@ const Appointment = () => {
                 });
 
                 return (
-                  <option
-                    key={index}
-                    value={slot.start_time}
-                  >
-                    {slot.start_time} to {slot.end_time} ({slot.status})
+                  <option key={index} value={slot.start_time}>
+                    {formattedStartTime} to {formattedEndTime} ({slot.status})
                   </option>
                 );
               })}
@@ -179,21 +233,6 @@ const Appointment = () => {
           ) : (
             <p>Loading available slots...</p>
           )}
-        </div>
-
-        <div>
-          <label htmlFor="appointment_date" className="block font-medium mb-1">
-            Appointment Date:
-          </label>
-          <input
-            type="date"
-            id="appointment_date"
-            name="appointment_date"
-            value={formData.appointment_date}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded-md"
-          />
         </div>
 
         <button
