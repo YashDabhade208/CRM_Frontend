@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import SlotSelector from "./Components/ui/Slotselector";
+import SlotSelector from "./SlotSelector";
 
 const Dashboard = () => {
   const [doctorInfo, setDoctorInfo] = useState({});

@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Forgot from "./Forgot";
+import Forgot from "./Components/Forgot";
 import Login from "./Components/Login";
-import Appointment from "./Appointments";
+import Appointment from "./Components/Appointments";
 import Register from "./Components/Register";
-import Dashboard from "./Dashboard";
+import Dashboard from "./Components/Dashboard";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
 import DoctorLogin from "./Components/DoctorLogin";
@@ -12,7 +12,7 @@ import DoctorCard from "./Components/DoctorCard";
 import UserDashboard from "./Components/UserDashboard";
 import DoctorRegistration from "./Components/DoctorRegistration";
 import PatientRegistration from "./Components/PatientRegistration";
-import SlotSelector from "./Components/ui/Slotselector";
+import SlotSelector from "./Components/SlotSelector";
 
 function App() {
   return (

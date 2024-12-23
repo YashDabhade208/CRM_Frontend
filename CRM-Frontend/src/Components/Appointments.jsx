@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useUser } from "./Contexts/UserContext";
+import { useUser } from "../Contexts/UserContext";
 
 const Appointment = () => {
   const [formData, setFormData] = useState({
