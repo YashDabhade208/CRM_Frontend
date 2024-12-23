@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import SlotSelector from "./Components/ui/Slotselector";
 
 const Dashboard = () => {
   const [doctorInfo, setDoctorInfo] = useState({});
@@ -94,6 +95,8 @@ const Dashboard = () => {
   }, []);
 
   return (
+    <>
+   
     <div className="p-6 bg-gray-100 min-h-screen">
       {/* Header Section */}
       <header className="text-center mb-8">
@@ -174,7 +177,9 @@ const Dashboard = () => {
           <p className="text-gray-600">No appointments available</p>
         )}
       </div>
+      <SlotSelector id={doctor_id}/>
     </div>
+    </>
   );
 };
 
