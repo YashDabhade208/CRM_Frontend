@@ -81,7 +81,8 @@ const PatientRegistration = () => {
         setFormData({
           ...formData,
           // Update the DOB field
-          age: age, // Update the calculated age
+          [name] :value,
+          age: Age, // Update the calculated age
         });
       };
 

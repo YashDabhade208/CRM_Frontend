@@ -12,7 +12,7 @@ import DoctorCard from "./Components/DoctorCard";
 import UserDashboard from "./Components/UserDashboard";
 import DoctorRegistration from "./Components/DoctorRegistration";
 import PatientRegistration from "./Components/PatientRegistration";
-
+import SlotSelector from "./Components/ui/Slotselector";
 
 function App() {
   return (
@@ -32,6 +32,7 @@ function App() {
         <Route path="/userdashboard" element ={<UserDashboard/>}/>
         <Route path="/doctorregistration" element ={<DoctorRegistration/>}/>
         <Route path= "/patientregistration" element ={<PatientRegistration/>}/>
+        <Route path= "/slotselector" element ={<SlotSelector/>}/>
       </Routes>
     </Router>
   );
