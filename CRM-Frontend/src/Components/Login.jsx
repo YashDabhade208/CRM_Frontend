@@ -36,6 +36,7 @@ const Login = () => {
         setMessage("Login successful");
         sessionStorage.setItem("jwtToken", response.data.token);
         setUser(response.data.result.user); // Store user data in context
+        
         setloggedIn(true);
         navigate("/"); // Navigate after successful login
       }

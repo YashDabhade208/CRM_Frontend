@@ -76,11 +76,11 @@ const PatientRegistration = () => {
     };
     const handleDob = (e) => {
         const { name, value } = e.target; // `name` is usually the key in your form, `value` is the DOB entered
-        const age = calcAge(value); // Calculate the age based on the DOB
-      setAge(age)
+        const Age = calcAge(value); // Calculate the age based on the DOB
+      setAge(Age)
         setFormData({
           ...formData,
-          [name]: value, // Update the DOB field
+          // Update the DOB field
           age: age, // Update the calculated age
         });
       };
@@ -102,6 +102,7 @@ const PatientRegistration = () => {
                     gender: "Male",
                     address: "",
                     user_id: 0,
+                    age:0
                 });
             } else {
                 throw new Error(`Error: ${response.status} - ${response.statusText}`);

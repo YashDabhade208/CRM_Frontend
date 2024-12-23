@@ -18,10 +18,8 @@ const Appointment = () => {
   const [patientData, setPatientData] = useState([])
   const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(true)
-
   const { doctorid } = useParams();
   const { user, setUser } = useUser();
-
   const [id, setId] = useState(0)
 
   // Updated slot object structure
@@ -65,6 +63,7 @@ const Appointment = () => {
     }
   };
 
+
   useEffect(() => {
     if (email) {
       fetchUserID();
@@ -80,8 +79,9 @@ const Appointment = () => {
           id
         })
         if (response.status === 200) {
-          setPatientData(response.data.result)
-          console.log(response.data.result);
+          const result =  await response.data.result
+          setPatientData(result)
+          console.log(result);
           
 
         }
@@ -91,7 +91,7 @@ const Appointment = () => {
 
       }
     }; fetchPatients()
-  }, [])
+  }, [id])
 
 
 
@@ -154,11 +154,14 @@ const Appointment = () => {
   };
 
   const handleChange = (e) => {
+    
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+
+    
   };
 
   const handleTimeChange = (e) => {

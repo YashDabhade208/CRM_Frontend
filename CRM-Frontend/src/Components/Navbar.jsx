@@ -22,11 +22,9 @@ const handleLogout = async () => {
     // Update state
     setUser(null);
     setloggedIn(false);
+    setloggedIn(false);
 
-    // Call Auth0 logout
-    await logout({
-      returnTo: window.location.origin, // Redirect to the homepage or specific logout URL
-    });
+   await logout()
 
     // Navigate to the homepage
     navigate('/');

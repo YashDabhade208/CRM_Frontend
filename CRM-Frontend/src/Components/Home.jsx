@@ -14,7 +14,7 @@ const Home = () => {
   useEffect(() => {
       if (isAuthenticated && user) {
         // Auth0 login detected
-        setUser(user);
+        setUser(user); 
         console.log(user,"l");
         
         setloggedIn(true); // Explicitly set loggedIn to true
