@@ -5,6 +5,7 @@ const SlotSelector = (props) => {
   const [slots, setSlots] = useState([]); // All slots from the database
   const [excludedSlots, setExcludedSlots] = useState([]); // Slots excluded from scheduling
   const [doctor_id, setDoctor_id] = useState(0);
+  const [date,setDate] = useState('')
 
   // Fetch the doctor_id from props
   useEffect(() => {
@@ -39,13 +40,23 @@ const SlotSelector = (props) => {
     );
   };
 
+  const  handleDate = (e)=>{
+    setDate(e.target.value); // Update the date
+
+    
+  }
+ 
+  const scheduleobj = {doctor_id,excludedSlots,date}
+ console.log(scheduleobj);
+ 
   // Submit excluded slots
   const submitExcludedSlots = async () => {
     try {
-      await axios.post("http://localhost:3000/api/excludedslots", {
-        excludedSlots,
-      });
-      alert("Excluded slots updated successfully!");
+      await axios.post("http://localhost:3000/api/setschedule", 
+        scheduleobj,
+      );
+      
+      console.log("Excluded slots updated successfully!");
     } catch (err) {
       console.error("Error updating excluded slots:", err.message);
     }
@@ -54,6 +65,22 @@ const SlotSelector = (props) => {
   return (
     <div>
       <h1>Slot Selector</h1>
+      <div>
+      <div>
+          <label htmlFor="Schedule_date" className="block font-medium mb-1">
+            Schedule Date:
+          </label>
+          <input
+            type="date"
+            id="Schedule_date"
+            name="Schedule_date"
+            value={date}
+            onChange={handleDate}
+            required
+            className=" p-2 border rounded-md"
+          />
+        </div>
+      </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
         {slots.map((slot) => (
           <div
