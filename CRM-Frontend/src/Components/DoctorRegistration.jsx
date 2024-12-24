@@ -42,73 +42,90 @@ const DoctorRegistration = () => {
   };
 
   return (
-    <div className="doctor-registration">
-      <h2>Register a New Doctor</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6">Register a New Doctor</h2>
+        
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="form-group">
+            <label htmlFor="name" className="block text-lg font-medium">Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full border rounded p-3 mt-2"
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="email" className="block text-lg font-medium">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full border rounded p-3 mt-2"
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="password" className="block text-lg font-medium">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full border rounded p-3 mt-2"
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="specialty">Specialty</label>
-          <input
-            type="text"
-            id="specialty"
-            name="specialty"
-            value={formData.specialty}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="specialty" className="block text-lg font-medium">Specialty</label>
+            <input
+              type="text"
+              id="specialty"
+              name="specialty"
+              value={formData.specialty}
+              onChange={handleChange}
+              className="w-full border rounded p-3 mt-2"
+            />
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="status">Status</label>
-          <select
-            id="status"
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
+          <div className="form-group">
+            <label htmlFor="status" className="block text-lg font-medium">Status</label>
+            <select
+              id="status"
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              className="w-full border rounded p-3 mt-2"
+            >
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="INACTIVE">INACTIVE</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white text-lg font-semibold px-4 py-3 rounded hover:bg-blue-700 transition duration-200"
           >
-            <option value="ACTIVE">ACTIVE</option>
-            <option value="INACTIVE">INACTIVE</option>
-          </select>
-        </div>
+            Register
+          </button>
+        </form>
 
-        <button type="submit">Register</button>
-      </form>
-
-      {responseMessage && <p className="response-message">{responseMessage}</p>}
+        {responseMessage && (
+          <p className="text-center text-lg font-medium text-green-500 mt-4">
+            {responseMessage}
+          </p>
+        )}
+      </div>
     </div>
   );
 };

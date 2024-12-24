@@ -6,11 +6,8 @@ const Dashboard = () => {
   const [doctorInfo, setDoctorInfo] = useState({});
   const [isDoctorActive, setIsDoctorActive] = useState(false);
   const [appointments, setAppointments] = useState([]);
+  const { id: doctor_id } = useParams();
 
-  const a = useParams()
-  const doctor_id =a.id;
-  console.log(doctor_id.id);
-  
   const toggleDoctorStatus = async () => {
     try {
       const response = await fetch(`http://localhost:3000/api/toggledoctor/${doctor_id}`, {
@@ -45,16 +42,16 @@ const Dashboard = () => {
   const fetchAppointments = async () => {
     try {
       const response = await fetch(`http://localhost:3000/api/getappointments`, {
-        method: 'POST', // Specify POST method
+        method: 'POST',
         headers: {
-          'Content-Type': 'application/json', // Set appropriate headers
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: doctor_id }), // Include any necessary data in the body
+        body: JSON.stringify({ id: doctor_id }),
       });
   
       if (response.ok) {
         const result = await response.json();
-        setAppointments(result.data); // Process the response data
+        setAppointments(result.data);
       } else {
         console.error("Error fetching appointments");
       }
@@ -62,7 +59,6 @@ const Dashboard = () => {
       console.error("Error fetching appointments", error);
     }
   };
-  
 
   const completeAppointment = async (id) => {
     try {
@@ -95,8 +91,6 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <>
-   
     <div className="p-6 bg-gray-100 min-h-screen">
       {/* Header Section */}
       <header className="text-center mb-8">
@@ -179,9 +173,7 @@ const Dashboard = () => {
       </div>
       <SlotSelector id={doctor_id}/>
     </div>
-    </>
   );
 };
-
 
 export default Dashboard;
