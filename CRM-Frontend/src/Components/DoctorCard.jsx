@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { DNA } from 'react-loader-spinner';
+import { motion } from 'framer-motion';
 
 const DoctorCard = () => {
     const [doctorInfo, setDoctorInfo] = useState([]);
@@ -17,7 +17,7 @@ const DoctorCard = () => {
                 const result = await response.json();
                 setDoctorInfo(result.data);
                 console.log(result.data);
-                setIsLoading(false)
+                setIsLoading(false);
             } else {
                 throw new Error(`Error: ${response.status} - ${response.statusText}`);
             }
@@ -44,7 +44,7 @@ const DoctorCard = () => {
     };
 
     return (
-        <div className="p-6 pt-8">
+        <div className="container mx-auto px-4 py-6 pt-6">
             {isLoading ? (
                 // Show spinner during loading and retries
                 <div className="flex flex-col items-center">
@@ -58,7 +58,7 @@ const DoctorCard = () => {
                     />
                     {error && (
                         <p className="text-red-600 text-center font-semibold mt-4">
-                           
+                            {error}
                         </p>
                     )}
                 </div>
@@ -77,62 +77,42 @@ const DoctorCard = () => {
                     </button>
                 </div>
             ) : (
-                // Display doctor cards if data is successfully fetched
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                // Display doctor information using doctorInfo.map
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-24 sm:mt-4">
                     {doctorInfo.map((doc, index) => (
-                        <motion.div
+                        <div
                             key={index}
-                            className="border-y-indigo-800 max-w-sm bg-white shadow-xl rounded-lg text-gray-900"
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.4, delay: index * 0.2 }}
-                            whileHover={{ scale: 1.1 }}
+                            className={`p-4 max-w-sm mx-auto bg-white rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6 ${index === 0 ? 'mt-20' : ''}`}
                         >
-                            <div className="rounded-t-lg h-32 overflow-hidden">
-                                <img
-                                    className="object-cover object-top w-full"
-                                    src='https://img.freepik.com/free-vector/medicine-online_24877-49093.jpg?ga=GA1.1.872252232.1721550928&semt=ais_hybrid'
-                                    alt="Default doctor"
-                                />
-                            </div>
-                            <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden">
-                                <img
-                                    className="object-cover object-center h-32"
-                                    src='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ'
-                                    alt="Doctor profile"
-                                />
-                            </div>
-                            <div className="text-center mt-2">
-                                <h2 className="font-semibold">{doc.name}</h2>
-                                <p className="text-gray-500">{doc.title || "Doctor"}</p>
-                            </div>
-                            <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
-                                <li className="flex flex-col items-center">
-                                    <span className="font-semibold">Status</span>
-                                    <div>{doc.status || "Unavailable"}</div>
-                                </li>
-                                <li className="flex flex-col items-center">
-                                    <span className="font-semibold">Specialty</span>
-                                    <div>{doc.specialty || "General"}</div>
-                                </li>
-                            </ul>
-                            <div className="p-4 border-t mx-8 mt-2">
-                                {doc.status === "ACTIVE" ? (
-                                    <motion.button
-                                        className="w-1/2 block mx-auto rounded-full bg-gray-900 hover:shadow-lg font-semibold text-white px-6 py-2"
+                            <img
+                                className="block mx-auto h-24 rounded-full sm:mx-0 sm:shrink-0"
+                                src={doc.image || "https://tailwindcss.com/img/erin-lindford.jpg"}
+                                alt={`${doc.name}'s face`}
+                            />
+                            <div className="text-center space-y-2 sm:text-left">
+                                <div className="space-y-0.5">
+                                    <p className="text-lg text-black font-semibold">
+                                        {doc.name}
+                                    </p>
+                                    <p className="text-slate-500 font-medium">
+                                        {doc.specialty || "General"}
+                                    </p>
+                                </div>
+                                <p className={`font-medium ${doc.status === 'ACTIVE' ? 'text-green-500' : 'text-red-500'}`}>
+                                    {doc.status || "Unavailable"}
+                                </p>
+                                <button className="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
+                                <motion.button
+                                        className=""
                                         onClick={() => handleAppointment(doc.doctor_id)}
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.95 }}
                                     >
                                         Book Appointment
                                     </motion.button>
-                                ) : (
-                                    <p className="text-red-600 text-center font-semibold">
-                                        Currently, the doctor is unavailable
-                                    </p>
-                                )}
+                                </button>
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
             )}

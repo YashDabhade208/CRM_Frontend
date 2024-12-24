@@ -17,23 +17,26 @@ import SlotSelector from "./Components/SlotSelector";
 function App() {
   return (
     <Router>
-      
-      <Navbar />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot" element={<Forgot />} />
-        <Route path="/appointment/:doctorid" element={<Appointment />} />
-        <Route path="/dashboard/:id" element={<Dashboard />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/upcomingappointment" element={<UpcomingAppointment />} />
-        <Route path="/doctorcard" element={<DoctorCard/>}/>
-        <Route path="/doctorlogin" element={<DoctorLogin/>}/>
-        <Route path="/userdashboard" element ={<UserDashboard/>}/>
-        <Route path="/doctorregistration" element ={<DoctorRegistration/>}/>
-        <Route path= "/patientregistration" element ={<PatientRegistration/>}/>
-        <Route path= "/slotselector" element ={<SlotSelector/>}/>
-      </Routes>
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-1 mt-20"> {/* Add top margin to account for fixed navbar */}
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot" element={<Forgot />} />
+            <Route path="/appointment/:doctorid" element={<Appointment />} />
+            <Route path="/dashboard/:id" element={<Dashboard />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/upcomingappointment" element={<UpcomingAppointment />} />
+            <Route path="/doctorcard" element={<DoctorCard/>}/>
+            <Route path="/doctorlogin" element={<DoctorLogin/>}/>
+            <Route path="/userdashboard" element={<UserDashboard/>}/>
+            <Route path="/doctorregistration" element={<DoctorRegistration/>}/>
+            <Route path="/patientregistration" element={<PatientRegistration/>}/>
+            <Route path="/slotselector" element={<SlotSelector/>}/>
+          </Routes>
+        </main>
+      </div>
     </Router>
   );
 }
