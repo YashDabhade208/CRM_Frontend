@@ -12,7 +12,6 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      
       const response = await axios.post("http://localhost:3000/api/register", {
         name,
         email,
@@ -25,79 +24,76 @@ const Register = () => {
   };
 
   return (
-    <div className="w-96 backdrop-blur-lg bg-opacity-80 rounded-lg shadow-lg p-5 bg-gray-900 text-white mx-auto mt-10">
-      <h2 className="text-2xl font-bold pb-5">SignUp</h2>
-      <form onSubmit={handleRegister}>
-        {/* Name Field */}
-        <div className="mb-4">
-          <label htmlFor="name" className="block mb-2 text-sm font-medium">
-            Your name
-          </label>
-          <input
-            type="text"
-            id="name"
-            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
-            placeholder="Andrew Jackson"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-
-        {/* Email Field */}
-        <div className="mb-4">
-          <label htmlFor="email" className="block mb-2 text-sm font-medium">
-            Your email
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
-            placeholder="andrew@mail.com"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        {/* Password Field */}
-        <div className="mb-4">
-          <label htmlFor="password" className="block mb-2 text-sm font-medium">
-            Your password
-          </label>
-          <input
-            type="password"
-            id="password"
-            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
-            placeholder="*********"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        {/* Message Section */}
-        <div>{message && <p className="text-red-500 pb-5">{message}</p>}</div>
-
-        {/* Submit Button */}
-        <div className="flex items-center justify-between mb-4">
-          <button
-            type="submit"
-            className="text-white bg-purple-600 hover:bg-purple-700 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 px-5 w-full sm:w-auto"
-          >
-            Register
-          </button>
-          <div className="flex items-center text-sm">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center mb-6">Sign Up</h2>
+        <form onSubmit={handleRegister}>
+          <div className="mb-4">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              Your Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Andrew Jackson"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Your Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              placeholder="andrew@mail.com"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Your Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              placeholder="••••••••"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          {message && (
+            <div className="mb-4">
+              <p className="text-red-500 text-center">{message}</p>
+            </div>
+          )}
+          <div className="flex items-center justify-between">
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition duration-300"
+            >
+              Register
+            </button>
+          </div>
+          <div className="flex items-center justify-center mt-4 text-sm">
             <p>Already have an account?</p>
             <p
-              className="underline cursor-pointer ml-1"
+              className="ml-1 text-blue-600 hover:underline cursor-pointer"
               onClick={() => navigate("/login")}
             >
               Sign in
             </p>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
