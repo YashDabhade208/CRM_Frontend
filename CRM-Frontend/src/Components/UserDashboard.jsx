@@ -28,21 +28,16 @@ const UserDashboard = () => {
     }
   }, [user]);
 
-
-  
-
   // Fetch user ID
   const fetchUserID = async () => {
-
     try {
       setIsLoading(true);
       const response = await axios.post('http://localhost:3000/api/getuserid', { email });
-      
-      
+
       if (response.status === 200) {
         const { result } = await response.data;
         setId(result.id);
-        setIsLoading(false)
+        setIsLoading(false);
       } else {
         throw new Error('Error fetching user ID');
       }
@@ -56,17 +51,9 @@ const UserDashboard = () => {
 
   useEffect(() => {
     if (email) {
-fetchUserID();}
+      fetchUserID();
+    }
   }, [email]);
-
-
-
-  
-  
-
-
-
- 
 
   // Logout handler
   const handleLogout = () => {
@@ -74,18 +61,15 @@ fetchUserID();}
     navigate('/');
   };
 
+  return (
+    <div className="p-6 mt-8">
+      <div className="mb-6 text-center">
+        <h2 className="text-2xl font-bold">Patient Dashboard</h2>
+        <p className="text-gray-600 text-center">Here you can check your upcoming appointments and more...</p>
+      </div>
+      <UpcomingAppointment id={id} />
+    </div>
+  );
+};
 
-
-    return (<>
-
-   < UpcomingAppointment id={id}/>
-    
-    </>
-
-
-    )    
-
-    
-}
-
-export default UserDashboard
+export default UserDashboard;
