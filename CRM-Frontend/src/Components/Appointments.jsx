@@ -269,8 +269,8 @@ const Appointment = () => {
             >
               <option value="">Select a time</option>
               {slots.map((slot, index) => {
-                const startTime = new Date(`1970-01-01T${slot.start_time}Z`);
-                const endTime = new Date(`1970-01-01T${slot.end_time}Z`);
+                const startTime = new Date(`1970-01-01T${slot.start_time}`);
+                const endTime = new Date(`1970-01-01T${slot.end_time}`);
 
                 const formattedStartTime = startTime.toLocaleTimeString([], {
                   hour: "2-digit",
