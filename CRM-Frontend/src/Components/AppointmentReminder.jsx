@@ -18,6 +18,9 @@ const AppointmentReminder = (props) => {
     console.log(userId);
   },[props])
 
+ 
+  
+
   //Check for Appointments: Fetch the appointments and check if any appointment is within the next 3 hours.
   const scheduleAppointmentNotifications = async (userId) => {
     // Fetch appointments
@@ -26,14 +29,12 @@ const AppointmentReminder = (props) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ user_id: userId }),
+      body: JSON.stringify({ id: userId }),
     });
     
     const data = await response.json();
-    if (data.message !== "Appointments fetched successfully") {
-      console.log(data.message);
-      return;
-    }
+    console.log(data);
+    
   
     const now = new Date();
   
@@ -51,10 +52,13 @@ const AppointmentReminder = (props) => {
       );
   
       const timeUntilAppointment = appointmentDateTime - now;
-      const timeUntilNotification = timeUntilAppointment - (3 * 60 * 60 * 1000); // 3 hours before
+      const timeUntilNotification = timeUntilAppointment - (12* 60 * 1000); // 3 hours before
+      console.log(timeUntilNotification/60000,"hh");
+      
   
       if (timeUntilNotification > 0) {
         setTimeout(() => {
+          alert("get yo ass to hospital")
           new Notification('Appointment Reminder', {
             body: `You have an appointment scheduled at ${appointment.appointment_time}.`,
           });
