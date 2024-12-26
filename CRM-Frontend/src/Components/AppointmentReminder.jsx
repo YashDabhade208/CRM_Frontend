@@ -52,20 +52,43 @@ const AppointmentReminder = (props) => {
       );
   
       const timeUntilAppointment = appointmentDateTime - now;
-      const timeUntilNotification = timeUntilAppointment - (12* 60 * 1000); // 3 hours before
+      const timeUntilNotification = timeUntilAppointment - (19* 60 * 1000); // 3 hours before
       console.log(timeUntilNotification/60000,"hh");
       
   
       if (timeUntilNotification > 0) {
         setTimeout(() => {
-          alert("get yo ass to hospital")
+         
           new Notification('Appointment Reminder', {
             body: `You have an appointment scheduled at ${appointment.appointment_time}.`,
           });
+          alert("get yo ass to hospital")
         }, timeUntilNotification);
+       
       }
     });
   };
+
+  const handle = () =>{
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(registration => {
+          console.log('Service Worker registered with scope:', registration.scope);
+      });
+  }
+  
+    navigator.serviceWorker.ready.then(registration => {
+      registration.showNotification('Persistent Notification', {
+          body: 'This notification works even if the browser is closed!',
+          
+          requireInteraction: true,
+      });
+  });
+  }
+
+  
+
+
 
   
   //Request Notification Permission: First, request permission from the user to show notifications.
@@ -85,6 +108,7 @@ const AppointmentReminder = (props) => {
   return (
     <div>
       {/* Your component code */}
+      <button onClick={handle}>rem</button>
     </div>
   );
 };

@@ -26,6 +26,8 @@ const UpcomingAppointment = ({ id: propId }) => {
         const result = response.data.result;
         console.log(response.data.result);
       if (result ) {
+        console.log(result);
+        
         setAppointments(result);
         
         
