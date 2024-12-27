@@ -1,45 +1,50 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 // Create a context for the user
-const UserContext = createContext();
+const UserContext = createContext({
+  user: null,
+  setUser: () => {},
+  loggedin: false,
+  setloggedIn: () => {},
+  doctor: null,
+  setDoctor: () => {},
+  isDoctorLoggedin: false,
+  setIsDoctorLoggedin: () => {},
+});
+
+const saveToSessionStorage = (key, value) => {
+  if (value !== null) {
+    sessionStorage.setItem(key, JSON.stringify(value));
+  } else {
+    sessionStorage.removeItem(key);
+  }
+};
+
+const parseSessionStorage = (key) => {
+  try {
+    const item = sessionStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  } catch (error) {
+    console.error(`Error parsing sessionStorage key "${key}":`, error);
+    return null;
+  }
+};
 
 export const UserProvider = ({ children }) => {
-  // Initialize state with sessionStorage data if available
-  const [user, setUser] = useState(() => {
-    const storedUser = sessionStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
-
-  const [loggedin, setloggedIn] = useState(() => {
-    const loginState = sessionStorage.getItem('loginState');
-    return loginState ? JSON.parse(loginState) : false;
-  });
-
-  const [doctor, setDoctor] = useState(() => {
-    const storedDoctor = sessionStorage.getItem('doctor');
-    return storedDoctor ? JSON.parse(storedDoctor) : null;
-  });
+  const [user, setUser] = useState(() => parseSessionStorage('user'));
+  const [loggedin, setloggedIn] = useState(() => parseSessionStorage('loginState'));
+  const [doctor, setDoctor] = useState(() => parseSessionStorage('doctor'));
+  const [isDoctorLoggedIn, setIsDoctorLoggedIn] = useState(() => parseSessionStorage('doctorLoginState') || false);
 
   useEffect(() => {
-    // Sync user and login state with sessionStorage
-    if (user) {
-      const { id, name,email} = user; // Limit stored data to essentials
-      sessionStorage.setItem('user', JSON.stringify({ id, name,email}));
-    } else {
-      sessionStorage.removeItem('user');
-    }
-
-    sessionStorage.setItem('loginState', JSON.stringify(loggedin));
+    saveToSessionStorage('user', user ? { id: user.id, name: user.name, email: user.email } : null);
+    saveToSessionStorage('loginState', loggedin);
   }, [user, loggedin]);
 
   useEffect(() => {
-    // Sync doctor data with sessionStorage
-    if (doctor) {
-      sessionStorage.setItem('doctor', JSON.stringify(doctor));
-    } else {
-      sessionStorage.removeItem('doctor');
-    }
-  }, [doctor]);
+    saveToSessionStorage('doctor', doctor);
+    saveToSessionStorage('doctorLoginState', isDoctorLoggedIn);
+  }, [doctor, isDoctorLoggedIn]);
 
   return (
     <UserContext.Provider
@@ -50,6 +55,8 @@ export const UserProvider = ({ children }) => {
         setloggedIn,
         doctor,
         setDoctor,
+        isDoctorLoggedIn,
+        setIsDoctorLoggedIn,
       }}
     >
       {children}

@@ -1,57 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import SlotSelector from "./SlotSelector";
+import { useUser } from "../Contexts/UserContext";
 
 const Dashboard = () => {
   const [doctorInfo, setDoctorInfo] = useState({});
   const [isDoctorActive, setIsDoctorActive] = useState(false);
   const [appointments, setAppointments] = useState([]);
-  const { id: doctor_id } = useParams();
+  const { doctor, isDoctorLoggedIn, setIsDoctorLoggedIn } = useUser();
+  const [doctorId, setDoctorId] = useState(0);
 
-  const toggleDoctorStatus = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/api/toggledoctor/${doctor_id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (response.ok) {
-        setIsDoctorActive((prevState) => !prevState);
-      } else {
-        console.error("Error toggling doctor status");
-      }
-    } catch (error) {
-      console.error("Error toggling doctor status", error);
+  useEffect(() => {
+    if (doctor) {
+      setDoctorInfo(doctor);
+      setIsDoctorActive(doctor.status);
+      setDoctorId(doctor.doctor_id);
     }
-  };
-
-  const fetchDoctorInfo = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/api/getdoctors/${doctor_id}`);
-      if (response.ok) {
-        const result = await response.json();
-        setDoctorInfo(result.data);
-        setIsDoctorActive(result.data.status);
-      } else {
-        console.error("Error fetching doctor information");
-      }
-    } catch (error) {
-      console.error("Error fetching doctor information", error);
-    }
-  };
+  }, [doctor]);
 
   const fetchAppointments = async () => {
     try {
       const response = await fetch(`http://localhost:3000/api/getappointments`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: doctor_id }),
+        body: JSON.stringify({ id: doctorId }),
       });
-  
+
       if (response.ok) {
         const result = await response.json();
-        setAppointments(result.data);
+        setAppointments(result.data || []);
       } else {
         console.error("Error fetching appointments");
       }
@@ -85,14 +63,57 @@ const Dashboard = () => {
     }
   };
 
+  const toggleDoctorStatus = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/toggledoctor/${doctorId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (response.ok) {
+        setIsDoctorActive((prevState) => !prevState);
+      } else {
+        console.error("Error toggling doctor status");
+      }
+    } catch (error) {
+      console.error("Error toggling doctor status", error);
+    }
+  };
+
+  const handleLogout = () => {
+    setIsDoctorLoggedIn(false);
+  };
+
   useEffect(() => {
-    fetchDoctorInfo();
-    fetchAppointments();
-  }, []);
+    if (doctorId) {
+      fetchAppointments();
+    }
+  }, [doctorId]);  
+
+  if (!isDoctorLoggedIn) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <button
+          className="px-6 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
+          onClick={() => window.location.href = "/doctorlogin"}
+        >
+          Login to Access Dashboard
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       {/* Header Section */}
+      <button
+        onClick={handleLogout}
+        className="px-4 py-1 rounded-lg font-medium text-white bg-red-500 hover:bg-red-600"
+      >
+        Logout
+      </button>
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Doctor's Dashboard</h1>
         <p className="text-gray-600">Manage your appointments effectively</p>
@@ -171,7 +192,8 @@ const Dashboard = () => {
           <p className="text-gray-600">No appointments available</p>
         )}
       </div>
-      <SlotSelector id={doctor_id}/>
+
+      <SlotSelector id={doctorId} />
     </div>
   );
 };

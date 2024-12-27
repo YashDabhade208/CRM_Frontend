@@ -59,9 +59,13 @@ const AppointmentReminder = (props) => {
       if (timeUntilNotification > 0) {
         setTimeout(() => {
          
-          new Notification('Appointment Reminder', {
-            body: `You have an appointment scheduled at ${appointment.appointment_time}.`,
-          });
+          if (Notification.permission === "granted") {
+            const notification = new Notification("Hello!", {
+              body: "This is a simple notification.",
+            });
+          } else {
+            console.log("Notifications not allowed.");
+          }
           alert("get yo ass to hospital")
         }, timeUntilNotification);
        
@@ -69,22 +73,23 @@ const AppointmentReminder = (props) => {
     });
   };
 
-  const handle = () =>{
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(registration => {
-          console.log('Service Worker registered with scope:', registration.scope);
-      });
-  }
   
-    navigator.serviceWorker.ready.then(registration => {
-      registration.showNotification('Persistent Notification', {
-          body: 'This notification works even if the browser is closed!',
-          
-          requireInteraction: true,
-      });
-  });
-  }
+
+    const handle = () => {
+      if (Notification.permission === "granted") {
+        try {
+          const notification = new Notification("Hello!", { 
+            body: "This is a simple notification." 
+          });
+        } catch (error) {
+          console.error("Error displaying notification:", error);
+        }
+      } else {
+        console.log("Notifications not allowed.");
+      }
+    };
+    
+  
 
   
 
@@ -108,7 +113,7 @@ const AppointmentReminder = (props) => {
   return (
     <div>
       {/* Your component code */}
-      <button onClick={handle}>rem</button>
+     
     </div>
   );
 };

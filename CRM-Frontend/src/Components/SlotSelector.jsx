@@ -63,13 +63,17 @@ const SlotSelector = (props) => {
   };
 
   return (
+    <div  >
+        <header className="text-center ">
+        <h3 className="text-2xl font-bold text-gray-800">Slot Selector</h3>
+        <p className="text-gray-600">Schedule time slots for upcoming days</p>
+        
+      </header>
     <div>
-      <h1>Slot Selector</h1>
       <div>
-      <div>
-          <label htmlFor="Schedule_date" className="block font-medium mb-1">
+        
             Schedule Date:
-          </label>
+          
           <input
             type="date"
             id="Schedule_date"
@@ -81,6 +85,8 @@ const SlotSelector = (props) => {
           />
         </div>
       </div>
+      <br />
+      <br />
       <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
         {slots.map((slot) => (
           <div
@@ -100,7 +106,7 @@ const SlotSelector = (props) => {
             }}
           >
             <p><strong>Slot ID:</strong> {slot.slot_id}</p>
-            <p><strong>Doctor ID:</strong> {slot.doctor_id}</p>
+            
             <p><strong>Time:</strong> {slot.start_time} - {slot.end_time}</p>
             <p><strong>Capacity:</strong> {slot.capacity}</p>
             <button

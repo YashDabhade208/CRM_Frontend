@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { DNA } from 'react-loader-spinner';
 import UpcomingAppointment from './UpcommingAppointment';
 import AppointmentReminder from './AppointmentReminder';
+import UserProfile from './UserProfile';
+import BookedAppointments from './BookedAppointments';
 
 const UserDashboard = () => {
   const [appointments, setAppointments] = useState([]);
@@ -14,7 +16,6 @@ const UserDashboard = () => {
   const [email, setEmail] = useState('');
   const { user, setUser } = useUser();
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(1);
 
   // Set username on mount
   useEffect(() => {
@@ -56,15 +57,21 @@ const UserDashboard = () => {
     navigate('/');
   };
 
-  return (
+  return (<>
+  <div className='b1'>
+  <UserProfile />
+  </div>
+   
     <div className="p-6 mt-8">
       <div className="mb-6 text-center">
-        <h2 className="text-2xl font-bold">Patient Dashboard</h2>
+        <h2 className="text-2xl font-bold text-blue-500">Patient Dashboard</h2> 
         <p className="text-gray-600 text-center">Here you can check your upcoming appointments and more...</p>
       </div>
       <UpcomingAppointment id={id} />
-      <AppointmentReminder id= {id} />
+      <BookedAppointments  id={id}/>
+      <AppointmentReminder id={id} />
     </div>
+    </>
   );
 };
 

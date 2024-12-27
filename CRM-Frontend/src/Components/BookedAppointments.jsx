@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Calendar, Clock, User, ChevronDown, ChevronUp } from "lucide-react";
 
-const UpcomingAppointment = ({ id: propId }) => {
+const BookedAppointments = ({ id: propId }) => {
   const [id, setId] = useState(propId || 0);
   const [appointments, setAppointments] = useState([]);
   const [patientData, setPatientData] = useState([]);
@@ -14,19 +14,22 @@ const UpcomingAppointment = ({ id: propId }) => {
   }, [propId]);
 
   
- 
+
  
   
 
   const fetchAppointments = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/upcomingappointments",
+        "http://localhost:3000/api/getappointmentsbyuserid",
         {id}
       );
-        const result = response.data.result;
-        const result1 =response.data.patientResult
-        console.log(response.data.result);
+      
+      
+        const result = response.data.data.result;
+        const result1 = response.data.data.patientResult
+       
+        console.log(response.data.data.patientResult);
       if (result ) {
         
         
@@ -59,7 +62,9 @@ const UpcomingAppointment = ({ id: propId }) => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "CONFIRMED":
+      case "COMPLETED":
+        return "bg-green-300 text-green-700";
+        case "CONFIRMED":
         return "bg-green-100 text-green-700";
       case "PENDING":
         return "bg-yellow-100 text-yellow-700";
@@ -89,7 +94,7 @@ const UpcomingAppointment = ({ id: propId }) => {
           className="w-full px-4 py-3 flex items-center justify-between text-left bg-gray-50 hover:bg-gray-100 rounded-t-lg"
         >
           <span className="text-lg font-semibold text-gray-800">
-            Upcoming Appointments
+          BookedAppointments
           </span>
           {isOpen ? (
             <ChevronUp className="w-5 h-5" />
@@ -149,4 +154,4 @@ const UpcomingAppointment = ({ id: propId }) => {
   );
 };
 
-export default UpcomingAppointment;
+export default BookedAppointments;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Ensure axios is imported
 import "../Css/DoctorLogin.css";
+import { useUser } from "../Contexts/UserContext";
 
 const DoctorLogin = () => {
   const [name, setName] = useState('');
@@ -9,7 +10,8 @@ const DoctorLogin = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  const {setDoctor,isDoctorLoggedIn,setIsDoctorLoggedIn} = useUser();
   
   let doctor_id;
   
@@ -29,7 +31,11 @@ const DoctorLogin = () => {
         setMessage('Login successful');
         doctor_id = response.data.user.doctor_id;
         sessionStorage.setItem('jwtToken', response.data.token);
-        navigate(`/dashboard/${doctor_id}`);
+        setIsDoctorLoggedIn(true)
+        console.log(response.data.user);
+        
+        setDoctor(response.data.user)
+        navigate(`/dashboard`);
       }
     } catch (error) {
       setMessage('Login failed. Please try again.');
@@ -43,18 +49,7 @@ const DoctorLogin = () => {
         <h1 className="text-2xl font-bold text-center mb-6">Doctor Login</h1>
         
         <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-lg font-medium">Name</label>
-            <input
-              type="text"
-              id="name"
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full border rounded p-3 mt-2"
-              required
-            />
-          </div>
+        
 
           <div>
             <label htmlFor="email" className="block text-lg font-medium">Email</label>

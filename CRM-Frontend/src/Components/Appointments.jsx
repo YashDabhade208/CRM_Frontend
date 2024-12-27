@@ -292,7 +292,7 @@ const Appointment = () => {
               })}
             </select>
           ) : (
-            <p>Loading available slots...</p>
+            <p className="text-red-600">No slots available for this date</p>
           )}
         </div>
 
