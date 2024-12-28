@@ -13,11 +13,16 @@ const BookedAppointments = ({ id: propId }) => {
     setId(propId);
   }, [propId]);
 
+  const token =  sessionStorage.getItem('jwtToken');  // Get token from sessionStorage
+  
+
   const fetchAppointments = async () => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/getappointmentsbyuserid",
-        { id }
+        { id ,headers: {
+          "Authorization": `Bearer ${token}`,
+      }}
       );
       
       

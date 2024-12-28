@@ -15,14 +15,20 @@ const UpcomingAppointment = ({ id: propId }) => {
 
   
  
+  const token =  sessionStorage.getItem('jwtToken');  // Get token from sessionStorage
  
+   
   
 
   const fetchAppointments = async () => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/upcomingappointments",
-        {id}
+        {id
+          ,headers: {
+            "Authorization": `Bearer ${token}`,
+        }
+        }
       );
         const result = response.data.result;
         const result1 =response.data.patientResult

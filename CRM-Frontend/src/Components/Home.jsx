@@ -8,21 +8,28 @@ import { useAuth0 } from "@auth0/auth0-react";
 const Home = () => {
   const navigate = useNavigate();
   const { setUser ,setloggedIn,loggedin} = useUser();
-  const { loginWithRedirect, isAuthenticated, isLoading, logout, user } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading, logout, user,getAccessTokenWithPopup,getAccessTokenSilently } = useAuth0();
 
 
   useEffect(() => {
-      if (isAuthenticated && user) {
-        // Auth0 login detected
-        setUser(user); 
-        console.log(user,"l");
-        
-        setloggedIn(true); // Explicitly set loggedIn to true
-        console.log("state updated");
-       // sessionStorage.setItem("userUser", JSON.stringify(user));
-        navigate("/"); // Redirect after successful login
-      }
-    }, [isAuthenticated, user, setUser, navigate]);
+    if (isAuthenticated && user) {
+      // Auth0 login detected
+      setUser(user); 
+      getAccessTokenSilently()
+        .then((token) => {
+          console.log(token);
+          sessionStorage.setItem('jwtToken', token); // Store the token
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve token:", error);
+        });
+      
+      setloggedIn(true); // Explicitly set loggedIn to true
+      console.log("state updated");
+      navigate("/"); // Redirect after successful login
+    }
+  }, [isAuthenticated, user, setUser, navigate, getAccessTokenSilently]);
+ 
     
     const handleLoginAlert = () => {
       alert("Please login before patient registration")

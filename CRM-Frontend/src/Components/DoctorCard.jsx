@@ -2,47 +2,55 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DNA } from 'react-loader-spinner';
 import { motion } from 'framer-motion';
-
+import axios from 'axios';
 const DoctorCard = () => {
     const [doctorInfo, setDoctorInfo] = useState([]);
-    const [isLoading, setIsLoading] = useState(true); // Loading state
-    const [error, setError] = useState(null); // Error state
+    const [isLoading, setIsLoading] = useState(true);  // Loading state
+    const [error, setError] = useState(null);  // Error state
+    
     const navigate = useNavigate();
+    const token =  sessionStorage.getItem('jwtToken');  // Get token from sessionStorage
+  
 
     const fetchDoctorInfo = async (retries = 3) => {
         try {
-            setError(null); // Clear previous errors
-            const response = await fetch(`http://localhost:3000/api/getalldoctors`);
-            if (response.ok) {
-                const result = await response.json();
-                setDoctorInfo(result.data);
-                console.log(result.data);
-                setIsLoading(false);
-            } else {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+            setError(null);  // Clear previous errors
+            if (!token) {
+                throw new Error("No token found, please log in again.");
             }
+            const response = await axios.get('http://localhost:3000/api/getalldoctors', {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                }
+            });
+
+            if (response.status === 200) {
+                const result = await response.data;
+                console.log(result);
+                
+                setDoctorInfo(result.data);
+                setIsLoading(false);  // Stop loading after successful data fetch
+            } 
         } catch (error) {
             console.error("Error fetching doctor information", error);
-            setError(error.message); // Set error message
+            setError(error.message);  // Set error message in state
+
             if (retries > 0) {
                 console.log(`Retrying... (${3 - retries + 1})`);
-                setTimeout(() => fetchDoctorInfo(retries - 1), 2000); // Retry after 2 seconds
-            }
-        } finally {
-            if (retries === 0) {
-                setIsLoading(false); // Stop loader after final retry
+                setTimeout(() => fetchDoctorInfo(retries - 1), 2000);  // Retry after 2 seconds
+            } else {
+                setIsLoading(false);  // Stop loader after final retry
             }
         }
     };
 
     useEffect(() => {
-        fetchDoctorInfo();
+        fetchDoctorInfo();  // Initial fetch call
     }, []);
 
     const handleAppointment = (doctorid) => {
         navigate(`/appointment/${doctorid}`);
     };
-
     return (
         <div className="container mx-auto px-4 py-6 pt-6">
             {isLoading ? (

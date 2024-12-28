@@ -18,16 +18,18 @@ const handleLogout = async () => {
     // Clear session storage
     sessionStorage.removeItem("authUser");
     sessionStorage.removeItem("userUser");
+    sessionStorage.removeItem("jwtToken");
 
     // Update state
     setUser(null);
     setloggedIn(false);
     setloggedIn(false);
 
-   await logout()
+  
 
     // Navigate to the homepage
-   window.location.href='/'
+   navigate('https://localhost:5173/')
+   await logout()
    
   } catch (error) {
     console.error("Error during logout:", error);
