@@ -2,8 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useUser } from "../Contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const Appointment = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     patient_id: "",
     name: "",
@@ -15,12 +18,12 @@ const Appointment = () => {
   const [slots, setSlots] = useState([]);
   const [doctorName, setDoctorName] = useState("");
   const [date, setDate] = useState("");
-  const [patientData, setPatientData] = useState([])
-  const [email, setEmail] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
+  const [patientData, setPatientData] = useState([]);
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const { doctorid } = useParams();
-  const { user, setUser } = useUser();
-  const [id, setId] = useState(0)
+  const { user } = useUser();
+  const [id, setId] = useState(0);
 
   // Updated slot object structure
   const slotobj = {
@@ -28,7 +31,7 @@ const Appointment = () => {
     date: date,
   };
 
-  // fetch userid for fetching patients 
+  // fetch userid for fetching patients
   useEffect(() => {
     if (user) {
       setEmail(user.email);
@@ -37,32 +40,25 @@ const Appointment = () => {
 
   console.log(user.email);
 
-
   // Fetch user ID
   const fetchUserID = async () => {
-
     try {
       setIsLoading(true);
-      const response = await axios.post('http://localhost:3000/api/getuserid', { email });
-
+      const response = await axios.post("http://localhost:3000/api/getuserid", { email });
 
       if (response.status === 200) {
         const { result } = await response.data;
         setId(result.id);
         console.log(result);
-
-        // setIsLoading(false)
       } else {
-        throw new Error('Error fetching user ID');
+        throw new Error("Error fetching user ID");
       }
     } catch (error) {
       console.error(error);
-      setError('Failed to fetch user ID');
     } finally {
-      //setIsLoading(false);
+      setIsLoading(false);
     }
   };
-
 
   useEffect(() => {
     if (email) {
@@ -70,31 +66,25 @@ const Appointment = () => {
     }
   }, [email]);
 
-
-
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.post(`http://localhost:3000/api/getpatientbyuserid`, {
-          id
-        })
+        const response = await axios.post("http://localhost:3000/api/getpatientbyuserid", {
+          id,
+        });
         if (response.status === 200) {
-          const result =  await response.data.result
-          setPatientData(result)
+          const result = await response.data.result;
+          setPatientData(result);
           console.log(result);
-          
-
         }
-      }
-      catch (err) {
+      } catch (err) {
         console.log(err);
-
       }
-    }; fetchPatients()
-  }, [id])
-
-
-
+    };
+    if (id) {
+      fetchPatients();
+    }
+  }, [id]);
 
   useEffect(() => {
     if (doctorid && date) {
@@ -107,8 +97,6 @@ const Appointment = () => {
           );
           if (response.status === 200) {
             setSlots(response.data.data);
-
-
           }
         } catch (error) {
           console.error("Error fetching slots data", error);
@@ -154,14 +142,11 @@ const Appointment = () => {
   };
 
   const handleChange = (e) => {
-    
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-
-    
   };
 
   const handleTimeChange = (e) => {
@@ -171,7 +156,6 @@ const Appointment = () => {
       ...formData,
       appointment_time: value,
     });
-
   };
 
   const handleSubmit = async (e) => {
@@ -222,7 +206,20 @@ const Appointment = () => {
               </option>
             ))}
           </select>
-
+          {patientData.length === 0 && (
+            <>
+              <button
+                type="button"
+                onClick={() => navigate("/patientregistration")}
+                className="text-blue-600 hover:text-blue-500 mt-2"
+              >
+                Register Patient
+              </button>
+              <p className="text-gray-600 mt-1">
+                Please register the patient first to book an appointment.
+              </p>
+            </>
+          )}
         </div>
 
         <div>
