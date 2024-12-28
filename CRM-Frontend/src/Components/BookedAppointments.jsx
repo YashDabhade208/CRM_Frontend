@@ -20,7 +20,7 @@ const BookedAppointments = ({ id: propId }) => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/getappointmentsbyuserid",
-        { id ,headers: {
+        { id}, {headers: {
           "Authorization": `Bearer ${token}`,
       }}
       );

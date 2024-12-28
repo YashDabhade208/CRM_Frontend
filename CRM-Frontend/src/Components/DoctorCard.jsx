@@ -26,7 +26,7 @@ const DoctorCard = () => {
 
             if (response.status === 200) {
                 const result = await response.data;
-                console.log(result);
+                console.log(response);
                 
                 setDoctorInfo(result.data);
                 setIsLoading(false);  // Stop loading after successful data fetch
