@@ -123,7 +123,7 @@ const UpcomingAppointment = ({ id: propId }) => {
                     <div className="space-y-2">
                       <div className="flex items-center text-gray-600">
                         <User className="w-4 h-4 mr-2" />
-                        <span>Patient:  {patientData.first_name} {patientData.last_name}</span>
+                        <span>Patient:  {appointment.first_name} {appointment.last_name}</span>
                       </div>
 
                       <div className="flex items-center text-gray-600">

@@ -64,12 +64,12 @@ const PatientRegistration = () => {
 
     const handleDob = (e) => {
         const { name, value } = e.target;
-        const Age = calcAge(value);
-        setAge(Age);
+        const AGe = calcAge(value);
+        setAge(AGe);
         setFormData({
             ...formData,
             [name]: value,
-            age: Age,
+            age: age,
         });
     };
 
@@ -214,7 +214,7 @@ const PatientRegistration = () => {
                         id="age"
                         name="age"
                         value={age}
-                        onChange={handleChange}
+                        onChange={handleDob}
                         className="w-full border rounded p-3 mt-2"
                         readOnly
                     />
