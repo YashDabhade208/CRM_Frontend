@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useUser } from '../Contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const PatientRegistration = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
     const [userName, setuserName] = useState("");
     const [age, setAge] = useState(0);
     const { user } = useUser();
     const [email, setEmail] = useState("");
+    const [isRegistered, setIsRegistered] = useState(false); // New state to track registration status
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         first_name: "",
@@ -69,7 +73,7 @@ const PatientRegistration = () => {
         setFormData({
             ...formData,
             [name]: value,
-            age: age,
+            age: AGe, // Fixed to use calculated age
         });
     };
 
@@ -77,11 +81,13 @@ const PatientRegistration = () => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
+        setSuccess(null); // Reset success message
 
         try {
             const response = await axios.post('http://localhost:3000/api/profile', formData);
-            if (response.status === 200) {
-                alert('Patient registered successfully!');
+            if (response.status === 200 || response.status === 201) {
+                setSuccess('Patient registered successfully!');
+                setIsRegistered(true); // Set registration status to true
                 setFormData({
                     first_name: "",
                     last_name: "",
@@ -120,11 +126,16 @@ const PatientRegistration = () => {
         return age;
     };
 
+    const handleBookAppointment = () => {
+        navigate("/doctorCard");
+    };
+
     return (
         <div className="container mx-auto p-8 max-w-lg">
             <h1 className="text-3xl font-bold text-center mb-6">Patient Registration</h1>
 
             {error && <div className="text-red-500 mb-4 text-center">{error}</div>}
+            {success && <div className="text-green-500 mb-4 text-center">{success}</div>}
 
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-lg">
                 <div>
@@ -222,12 +233,21 @@ const PatientRegistration = () => {
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white text-lg font-semibold px-4 py-3 rounded hover:bg-blue-700 transition duration-200"
+                    className={`w-full bg-blue-600 text-white text-lg font-semibold px-4 py-3 rounded hover:bg-blue-700 transition duration-200 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     disabled={isLoading}
                 >
                     {isLoading ? 'Submitting...' : 'Register Patient'}
                 </button>
             </form>
+
+            {isRegistered && (
+                <button
+                    onClick={handleBookAppointment}
+                    className="w-full bg-green-600 text-white text-lg font-semibold px-4 py-3 rounded hover:bg-green-700 transition duration-200 mt-4"
+                >
+                    Book Appointment
+                </button>
+            )}
         </div>
     );
 };
