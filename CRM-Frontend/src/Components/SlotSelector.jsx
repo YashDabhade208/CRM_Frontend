@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const SlotSelector = (props) => {
-  const [slots, setSlots] = useState([]); // All slots from the database
-  const [excludedSlots, setExcludedSlots] = useState([]); // Slots excluded from scheduling
+  const [slots, setSlots] = useState([]);
+  const [excludedSlots, setExcludedSlots] = useState([]);
   const [doctor_id, setDoctor_id] = useState(0);
-  const [date,setDate] = useState('')
+  const [date, setDate] = useState('');
+  // Add new state for success message
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  // Fetch the doctor_id from props
   useEffect(() => {
     setDoctor_id(props.id);
   }, [props]);
 
-  // Fetch slots from API based on doctor_id
   useEffect(() => {
     const fetchSlots = async () => {
       try {
@@ -31,49 +31,107 @@ const SlotSelector = (props) => {
     }
   }, [doctor_id]);
 
-  // Toggle slot exclusion
   const toggleSlotExclusion = (slotId) => {
     setExcludedSlots((prevExcluded) =>
       prevExcluded.includes(slotId)
-        ? prevExcluded.filter((id) => id !== slotId) // Remove slotId if already excluded
-        : [...prevExcluded, slotId] // Add slotId to exclusions
+        ? prevExcluded.filter((id) => id !== slotId)
+        : [...prevExcluded, slotId]
     );
   };
 
-  const  handleDate = (e)=>{
-    setDate(e.target.value); // Update the date
-
-    
+  const handleDate = (e) => {
+    setDate(e.target.value);
   }
- 
-  const scheduleobj = {doctor_id,excludedSlots,date}
- console.log(scheduleobj);
- 
-  // Submit excluded slots
+
+  const scheduleobj = { doctor_id, excludedSlots, date }
+
   const submitExcludedSlots = async () => {
     try {
-      await axios.post("http://localhost:3000/api/setschedule", 
-        scheduleobj,
-      );
+      // Validate only the essential fields
+      if (!date) {
+        alert("Please select a date");
+        return;
+      }
+  
+      if (!doctor_id) {
+        alert("Doctor ID is missing");
+        return;
+      }
+  
+      // Log the request payload for debugging
+      console.log("Sending request with data:", scheduleobj);
+  
+      const response = await axios.post("http://localhost:3000/api/setschedule", scheduleobj);
       
-      console.log("Excluded slots updated successfully!");
+      // Log the response for debugging
+      console.log("Server response:", response.data);
+  
+      // Show success message
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
+  
     } catch (err) {
-      console.error("Error updating excluded slots:", err.message);
+      // Enhanced error handling
+      const errorMessage = err.response?.data?.message || err.message;
+      console.error("Error details:", {
+        message: errorMessage,
+        status: err.response?.status,
+        data: err.response?.data
+      });
+  
+      // Show error to user
+      alert(`Failed to update schedule: ${errorMessage}`);
     }
   };
 
   return (
-    <div  >
-        <header className="text-center ">
+    <div>
+      <header className="text-center">
         <h3 className="text-2xl font-bold text-gray-800">Slot Selector</h3>
         <p className="text-gray-600">Schedule time slots for upcoming days</p>
-        
       </header>
-    <div>
+
+      {/* Success message */}
+      {showSuccess && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            padding: '15px',
+            borderRadius: '5px',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+            zIndex: 1000,
+            animation: 'slideIn 0.5s ease-out'
+          }}
+        >
+          Schedule updated successfully!
+        </div>
+      )}
+
+      {/* Add CSS for animation */}
+      <style>
+        {`
+          @keyframes slideIn {
+            from {
+              transform: translateX(100%);
+              opacity: 0;
+            }
+            to {
+              transform: translateX(0);
+              opacity: 1;
+            }
+          }
+        `}
+      </style>
+
       <div>
-        
-            Schedule Date:
-          
+        <div>
+          Schedule Date:
           <input
             type="date"
             id="Schedule_date"
@@ -81,7 +139,7 @@ const SlotSelector = (props) => {
             value={date}
             onChange={handleDate}
             required
-            className=" p-2 border rounded-md"
+            className="p-2 border rounded-md"
           />
         </div>
       </div>
@@ -106,7 +164,6 @@ const SlotSelector = (props) => {
             }}
           >
             <p><strong>Slot ID:</strong> {slot.slot_id}</p>
-            
             <p><strong>Time:</strong> {slot.start_time} - {slot.end_time}</p>
             <p><strong>Capacity:</strong> {slot.capacity}</p>
             <button
