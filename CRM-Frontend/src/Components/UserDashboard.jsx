@@ -24,11 +24,18 @@ const UserDashboard = () => {
     }
   }, [user]);
 
+  
+  
+
+  const token = sessionStorage.getItem("jwtToken")
+
   // Fetch user ID
   const fetchUserID = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post('http://localhost:3000/api/getuserid', { email });
+      const response = await axios.post('http://localhost:3000/api/getuserid', { email },{headers: {
+        "Authorization": `Bearer ${token}`,
+    }});
 
       if (response.status === 200) {
         const { result } = await response.data;

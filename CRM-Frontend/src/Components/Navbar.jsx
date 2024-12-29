@@ -28,9 +28,9 @@ const handleLogout = async () => {
   
 
     // Navigate to the homepage
-   navigate('https://localhost:5173/')
-   await logout()
    
+   await logout()
+   navigate('/')
   } catch (error) {
     console.error("Error during logout:", error);
   }

@@ -18,6 +18,7 @@ const AppointmentReminder = (props) => {
     console.log(userId);
   },[props])
 
+  const token = sessionStorage.getItem('jwtToken')
  
   
 
@@ -28,6 +29,7 @@ const AppointmentReminder = (props) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        "Authorization":`Bearer ${token}`
       },
       body: JSON.stringify({ id: userId }),
     });

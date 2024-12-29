@@ -17,11 +17,16 @@ const Dashboard = () => {
     }
   }, [doctor]);
 
+  const token = sessionStorage.getItem("jwtToken")
+
+ 
+  
   const fetchAppointments = async () => {
     try {
       const response = await fetch(`http://localhost:3000/api/getappointments`, {
         method: "POST",
         headers: {
+          "Authorization":`Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ id: doctorId }),
@@ -44,7 +49,10 @@ const Dashboard = () => {
         `http://localhost:3000/api/completeappointment/${id}`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Authorization":`Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
       );
       if (response.ok) {
@@ -69,7 +77,10 @@ const Dashboard = () => {
         `http://localhost:3000/api/toggledoctor/${doctorId}`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Authorization":`Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
       );
       if (response.ok) {
@@ -84,6 +95,7 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     setIsDoctorLoggedIn(false);
+
   };
 
   useEffect(() => {

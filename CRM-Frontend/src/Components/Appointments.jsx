@@ -39,12 +39,15 @@ const Appointment = () => {
   }, [user]);
 
   console.log(user.email);
-
+    const token = sessionStorage.getItem("jwtToken")
   // Fetch user ID
   const fetchUserID = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post("http://localhost:3000/api/getuserid", { email });
+      const response = await axios.post("http://localhost:3000/api/getuserid", { email },
+        {headers:{"Authorization": `Bearer ${token}`}}
+        
+      );
 
       if (response.status === 200) {
         const { result } = await response.data;
@@ -71,7 +74,7 @@ const Appointment = () => {
       try {
         const response = await axios.post("http://localhost:3000/api/getpatientbyuserid", {
           id,
-        });
+        }, {headers:{"Authorization": `Bearer ${token}`}});
         if (response.status === 200) {
           const result = await response.data.result;
           setPatientData(result);
@@ -93,7 +96,7 @@ const Appointment = () => {
         try {
           const response = await axios.post(
             `http://localhost:3000/api/getslots/`,
-            slotobj
+            slotobj, {headers:{"Authorization": `Bearer ${token}`}}
           );
           if (response.status === 200) {
             setSlots(response.data.data);
@@ -111,7 +114,9 @@ const Appointment = () => {
   useEffect(() => {
     const fetchDoctorName = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/getalldoctors");
+        const response = await axios.get("http://localhost:3000/api/getalldoctors",{
+          headers:{"Authorization": `Bearer ${token}`}
+        });
         if (response.status === 200) {
           const doctorData = response.data.data.find(
             (doc) => String(doc.doctor_id) === String(doctorid)
@@ -162,7 +167,7 @@ const Appointment = () => {
     e.preventDefault();
     console.log(formData);
 
-    const token = localStorage.getItem("jwtToken");
+   
 
     try {
       const config = {
@@ -172,7 +177,9 @@ const Appointment = () => {
       const response = await axios.post(
         "http://localhost:3000/api/appointments",
         { ...formData, name: doctorName }, // Add doctor name to formData
-        config
+        config,{headers: {
+          "Authorization": `Bearer ${token}`,
+      }}
       );
       setMessage("Appointment successfully booked!");
     } catch (error) {

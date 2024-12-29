@@ -13,12 +13,17 @@ const SlotSelector = (props) => {
     setDoctor_id(props.id);
   }, [props]);
 
+
+  const token = sessionStorage.getItem("jwtToken")
   useEffect(() => {
     const fetchSlots = async () => {
       try {
         const response = await axios.post("http://localhost:3000/api/getslotsbydoctor", {
           doctor_id,
-        });
+        },{headers: {
+          "Authorization":`Bearer ${token}`,
+          "Content-Type": "application/json",
+        }},);
         setSlots(response.data.data);
         console.log(response.data.data);
       } catch (err) {
@@ -60,8 +65,15 @@ const SlotSelector = (props) => {
   
       // Log the request payload for debugging
       console.log("Sending request with data:", scheduleobj);
+    
+
   
-      const response = await axios.post("http://localhost:3000/api/setschedule", scheduleobj);
+      const response = await axios.post("http://localhost:3000/api/setschedule", scheduleobj,{
+        headers: {
+          "Authorization":`Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       
       // Log the response for debugging
       console.log("Server response:", response.data);

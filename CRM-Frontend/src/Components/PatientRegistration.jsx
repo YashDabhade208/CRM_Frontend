@@ -31,10 +31,15 @@ const PatientRegistration = () => {
         }
     }, [user]);
 
+
+    const token = sessionStorage.getItem("jwtToken")
+
     const fetchUserID = async () => {
         try {
             setIsLoading(true);
-            const response = await axios.post("http://localhost:3000/api/getuserid", { email });
+            const response = await axios.post("http://localhost:3000/api/getuserid", { email },{headers: {
+                "Authorization": `Bearer ${token}`,
+            }});
             if (response.status === 200) {
                 const { result } = response.data;
                 setFormData((prevFormData) => ({
@@ -83,8 +88,13 @@ const PatientRegistration = () => {
         setError(null);
         setSuccess(null); // Reset success message
 
+
         try {
-            const response = await axios.post('http://localhost:3000/api/profile', formData);
+            const response = await axios.post('http://localhost:3000/api/profile', formData,
+                {headers: {
+                    "Authorization": `Bearer ${token}`,
+                }}
+            );
             if (response.status === 200 || response.status === 201) {
                 setSuccess('Patient registered successfully!');
                 setIsRegistered(true); // Set registration status to true

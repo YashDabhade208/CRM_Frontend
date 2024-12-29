@@ -16,10 +16,11 @@ import PatientRegistration from "./Components/PatientRegistration";
 import SlotSelector from "./Components/SlotSelector";
 import { useUser } from "../src/Contexts/UserContext";
 import BookedAppointments from "./Components/BookedAppointments";
+import { Cookie } from "lucide-react";
 
 function App() {
   const { isDoctorLoggedIn } = useUser();
-  
+ 
 
   return (
     <Router>

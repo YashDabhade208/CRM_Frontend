@@ -23,14 +23,24 @@ const DoctorLogin = () => {
     navigate('/doctorregistration');
   };
 
+
+  
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/doctorlogin', { name, email, password });
+      const response = await axios.post('http://localhost:3000/api/doctorlogin', { name, email, password },{
+        headers: {
+         
+         
+        },
+      });
       if (response.status === 200) {
         setMessage('Login successful');
         doctor_id = response.data.user.doctor_id;
         sessionStorage.setItem('jwtToken', response.data.token);
+        
+        
         setIsDoctorLoggedIn(true)
         console.log(response.data.user);
         
