@@ -17,6 +17,7 @@ import SlotSelector from "./Components/SlotSelector";
 import { useUser } from "../src/Contexts/UserContext";
 import BookedAppointments from "./Components/BookedAppointments";
 import { Cookie } from "lucide-react";
+import PasswordReset from "./Components/PasswordReset";
 
 function App() {
   const { isDoctorLoggedIn } = useUser();
@@ -43,6 +44,8 @@ function App() {
             <Route path="/patientregistration" element={<PatientRegistration />} />
             <Route path="/slotselector" element={<SlotSelector />} />
             <Route path="*" element={<Home />} /> {/* Handle undefined routes */}
+            <Route path="/passwordreset/reset-password" element={<PasswordReset />} />
+
           </Routes>
         </main>
       </div>
