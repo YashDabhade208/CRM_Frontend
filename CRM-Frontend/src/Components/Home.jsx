@@ -11,45 +11,61 @@ const Home = () => {
   const { loginWithRedirect, isAuthenticated, isLoading, logout, user,getAccessTokenSilently } = useAuth0();
 
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      // Auth0 login detected
-      setUser(user); 
-      // getAccessTokenSilently()
-      //   .then((token) => {
-      //     console.log(token);
-      //     sessionStorage.setItem('jwtToken', token); // Store the token
-      //   })
-      //   .catch((error) => {
-      //     console.error("Failed to retrieve token:", error);
-      //   });
+  // useEffect(() => {
+  //   if (isAuthenticated && user) {
+  //     // Auth0 login detected
+  //     const fetchToken = async () => {
+  //       try {
+  //         const response = await axios.post("http://localhost:3000/api/login", {
+  //           email: "ankur@ankur.com",
+  //           password: "ankur",
+  //           loginType: "auth0", // Differentiates this login type
+  //         });
+  //         const token = response.data.token;
+  //         console.log(token);
+  //         if(response.status ===200){
+  //           sessionStorage.setItem("jwtToken", token);
+  //         }
+        
+          
+  //       } catch (error) {
+  //         console.error("Error during login:", error);
+  //       }
+  //     };
+  
       
+  //   }
+      
+  //   fetchToken()}
+  // , [isAuthenticated, user, setUser, navigate, getAccessTokenSilently]);
+ 
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const response = await axios.post("http://localhost:3000/api/login", {
+          email: "",
+          password: "",
+          loginType: "auth0", // Differentiates this login type
+        });
+        const token = response.data.token;
+        console.log(token);
+        if(response.status ===200){
+          sessionStorage.setItem("jwtToken", token);
+          setUser(user); 
+     
       setloggedIn(true); // Explicitly set loggedIn to true
       console.log("state updated");
-      navigate("/"); // Redirect after successful login
-    }
-  }, [isAuthenticated, user, setUser, navigate, getAccessTokenSilently]);
- 
-    useEffect(()=>{
-       try {
-           
-            
+        }
       
-            // Send the Auth0 token to your backend
-            const response =  axios.post("http://localhost:3000/api/login", {
-              email:"",
-              password:"",
-              loginType: "auth0", // Differentiates this login type
-            });
-            sessionStorage.setItem("jwtToken", response.data.token);
-          
-            
-          } catch (error) {
-            console.log(error);
-            
-          }
-         
-    },[isAuthenticated, user, setUser, navigate, getAccessTokenSilently])
+        
+      } catch (error) {
+        console.error("Error during login:", error);
+      }
+    };
+
+    fetchToken();
+  }, [isAuthenticated, user, setUser, navigate]);
 
 
     const handleLoginAlert = () => {

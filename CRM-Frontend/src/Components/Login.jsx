@@ -39,31 +39,11 @@ const Login = () => {
 
   // Handle Auth0 login
   const handleLoginWithAuth0 = async () => {
-    try {
-     
-      const token = await getAccessTokenSilently();
-
-      // Send the Auth0 token to your backend
-      const response = await axios.post("http://localhost:3000/api/login", {
-        email:"",
-        password:"",
-        loginType: "auth0", // Differentiates this login type
-      });
-          console.log(response.data.token);
-          
-      if (response.status === 200) {
-        setMessage("Login successful with Auth0");
-        sessionStorage.setItem("jwtToken", response.data.token);
-        setUser(response.data.result.user);
-        setloggedIn(true);
-        navigate("/");
-      }
-      
-    } catch (error) {
-      console.log(error);
-      
-    }
-    await loginWithRedirect();
+   
+     try{await loginWithRedirect();
+     }catch(error){
+      setMessage(error)
+     }
   };
 
   return (
