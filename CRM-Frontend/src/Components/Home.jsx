@@ -41,28 +41,33 @@ const Home = () => {
  
 
   useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const response = await axios.post("http://localhost:3000/api/login", {
-          email: "",
-          password: "",
-          loginType: "auth0", // Differentiates this login type
-        });
-        const token = response.data.token;
-        console.log(token);
-        if(response.status ===200){
-          sessionStorage.setItem("jwtToken", token);
-          setUser(user); 
-     
-      setloggedIn(true); // Explicitly set loggedIn to true
-      console.log("state updated");
-        }
-      
+  
+      const fetchToken = async () => {
+        if(isAuthenticated && user){
+        try {
+          const response = await axios.post("http://localhost:3000/api/login", {
+            email: "",
+            password: "",
+            loginType: "auth0", // Differentiates this login type
+          });
+          const token = response.data.token;
+          console.log(token);
+          if(response.status ===200){
+            sessionStorage.setItem("jwtToken", token);
+            setUser(user); 
+       
+        setloggedIn(true); // Explicitly set loggedIn to true
+        console.log("state updated");
+          }
         
-      } catch (error) {
-        console.error("Error during login:", error);
-      }
-    };
+          
+        } catch (error) {
+          console.error("Error during login:", error);
+        }
+      };}
+
+    
+    
 
     fetchToken();
   }, [isAuthenticated, user, setUser, navigate]);

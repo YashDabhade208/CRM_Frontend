@@ -95,6 +95,9 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     setIsDoctorLoggedIn(false);
+    sessionStorage.removeItem('doctor')
+    sessionStorage.removeItem("jwtToken")
+   
 
   };
 
