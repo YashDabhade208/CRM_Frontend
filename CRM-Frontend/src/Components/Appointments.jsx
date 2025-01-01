@@ -182,6 +182,7 @@ const Appointment = () => {
       }}
       );
       setMessage("Appointment successfully booked!");
+      navigate('/payment')
     } catch (error) {
       setMessage(
         error.response?.data?.message ||
