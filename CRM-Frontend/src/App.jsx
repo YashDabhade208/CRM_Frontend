@@ -19,6 +19,7 @@ import BookedAppointments from "./Components/BookedAppointments";
 import { Cookie } from "lucide-react";
 import PasswordReset from "./Components/PasswordReset";
 import Payment from "./Components/Payment";
+import ChatSupport from "./Components/ChatSupport";
 
 function App() {
   const { isDoctorLoggedIn } = useUser();
@@ -47,6 +48,8 @@ function App() {
             <Route path="*" element={<Home />} /> {/* Handle undefined routes */}
             <Route path="/passwordreset/reset-password" element={<PasswordReset />} />
             <Route path="/payment" element={<Payment/>} />
+            
+            <Route path="/chat" element={<ChatSupport/>}/>
 
           </Routes>
         </main>

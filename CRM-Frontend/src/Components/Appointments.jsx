@@ -24,6 +24,7 @@ const Appointment = () => {
   const { doctorid } = useParams();
   const { user } = useUser();
   const [id, setId] = useState(0);
+  const [appointmentStatus,setAppointmentStatus] = useState("")
 
   // Updated slot object structure
   const slotobj = {
