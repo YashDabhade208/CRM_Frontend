@@ -9,6 +9,23 @@ function ChatSupport() {
     script.setAttribute("crossorigin", "*");
     document.body.appendChild(script);
 
+    const user = sessionStorage.getItem('user')
+    script.onload = () => {
+        if (window.Tawk_API) {
+          window.Tawk_API.setAttributes(
+            {
+              name: user.name, // Replace with your dynamic user data
+              email: user.email, // Replace with user email
+              userId: user.id, // Optional unique ID for the user
+            },
+            (error) => {
+              if (error) {
+                console.error("Failed to set user attributes:", error);
+              }
+            }
+          );
+        }
+      };
     return () => {
       document.body.removeChild(script);
     };

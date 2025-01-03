@@ -23,7 +23,7 @@ const Dashboard = () => {
   
   const fetchAppointments = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/getappointments`, {
+      const response = await fetch(`BASE_URLgetappointments`, {
         method: "POST",
         headers: {
           "Authorization":`Bearer ${token}`,
@@ -46,7 +46,7 @@ const Dashboard = () => {
   const completeAppointment = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/completeappointment/${id}`,
+        `BASE_URLcompleteappointment/${id}`,
         {
           method: "POST",
           headers: {
@@ -74,7 +74,7 @@ const Dashboard = () => {
   const toggleDoctorStatus = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/toggledoctor/${doctorId}`,
+        `BASE_URLtoggledoctor/${doctorId}`,
         {
           method: "POST",
           headers: {

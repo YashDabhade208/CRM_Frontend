@@ -15,7 +15,7 @@ const PasswordReset = () => {
       e.preventDefault();
   
       try {
-        const response = await fetch("http://localhost:3000/api/update", {
+        const response = await fetch("BASE_URLupdate", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

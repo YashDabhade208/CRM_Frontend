@@ -25,7 +25,7 @@ const AppointmentReminder = (props) => {
   //Check for Appointments: Fetch the appointments and check if any appointment is within the next 3 hours.
   const scheduleAppointmentNotifications = async (userId) => {
     // Fetch appointments
-    const response = await fetch(`http://localhost:3000/api/appointmentreminder`, {
+    const response = await fetch(`BASE_URLappointmentreminder`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

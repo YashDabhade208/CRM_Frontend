@@ -18,7 +18,7 @@ const DoctorCard = () => {
             if (!token) {
                 throw new Error("No token found, please log in again.");
             }
-            const response = await axios.get('http://localhost:3000/api/getalldoctors', {
+            const response = await axios.get('https://crm-backend-yash208.vercel.app/api/getalldoctors', {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                 }

@@ -24,7 +24,7 @@ const UpcomingAppointment = ({ id: propId }) => {
   const fetchAppointments = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/upcomingappointments",
+        "BASE_URLupcomingappointments",
         {id},
         {headers: {
             "Authorization": `Bearer ${token}`,
