@@ -18,7 +18,7 @@ const Forgot = () => {
     setLoading(true);
     try {
       // Send password reset userEmail request to the backend
-      const response = await axios.post('BASE_URLresetpassword', { userEmail });
+      const response = await axios.post('${BASE_URL}/resetpassword', { userEmail });
 
       if (response.status ===200) {
         setMessage('Password reset userEmail sent successfully! Please check your inbox.');

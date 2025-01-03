@@ -24,7 +24,7 @@ const DoctorRegistration = () => {
     e.preventDefault();
     try {
       // Submit the form data to the backend
-      const response = await axios.post(`BASE_URLregisterdoctor`, formData);
+      const response = await axios.post(`${BASE_URL}/registerdoctor`, formData);
       setResponseMessage(response.data.message); // Show success message
       setFormData({
         name: "",

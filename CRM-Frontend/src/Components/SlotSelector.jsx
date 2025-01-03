@@ -18,7 +18,7 @@ const SlotSelector = (props) => {
   useEffect(() => {
     const fetchSlots = async () => {
       try {
-        const response = await axios.post("BASE_URLgetslotsbydoctor", {
+        const response = await axios.post("${BASE_URL}/getslotsbydoctor", {
           doctor_id,
         },{headers: {
           "Authorization":`Bearer ${token}`,
@@ -68,7 +68,7 @@ const SlotSelector = (props) => {
     
 
   
-      const response = await axios.post("BASE_URLsetschedule", scheduleobj,{
+      const response = await axios.post("${BASE_URL}/setschedule", scheduleobj,{
         headers: {
           "Authorization":`Bearer ${token}`,
           "Content-Type": "application/json",

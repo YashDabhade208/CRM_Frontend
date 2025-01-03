@@ -19,7 +19,7 @@ const BookedAppointments = ({ id: propId }) => {
   const fetchAppointments = async () => {
     try {
       const response = await axios.post(
-        "BASE_URLgetappointmentsbyuserid",
+        "${BASE_URL}/getappointmentsbyuserid",
         { id}, {headers: {
           "Authorization": `Bearer ${token}`,
       }}

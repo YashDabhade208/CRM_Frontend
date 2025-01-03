@@ -29,7 +29,7 @@ const DoctorLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('BASE_URLdoctorlogin', { name, email, password },{
+      const response = await axios.post('${BASE_URL}/doctorlogin', { name, email, password },{
         headers: {
          
          

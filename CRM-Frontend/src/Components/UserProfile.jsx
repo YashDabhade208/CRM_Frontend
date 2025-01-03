@@ -13,7 +13,7 @@ const UserProfile = () => {
       try {
         setIsLoading(true); // Set loading state
 
-        const response = await axios.get('/api/user/profile'); // Replace with your actual API endpoint
+        const response = await axios.get('${BASE_URL}/profile'); // Replace with your actual API endpoint
          // Update user context
 
       } catch (error) {

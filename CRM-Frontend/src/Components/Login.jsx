@@ -17,7 +17,7 @@ const Login = () => {
   const handleCustomLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("BASE_URLlogin", {
+      const response = await axios.post("${BASE_URL}/login", {
         email,
         password,
         loginType: "custom", // Differentiates this login type

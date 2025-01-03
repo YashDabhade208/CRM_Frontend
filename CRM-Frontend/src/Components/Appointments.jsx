@@ -45,7 +45,7 @@ const Appointment = () => {
   const fetchUserID = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post("BASE_URLgetuserid", { email },
+      const response = await axios.post("${BASE_URL}/getuserid", { email },
         {headers:{"Authorization": `Bearer ${token}`}}
         
       );
@@ -73,7 +73,7 @@ const Appointment = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.post("BASE_URLgetpatientbyuserid", {
+        const response = await axios.post("${BASE_URL}/getpatientbyuserid", {
           id,
         }, {headers:{"Authorization": `Bearer ${token}`}});
         if (response.status === 200) {
@@ -96,7 +96,7 @@ const Appointment = () => {
       const fetchSlots = async () => {
         try {
           const response = await axios.post(
-            `BASE_URLgetslots/`,
+            `${BASE_URL}/getslots/`,
             slotobj, {headers:{"Authorization": `Bearer ${token}`}}
           );
           if (response.status === 200) {
@@ -115,7 +115,7 @@ const Appointment = () => {
   useEffect(() => {
     const fetchDoctorName = async () => {
       try {
-        const response = await axios.get("BASE_URLgetalldoctors",{
+        const response = await axios.get("${BASE_URL}/getalldoctors",{
           headers:{"Authorization": `Bearer ${token}`}
         });
         if (response.status === 200) {
@@ -176,7 +176,7 @@ const Appointment = () => {
       };
 
       const response = await axios.post(
-        "BASE_URLappointments",
+        "${BASE_URL}/appointments",
         { ...formData, name: doctorName }, // Add doctor name to formData
         config,{headers: {
           "Authorization": `Bearer ${token}`,

@@ -37,7 +37,7 @@ const PatientRegistration = () => {
     const fetchUserID = async () => {
         try {
             setIsLoading(true);
-            const response = await axios.post("BASE_URLgetuserid", { email },{headers: {
+            const response = await axios.post("${BASE_URL}/getuserid", { email },{headers: {
                 "Authorization": `Bearer ${token}`,
             }});
             if (response.status === 200) {
@@ -90,7 +90,7 @@ const PatientRegistration = () => {
 
 
         try {
-            const response = await axios.post('BASE_URLprofile', formData,
+            const response = await axios.post('${BASE_URL}/profile', formData,
                 {headers: {
                     "Authorization": `Bearer ${token}`,
                 }}

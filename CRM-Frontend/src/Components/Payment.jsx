@@ -21,7 +21,7 @@ const Payment = () => {
 
  useEffect( ()=>{const Fetchprices  = async ()=>{
     try {
-      const response  = await axios.get(`BASE_URLgetprices`,{
+      const response  = await axios.get(`${BASE_URL}/getprices`,{
         headers:{Authorization:`Bearer ${token}`} 
       })
        if(response.status===200){
@@ -47,7 +47,7 @@ const Payment = () => {
     try {
       // Step 1: Generate Order Token
       const response = await axios.post(
-        "BASE_URLprocesspayment",
+        "${BASE_URL}/processpayment",
         paymentObj,
         {
           headers: {

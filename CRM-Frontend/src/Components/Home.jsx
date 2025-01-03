@@ -16,7 +16,7 @@ const Home = () => {
   //     // Auth0 login detected
   //     const fetchToken = async () => {
   //       try {
-  //         const response = await axios.post("BASE_URLlogin", {
+  //         const response = await axios.post("${BASE_URL}/login", {
   //           email: "ankur@ankur.com",
   //           password: "ankur",
   //           loginType: "auth0", // Differentiates this login type
@@ -45,7 +45,7 @@ const Home = () => {
       const fetchToken = async () => {
         if(isAuthenticated && user){
         try {
-          const response = await axios.post("BASE_URLlogin", {
+          const response = await axios.post("${BASE_URL}/login", {
             email: "",
             password: "",
             loginType: "auth0", // Differentiates this login type
@@ -84,7 +84,7 @@ const Home = () => {
       if (isAuthenticated && user) {
         try {
           const { email, name } = user;
-          const response = await axios.post("BASE_URLregister", {
+          const response = await axios.post("${BASE_URL}/register", {
             name,
             email,
             password: null, // Assuming password is not required for Auth0 users
