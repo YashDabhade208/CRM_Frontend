@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import BASE_URL from '../../Config/apiConfig';
 const DoctorRegistration = () => {
   // Form state
   const [formData, setFormData] = useState({

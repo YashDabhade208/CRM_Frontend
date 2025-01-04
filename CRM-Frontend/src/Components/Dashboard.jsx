@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SlotSelector from "./SlotSelector";
 import { useUser } from "../Contexts/UserContext";
-
+import BASE_URL from '../../Config/apiConfig';
 const Dashboard = () => {
   const [doctorInfo, setDoctorInfo] = useState({});
   const [isDoctorActive, setIsDoctorActive] = useState(false);

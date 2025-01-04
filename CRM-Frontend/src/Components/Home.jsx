@@ -46,7 +46,7 @@ const Home = () => {
       const fetchToken = async () => {
         if(isAuthenticated && user){
         try {
-          const response = await axios.post(`https://crm-backend-yash208.vercel.app/login`, {
+          const response = await axios.post(`${BASE_URL}/login`, {
             email: "",
             password: "",
             loginType: "auth0", // Differentiates this login type
@@ -85,7 +85,7 @@ const Home = () => {
       if (isAuthenticated && user) {
         try {
           const { email, name } = user;
-          const response = await axios.post("${BASE_URL}/register", {
+          const response = await axios.post(`${BASE_URL}/register`, {
             name,
             email,
             password: null, // Assuming password is not required for Auth0 users

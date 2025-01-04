@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Calendar, Clock, User, ChevronDown, ChevronUp } from "lucide-react";
-
+import BASE_URL from '../../Config/apiConfig';
 const BookedAppointments = ({ id: propId }) => {
   const [id, setId] = useState(propId || 0);
   const [appointments, setAppointments] = useState([]);
@@ -19,7 +19,7 @@ const BookedAppointments = ({ id: propId }) => {
   const fetchAppointments = async () => {
     try {
       const response = await axios.post(
-        "${BASE_URL}/getappointmentsbyuserid",
+        `${BASE_URL}/getappointmentsbyuserid`,
         { id}, {headers: {
           "Authorization": `Bearer ${token}`,
       }}

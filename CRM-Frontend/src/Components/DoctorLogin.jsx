@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Ensure axios is imported
 import "../Css/DoctorLogin.css";
 import { useUser } from "../Contexts/UserContext";
+import BASE_URL from '../../Config/apiConfig';
 
 const DoctorLogin = () => {
   const [name, setName] = useState('');
@@ -29,7 +30,7 @@ const DoctorLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('${BASE_URL}/doctorlogin', { name, email, password },{
+      const response = await axios.post(`${BASE_URL}/doctorlogin`, { name, email, password },{
         headers: {
          
          

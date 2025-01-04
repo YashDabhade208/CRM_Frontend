@@ -13,7 +13,7 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { setUser, setloggedIn } = useUser();
-console.log(BASE_URL,"cyh");
+  console.log(BASE_URL,"<=this the bknd URL");
 
   // Handle custom login
   const handleCustomLogin = async (e) => {
@@ -21,7 +21,7 @@ console.log(BASE_URL,"cyh");
     try {
       console.log("jhbj");
       
-      const response = await axios.post(`https://crm-backend-yash208.vercel.app/login`, {
+      const response = await axios.post(`${BASE_URL}/login`, {
         email,
         password,
         loginType: "custom", // Differentiates this login type

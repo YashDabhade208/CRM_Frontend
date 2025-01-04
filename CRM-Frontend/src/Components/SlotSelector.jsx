@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import BASE_URL from '../../Config/apiConfig';
 
 const SlotSelector = (props) => {
   const [slots, setSlots] = useState([]);
@@ -18,7 +19,7 @@ const SlotSelector = (props) => {
   useEffect(() => {
     const fetchSlots = async () => {
       try {
-        const response = await axios.post("${BASE_URL}/getslotsbydoctor", {
+        const response = await axios.post(`${BASE_URL}/getslotsbydoctor`, {
           doctor_id,
         },{headers: {
           "Authorization":`Bearer ${token}`,
@@ -68,7 +69,7 @@ const SlotSelector = (props) => {
     
 
   
-      const response = await axios.post("${BASE_URL}/setschedule", scheduleobj,{
+      const response = await axios.post(`${BASE_URL}/setschedule`, scheduleobj,{
         headers: {
           "Authorization":`Bearer ${token}`,
           "Content-Type": "application/json",

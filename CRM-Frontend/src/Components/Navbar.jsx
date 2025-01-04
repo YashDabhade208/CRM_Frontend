@@ -3,14 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from '../Contexts/UserContext';
 import {useAuth0} from '@auth0/auth0-react'
 import logo from '../assets/logo.png'
-
-
+import BASE_URL from '../../Config/apiConfig';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const {user,loggedin,setUser,setloggedIn} =useUser()
   const {loginWithRedirect, isAuthenticated, isLoading,logout } = useAuth0();
-
 
 
 const handleLogout = async () => {

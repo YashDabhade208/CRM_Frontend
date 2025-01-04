@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
+import BASE_URL from '../../Config/apiConfig';
 
 const PasswordReset = () => {
     const [email, setEmail] = useState("");
@@ -15,7 +16,7 @@ const PasswordReset = () => {
       e.preventDefault();
   
       try {
-        const response = await fetch("${BASE_URL}/update", {
+        const response = await fetch(`${BASE_URL}/update`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

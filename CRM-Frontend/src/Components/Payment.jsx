@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import BASE_URL from '../../Config/apiConfig';
 const Payment = () => {
 
   const [prices,setPrices]=useState([])
   const [message,SetMessage] =useState("")
   const [error,SetError] = useState("")
-  const [orderAmount,setOrrderAmount]= useState(0)
+  const [orderAmount,setOrrderAmount]= useState(400)
   const orderId = `order_${Date.now()}`; // Unique order ID
  
   const customerDetails = {
@@ -47,7 +47,7 @@ const Payment = () => {
     try {
       // Step 1: Generate Order Token
       const response = await axios.post(
-        "${BASE_URL}/processpayment",
+        `${BASE_URL}/processpayment`,
         paymentObj,
         {
           headers: {

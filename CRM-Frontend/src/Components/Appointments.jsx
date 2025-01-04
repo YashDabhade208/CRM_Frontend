@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useUser } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import BASE_URL from '../../Config/apiConfig';
 
 const Appointment = () => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Appointment = () => {
   const fetchUserID = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post("${BASE_URL}/getuserid", { email },
+      const response = await axios.post(`${BASE_URL}/getuserid`, { email },
         {headers:{"Authorization": `Bearer ${token}`}}
         
       );
@@ -73,7 +74,7 @@ const Appointment = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.post("${BASE_URL}/getpatientbyuserid", {
+        const response = await axios.post(`${BASE_URL}/getpatientbyuserid`, {
           id,
         }, {headers:{"Authorization": `Bearer ${token}`}});
         if (response.status === 200) {
@@ -115,7 +116,7 @@ const Appointment = () => {
   useEffect(() => {
     const fetchDoctorName = async () => {
       try {
-        const response = await axios.get("${BASE_URL}/getalldoctors",{
+        const response = await axios.get(`${BASE_URL}/getalldoctors`,{
           headers:{"Authorization": `Bearer ${token}`}
         });
         if (response.status === 200) {
@@ -176,7 +177,7 @@ const Appointment = () => {
       };
 
       const response = await axios.post(
-        "${BASE_URL}/appointments",
+        `${BASE_URL}/appointments`,
         { ...formData, name: doctorName }, // Add doctor name to formData
         config,{headers: {
           "Authorization": `Bearer ${token}`,

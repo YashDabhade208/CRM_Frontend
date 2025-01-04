@@ -7,7 +7,7 @@ import UpcomingAppointment from './UpcommingAppointment';
 import AppointmentReminder from './AppointmentReminder';
 import UserProfile from './UserProfile';
 import BookedAppointments from './BookedAppointments';
-
+import BASE_URL from '../../Config/apiConfig';
 const UserDashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // Loading state
@@ -33,7 +33,7 @@ const UserDashboard = () => {
   const fetchUserID = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post('${BASE_URL}/getuserid', { email },{headers: {
+      const response = await axios.post(`${BASE_URL}/getuserid`, { email },{headers: {
         "Authorization": `Bearer ${token}`,
     }});
 

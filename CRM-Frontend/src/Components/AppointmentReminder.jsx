@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import BASE_URL from '../../Config/apiConfig';
 
 const AppointmentReminder = (props) => {
 

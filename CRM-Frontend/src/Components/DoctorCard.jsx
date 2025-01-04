@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { DNA } from 'react-loader-spinner';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import BASE_URL from '../../Config/apiConfig';
+
 const DoctorCard = () => {
     const [doctorInfo, setDoctorInfo] = useState([]);
     const [isLoading, setIsLoading] = useState(true);  // Loading state
@@ -10,7 +12,8 @@ const DoctorCard = () => {
     
     const navigate = useNavigate();
     const token =  sessionStorage.getItem('jwtToken');  // Get token from sessionStorage
-  
+    console.log("Doctor card says: BAse url is : ", BASE_URL);
+    
 
     const fetchDoctorInfo = async (retries = 3) => {
         try {
@@ -18,7 +21,7 @@ const DoctorCard = () => {
             if (!token) {
                 throw new Error("No token found, please log in again.");
             }
-            const response = await axios.get(`https://crm-backend-yash208.vercel.app/getalldoctors`, {
+            const response = await axios.get(`${BASE_URL}/getalldoctors`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                 }
@@ -26,7 +29,7 @@ const DoctorCard = () => {
 
             if (response.status === 200) {
                 const result = await response.data;
-                console.log(response);
+                console.log(result);
                 
                 setDoctorInfo(result.data);
                 setIsLoading(false);  // Stop loading after successful data fetch

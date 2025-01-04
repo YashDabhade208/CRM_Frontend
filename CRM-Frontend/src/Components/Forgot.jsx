@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import BASE_URL from '../../Config/apiConfig';
 
 const Forgot = () => {
   const [userEmail, setuserEmail] = useState('');

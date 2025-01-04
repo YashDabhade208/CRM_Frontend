@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Calendar, Clock, User, ChevronDown, ChevronUp } from "lucide-react";
-
+import BASE_URL from '../../Config/apiConfig';
 const UpcomingAppointment = ({ id: propId }) => {
   const [id, setId] = useState(propId || 0);
   const [appointments, setAppointments] = useState([]);
@@ -13,18 +13,15 @@ const UpcomingAppointment = ({ id: propId }) => {
     setId(propId);
   }, [propId]);
 
-  
  
   const token =  sessionStorage.getItem('jwtToken');  // Get token from sessionStorage
 
  
-   
-  
 
   const fetchAppointments = async () => {
     try {
       const response = await axios.post(
-        "${BASE_URL}/upcomingappointments",
+        `${BASE_URL}/upcomingappointments`,
         {id},
         {headers: {
             "Authorization": `Bearer ${token}`,

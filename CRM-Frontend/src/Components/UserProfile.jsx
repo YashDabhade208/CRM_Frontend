@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Assuming you're using axios for API call
 import { useUser } from '../Contexts/UserContext';
 import { User } from 'lucide-react'; // Import the User icon from Lucide React
+import BASE_URL from '../../Config/apiConfig';
 
 const UserProfile = () => {
   const { user, setUser } = useUser();
@@ -13,7 +14,7 @@ const UserProfile = () => {
       try {
         setIsLoading(true); // Set loading state
 
-        const response = await axios.get('${BASE_URL}/profile'); // Replace with your actual API endpoint
+        const response = await axios.get(`${BASE_URL}/profile`); // Replace with your actual API endpoint
          // Update user context
 
       } catch (error) {
