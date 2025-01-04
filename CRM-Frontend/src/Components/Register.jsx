@@ -12,7 +12,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("${BASE_URL}/register", {
+      const response = await axios.post(`${BASE_URL}/register`, {
         name,
         email,
         password,

@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../Contexts/UserContext";
 import { useAuth0 } from "@auth0/auth0-react";
+import BASE_URL from '../../Config/apiConfig';
 
 
 const Home = () => {
@@ -45,7 +46,7 @@ const Home = () => {
       const fetchToken = async () => {
         if(isAuthenticated && user){
         try {
-          const response = await axios.post("${BASE_URL}/login", {
+          const response = await axios.post(`https://crm-backend-yash208.vercel.app/login`, {
             email: "",
             password: "",
             loginType: "auth0", // Differentiates this login type

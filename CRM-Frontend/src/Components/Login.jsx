@@ -4,6 +4,7 @@ import { Mail, Lock, LogIn } from 'lucide-react';
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useUser } from "../Contexts/UserContext";
+import BASE_URL from '../../Config/apiConfig';
 
 const Login = () => {
   const { loginWithRedirect, getAccessTokenSilently } = useAuth0();
@@ -12,12 +13,15 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { setUser, setloggedIn } = useUser();
+console.log(BASE_URL,"cyh");
 
   // Handle custom login
   const handleCustomLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("${BASE_URL}/login", {
+      console.log("jhbj");
+      
+      const response = await axios.post(`https://crm-backend-yash208.vercel.app/login`, {
         email,
         password,
         loginType: "custom", // Differentiates this login type
@@ -41,6 +45,7 @@ const Login = () => {
   const handleLoginWithAuth0 = async () => {
    
      try{await loginWithRedirect();
+      navigate("/");
      }catch(error){
       setMessage(error)
      }
