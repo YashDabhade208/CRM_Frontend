@@ -97,8 +97,9 @@ const Appointment = () => {
   useEffect(() => {
     if (doctorid && date) {
       // Fetch slots for the doctor
+      setIsLoading(true)
       const fetchSlots = async () => {
-        setIsLoading(true)
+        
         try {
           const response = await axios.post(
             `${BASE_URL}/getslots/`,

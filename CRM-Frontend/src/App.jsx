@@ -20,6 +20,7 @@ import { Cookie } from "lucide-react";
 import PasswordReset from "./Components/PasswordReset";
 import Payment from "./Components/Payment";
 import ChatSupport from "./Components/ChatSupport";
+import './App.css'
 
 function App() {
   const { isDoctorLoggedIn } = useUser();
