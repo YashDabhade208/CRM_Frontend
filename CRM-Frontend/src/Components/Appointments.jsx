@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useUser } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from '../../Config/apiConfig';
+import { DNA } from 'react-loader-spinner';
 
 const Appointment = () => {
   const navigate = useNavigate();
