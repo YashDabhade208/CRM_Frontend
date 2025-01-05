@@ -149,7 +149,7 @@ const Home = () => {
           </Link>
         </div>) : (
           <>
-          <div className="relative inline-flex group">
+          <div className="">
             <Link
               to="/login"
               title="Get quote now"
@@ -163,7 +163,7 @@ const Home = () => {
 
       </div>
       <br />
-      {loggedin ? (<div className="relative inline-flex group">
+      {loggedin ? (<div className="">
         <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
         <Link
           to="/patientregistration"
