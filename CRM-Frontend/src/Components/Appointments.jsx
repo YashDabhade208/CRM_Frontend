@@ -25,7 +25,7 @@ const Appointment = () => {
   const { doctorid } = useParams();
   const { user } = useUser();
   const [id, setId] = useState(0);
-  const [appointmentStatus,setAppointmentStatus] = useState("")
+  const [appointmentStatus, setAppointmentStatus] = useState("")
 
   // Updated slot object structure
   const slotobj = {
@@ -41,14 +41,14 @@ const Appointment = () => {
   }, [user]);
 
   console.log(user.email);
-    const token = sessionStorage.getItem("jwtToken")
+  const token = sessionStorage.getItem("jwtToken")
   // Fetch user ID
   const fetchUserID = async () => {
     try {
       setIsLoading(true);
       const response = await axios.post(`${BASE_URL}/getuserid`, { email },
-        {headers:{"Authorization": `Bearer ${token}`}}
-        
+        { headers: { "Authorization": `Bearer ${token}` } }
+
       );
 
       if (response.status === 200) {
@@ -76,7 +76,7 @@ const Appointment = () => {
       try {
         const response = await axios.post(`${BASE_URL}/getpatientbyuserid`, {
           id,
-        }, {headers:{"Authorization": `Bearer ${token}`}});
+        }, { headers: { "Authorization": `Bearer ${token}` } });
         if (response.status === 200) {
           const result = await response.data.result;
           setPatientData(result);
@@ -98,7 +98,7 @@ const Appointment = () => {
         try {
           const response = await axios.post(
             `${BASE_URL}/getslots/`,
-            slotobj, {headers:{"Authorization": `Bearer ${token}`}}
+            slotobj, { headers: { "Authorization": `Bearer ${token}` } }
           );
           if (response.status === 200) {
             setSlots(response.data.data);
@@ -116,8 +116,8 @@ const Appointment = () => {
   useEffect(() => {
     const fetchDoctorName = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/getalldoctors`,{
-          headers:{"Authorization": `Bearer ${token}`}
+        const response = await axios.get(`${BASE_URL}/getalldoctors`, {
+          headers: { "Authorization": `Bearer ${token}` }
         });
         if (response.status === 200) {
           const doctorData = response.data.data.find(
@@ -168,9 +168,7 @@ const Appointment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-
-   
-
+    setIsLoading(true)
     try {
       const config = {
         headers: { Authorization: `Bearer ${token}` },
@@ -179,12 +177,18 @@ const Appointment = () => {
       const response = await axios.post(
         `${BASE_URL}/appointments`,
         { ...formData, name: doctorName }, // Add doctor name to formData
-        config,{headers: {
+        config, {
+        headers: {
           "Authorization": `Bearer ${token}`,
-      }}
+        }
+      }
       );
+      console.log(response.data);
+      
+      setIsLoading(false)
       setMessage("Appointment successfully booked!");
-      navigate('/payment')
+
+      //navigate('/payment')
     } catch (error) {
       setMessage(
         error.response?.data?.message ||
@@ -321,6 +325,22 @@ const Appointment = () => {
           {message}
         </p>
       )}
+      <div className="flex flex-col items-center">
+        {isLoading ? (
+          // Show spinner during loading and retries
+          <div className="flex flex-col items-center">
+            <DNA
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
+            />
+          </div>
+        ) : (<div></div>)}
+
+      </div>
     </div>
   );
 };
