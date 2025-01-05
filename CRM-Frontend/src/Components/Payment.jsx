@@ -3,8 +3,10 @@ import axios from "axios";
 import BASE_URL from "../../Config/apiConfig";
 import { CheckCircle } from "lucide-react";
 import Confetti from "react-confetti";
+import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
+  const navigate = useNavigate();
   const [prices, setPrices] = useState([]);
   const [orderAmount, setOrderAmount] = useState(100);
   const [orderStatus, setOrderStatus] = useState(null);
@@ -99,7 +101,7 @@ const Payment = () => {
             </p>
             <button
               className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-              onClick={() => (window.location.href = "/userdashboard")}
+              onClick={() => navigate("/userdashboard")}
             >
               Go to Dashboard
             </button>
