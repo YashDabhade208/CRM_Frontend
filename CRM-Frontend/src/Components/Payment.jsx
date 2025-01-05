@@ -5,8 +5,12 @@ const Payment = () => {
   const [prices, setPrices] = useState([]);
   const [message, SetMessage] = useState("");
   const [error, SetError] = useState("");
-  const [orderAmount, setOrrderAmount] = useState(400);
-  const orderId = `order_${Date.now()}`; // Unique order ID
+  const [orderAmount, setOrrderAmount] = useState(100);
+  const [orderId,setOrderId] = useState();
+  //const orderId = `${Date.now()}`; // Unique order ID
+  const [date, setDate] = useState('');
+  const [orderStatus, setOrderStatus] = useState(null);
+  const [neworderId,setNewOrderId] = useState()
 
   const customerDetails = {
     customerName: "Carl Johnson",
@@ -35,17 +39,23 @@ const Payment = () => {
     };
     Fetchprices();
   }, []);
+
+
+
+
+
   const handlePayment = async () => {
+    const orderid = `${Date.now()}`;
+    setOrderId(orderid);
     const paymentObj = {
-      orderId,
+      orderId: orderid,
       orderAmount,
       ...customerDetails,
     };
-
+    
     try {
-      // Step 1: Generate Order Token
       const response = await axios.post(
-        `${BASE_URL}/processpayment`,
+        `https://crm-backend-yash208.vercel.app/processpayment`,
         paymentObj,
         {
           headers: {
@@ -53,51 +63,65 @@ const Payment = () => {
           },
         }
       );
-      console.log("base url is form payment.jsx: " ,BASE_URL);
-      
-      console.log(paymentObj, "payment pbject from payment.jsx");
-
-      const paymentSessionId = response.data.response.payment_session_id; // Extract the session ID
-      console.log("Payment Session ID:", paymentSessionId);
-      const result = await response.data;
-      console.log(result);
-
-      // Step 2: Initialize Cashfree Checkout
+  
+      const paymentSessionId = response.data.response.payment_session_id;
+      const newOrderId = response.data.response.order_id;
+      setNewOrderId(newOrderId);
+  
       let checkoutOptions = {
-        paymentSessionId: paymentSessionId, // Use the session ID from the API response
+        paymentSessionId: paymentSessionId,
         redirectTarget: "_modal",
       };
-
-      const nigga = await cashfree.checkout(checkoutOptions).then((result) => {
-        if (result.error) {
-          console.error(
-            "User closed the popup or an error occurred during the payment:",
-            result.error
-          );
-        }
-        if (result.redirect) {
-          console.log("Payment will be redirected.");
-        }
-        if (result.paymentDetails) {
-          console.log("Payment completed:", result.paymentDetails);
-          console.log(nigga);
-        }
+  
+      const result = await cashfree.checkout(checkoutOptions);
+  
+      if (result.error) {
+        console.log("Payment error:", result.error);
+      } else if (result.redirect) {
+        console.log("Payment will be redirected");
+      } else if (result.paymentDetails) {
+        console.log("Payment completed:", result.paymentDetails.paymentMessage);
+      }
+  
+      // Getting order status
+      console.log("orderId while getting order status", newOrderId);
+      const statusResponse = await axios.post('https://crm-backend-yash208.vercel.app/getorderstatus', {
+        orderId: newOrderId,
       });
+      setOrderStatus(statusResponse.data.orderStatus);
+      console.log("orderStatus:", statusResponse.data.orderStatus);
+  
     } catch (error) {
       console.error("Payment initiation failed", error);
     }
   };
+  
+
+
+
   const handlePriceChange = (e) => {
     e.prevent.default;
     setOrrderAmount(e);
   };
+  
+   
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      SetError(null);
+      setOrderStatus(null);
+
+    }
+
+
+    
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
       <h1 className="text-2xl font-bold mb-4 text-gray-800">
         Cashfree Payment Integration
       </h1>
-      <select
+      {/* <select
         name="price"
         id="price"
         value={orderAmount}
@@ -110,14 +134,16 @@ const Payment = () => {
             {price.appointment_type} ₹{price.price}
           </option>
         ))}
-      </select>
+      </select> */}
 
       <button
         onClick={handlePayment}
         className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
       >
         Pay Now ₹{orderAmount}
+        
       </button>
+      <div>{orderStatus}</div>
     </div>
   );
 };
