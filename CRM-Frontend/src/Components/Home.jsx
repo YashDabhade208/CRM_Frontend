@@ -149,7 +149,7 @@ const Home = () => {
           </Link>
         </div>) : (
           <>
-          <div className="mt-12 flex flex-col justify-center gap-y-5 sm:mt-10 sm:flex-row sm:gap-y-0 sm:gap-x-6">
+          <div className="relative inline-flex group">
             <Link
               to="/login"
               title="Get quote now"
