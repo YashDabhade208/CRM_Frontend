@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
+    "@cashfreepayments/cashfree-js": "^1.0.5",
     "axios": "^1.7.8",
     "clsx": "^2.1.1",
     "framer-motion": "^11.14.1",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
+    "react-confetti": "^6.2.2",
     "react-dom": "^18.3.1",
     "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^6.28.0",
