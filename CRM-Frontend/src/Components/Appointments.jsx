@@ -73,6 +73,7 @@ const Appointment = () => {
   }, [email]);
 
   useEffect(() => {
+    setIsLoading(true)
     const fetchPatients = async () => {
       try {
         const response = await axios.post(`${BASE_URL}/getpatientbyuserid`, {
@@ -81,6 +82,7 @@ const Appointment = () => {
         if (response.status === 200) {
           const result = await response.data.result;
           setPatientData(result);
+          setIsLoading(false)
           console.log(result);
         }
       } catch (err) {
@@ -96,6 +98,7 @@ const Appointment = () => {
     if (doctorid && date) {
       // Fetch slots for the doctor
       const fetchSlots = async () => {
+        setIsLoading(true)
         try {
           const response = await axios.post(
             `${BASE_URL}/getslots/`,
@@ -103,6 +106,7 @@ const Appointment = () => {
           );
           if (response.status === 200) {
             setSlots(response.data.data);
+            setIsLoading(false)
           }
         } catch (error) {
           console.error("Error fetching slots data", error);
@@ -116,6 +120,7 @@ const Appointment = () => {
 
   useEffect(() => {
     const fetchDoctorName = async () => {
+      setIsLoading(true)
       try {
         const response = await axios.get(`${BASE_URL}/getalldoctors`, {
           headers: { "Authorization": `Bearer ${token}` }
@@ -126,6 +131,7 @@ const Appointment = () => {
           );
           if (doctorData) {
             setDoctorName(doctorData.name); // Set the state
+            setIsLoading(false)
           } else {
             console.error("Doctor not found");
             setMessage("Doctor not found.");
@@ -189,7 +195,7 @@ const Appointment = () => {
       setIsLoading(false)
       setMessage("Appointment successfully booked!");
 
-      //navigate('/payment')
+      navigate('/payment')
     } catch (error) {
       setMessage(
         error.response?.data?.message ||

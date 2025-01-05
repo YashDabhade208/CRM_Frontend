@@ -80,48 +80,63 @@ const Payment = () => {
     } catch (error) {
       console.error("Payment initiation failed", error);
     }
-  };
+    try {
 
-  return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">
-        Cashfree Payment Integration
-      </h1>
+      console.log("orderId while getting order status", newOrderId);
+      const statusResponse = await axios.post('https://crm-backend-yash208.vercel.app/getorderstatus', {
+        orderId: newOrderId,
+      });
+      setOrderStatus(statusResponse.data.orderStatus);
+      console.log("orderStatus:", statusResponse.data.orderStatus);
 
-      {orderStatus === "PAID" ? (
-        <div className="text-center">
-          <Confetti className="absolute inset-0" />
-          <div className="flex flex-col items-center bg-white rounded-lg p-6 shadow-lg">
-            <CheckCircle className="text-green-500 w-16 h-16 mb-4" />
-            <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-              Payment Successful!
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Thank you for your payment of ₹{orderAmount}.
-            </p>
-            <button
-              className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-              onClick={() => navigate("/userdashboard")}
-            >
-              Go to Dashboard
-            </button>
-            <p className="mt-4 text-gray-500">
-              Click on the dashboard for more details about your transaction.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div className="flex flex-col items-center">
+    } catch (error) {
+      console.error("Payment initiation failed", error);
+    }
+
+  }
+
+
+
+return (
+  <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+    <h1 className="text-3xl font-bold mb-6 text-gray-800">
+      Cashfree Payment Integration
+    </h1>
+
+    {orderStatus === "PAID" ? (
+      <div className="text-center">
+        <Confetti className="absolute inset-0" />
+        <div className="flex flex-col items-center bg-white rounded-lg p-6 shadow-lg">
+          <CheckCircle className="text-green-500 w-16 h-16 mb-4" />
+          <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+            Payment Successful!
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Thank you for your payment of ₹{orderAmount}.
+          </p>
           <button
-            onClick={handlePayment}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+            onClick={() => navigate("/userdashboard")}
           >
-            Pay Now ₹{orderAmount}
+            Go to Dashboard
           </button>
+          <p className="mt-4 text-gray-500">
+            Click on the dashboard for more details about your transaction.
+          </p>
         </div>
-      )}
-    </div>
-  );
+      </div>
+    ) : (
+      <div className="flex flex-col items-center">
+        <button
+          onClick={handlePayment}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+        >
+          Pay Now ₹{orderAmount}
+        </button>
+      </div>
+    )}
+  </div>
+);
 };
 
 export default Payment;
