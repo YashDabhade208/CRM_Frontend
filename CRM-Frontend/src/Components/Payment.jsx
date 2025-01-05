@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Payment = () => {
   const navigate = useNavigate();
   const [prices, setPrices] = useState([]);
-  const [orderAmount, setOrderAmount] = useState(100);
+  const [orderAmount, setOrderAmount] = useState();
   const [orderStatus, setOrderStatus] = useState(null);
   const [newOrderId, setNewOrderId] = useState();
 
@@ -26,7 +26,7 @@ const Payment = () => {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/getprices`, {
+        const response = await axios.get(`https://crm-backend-yash208.vercel.app/getprices`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.status === 200) {
@@ -94,14 +94,33 @@ const Payment = () => {
     }
 
   }
+  const handleOrderAmount = (e)=>{
+      
+      setOrderAmount(e.target.value)
+    }
 
 
 
 return (
+  <>
   <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
     <h1 className="text-3xl font-bold mb-6 text-gray-800">
       Cashfree Payment Integration
     </h1>
+    
+    <div className="py-3 my-12 bg-gray-100 flex flex-col items-center justify-center">
+      <select name="prices" id="prices" onChange={handleOrderAmount}>
+        <option value="">Select Appointment Type</option>
+        {prices.map((priceObj, index) => (
+          <option  key={index} value={priceObj.price}>
+            {priceObj.appointment_type} - {priceObj.price} {priceObj.currency}
+          </option>
+        ))}
+      </select>
+    </div>
+
+      
+    
 
     {orderStatus === "PAID" ? (
       <div className="text-center">
@@ -136,6 +155,7 @@ return (
       </div>
     )}
   </div>
+  </>
 );
 };
 
