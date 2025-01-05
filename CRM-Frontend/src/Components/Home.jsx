@@ -106,7 +106,7 @@ const Home = () => {
 
   return (
     <>
-    <div className="mx-auto px-4 sm:px-6 text-center">
+    <div className="mx-auto px-4  my-4 sm:px-6 text-center">
       <p className="mx-auto -mt-4 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">
         Welcome to{" "}
         <span className="border-b border-dotted border-slate-300">DAMS</span>
@@ -128,7 +128,7 @@ const Home = () => {
         <span className="inline-block">Online</span>
       </h1>
 
-      <p className="mx-auto mt-9 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">
+      <p className="mx-auto mt-9 my-4 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">
         <span className="inline-block">
           Save time spent on coordinating appointments over the phone
         </span>
@@ -149,13 +149,14 @@ const Home = () => {
           </Link>
         </div>) : (
           <>
-          <div className="mt-12 flex flex-col justify-center gap-y-5 sm:mt-10 sm:flex-row sm:gap-y-0 sm:gap-x-6"></div>
+          <div className="mt-12 flex flex-col justify-center gap-y-5 sm:mt-10 sm:flex-row sm:gap-y-0 sm:gap-x-6">
             <Link
               to="/login"
               title="Get quote now"
               className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
               role="button"
-            > Book Appointment now</Link></>
+            > Book Appointment now</Link>
+            </div></>
 
         )}
 
