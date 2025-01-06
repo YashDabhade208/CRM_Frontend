@@ -3,7 +3,7 @@ import axios from 'axios';
 import BASE_URL from '../../Config/apiConfig';
 
 const Forgot = () => {
-  const [userEmail, setuserEmail] = useState('');
+  const [email, setuserEmail] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -11,7 +11,7 @@ const Forgot = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!userEmail) {
+    if (!email) {
       setMessage('Please enter your userEmail address.');
       return;
     }
@@ -19,7 +19,7 @@ const Forgot = () => {
     setLoading(true);
     try {
       // Send password reset userEmail request to the backend
-      const response = await axios.post(`${BASE_URL}/resetpassword`, { userEmail });
+      const response = await axios.post(`${BASE_URL}/resetpassword`, { email });
 
       if (response.status ===200) {
         setMessage('Password reset userEmail sent successfully! Please check your inbox.');
@@ -43,7 +43,7 @@ const Forgot = () => {
           <input
             type="userEmail"
             id="userEmail"
-            value={userEmail}
+            value={email}
             onChange={(e) => setuserEmail(e.target.value)}
             required
             className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
