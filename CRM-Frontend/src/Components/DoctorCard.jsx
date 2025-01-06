@@ -61,8 +61,8 @@ const DoctorCard = () => {
                 <div className="flex flex-col items-center">
                     <DNA
                         visible={true}
-                        height="80"
-                        width="80"
+                        height="40"
+                        width="40"
                         ariaLabel="dna-loading"
                         wrapperStyle={{}}
                         wrapperClass="dna-wrapper"

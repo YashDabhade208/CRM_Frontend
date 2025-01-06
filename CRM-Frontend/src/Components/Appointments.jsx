@@ -191,12 +191,12 @@ const Appointment = () => {
         }
       }
       );
-      console.log(response.data);
+      console.log("appointment data",response.data.data);
       
       setIsLoading(false)
       setMessage("Appointment successfully booked!");
 
-      navigate('/payment')
+      // navigate('/payment')
     } catch (error) {
       setMessage(
         error.response?.data?.message ||
