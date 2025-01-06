@@ -107,6 +107,13 @@ const Dashboard = () => {
     }
   }, [doctorId]);  
 
+  const formatTime = (timeString) => {
+    return new Date(`1970-01-01T${timeString}`).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   if (!isDoctorLoggedIn) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -188,7 +195,7 @@ const Dashboard = () => {
                 </p>
                 <p className="text-gray-600">
                   <strong>Time:</strong>{" "}
-                  {new Date(appointment.appointment_time).toLocaleString()}
+                  {formatTime(appointment.appointment_time)}
                 </p>
                 {appointment.status !== "COMPLETED" && (
                   <button

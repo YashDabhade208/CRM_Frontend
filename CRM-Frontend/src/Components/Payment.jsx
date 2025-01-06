@@ -67,11 +67,12 @@ const Payment = () => {
     }, [email, fetchUserID]);
     
 
-  const customerDetails = {
-    customerName: "Carl Johnson",
-    customerEmail: "cj.doe@example.com",
-    customerPhone: "9999999999",
-  };
+    const customerDetails = {
+      customerName: user.name,
+      customerEmail: email,
+      customerPhone: "9999999999",
+    };
+  
 
   
   const cashfree = Cashfree({
