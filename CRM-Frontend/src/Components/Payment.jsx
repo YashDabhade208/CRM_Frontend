@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BASE_URL from "../../Config/apiConfig";
-import { CheckCircle } from "lucide-react";
 import Confetti from "react-confetti";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../Contexts/UserContext';
+import { CheckCircle, CreditCard, AlertCircle } from "lucide-react";
 
 const Payment = () => {
   const navigate = useNavigate();
@@ -234,62 +234,102 @@ const Payment = () => {
 
 
 
-return (
-  <>
-  <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-    <h1 className="text-3xl font-bold mb-6 text-gray-800">
-      Cashfree Payment Integration
-    </h1>
-    
-    <div className="py-3 my-12 bg-gray-100 flex flex-col items-center justify-center">
-      <select name="prices" id="prices" onChange={handleOrderAmount}>
-        <option value="">Select Appointment Type</option>
-        {prices.map((priceObj, index) => (
-          <option  key={index} value={priceObj.price}>
-            {priceObj.appointment_type} - {priceObj.price} {priceObj.currency}
-          </option>
-        ))}
-      </select>
-    </div>
-
-      
-    
-
-    {orderStatus === "PAID" ? (
-      <div className="text-center">
-        <Confetti className="absolute inset-0" />
-        <div className="flex flex-col items-center bg-white rounded-lg p-6 shadow-lg">
-          <CheckCircle className="text-green-500 w-16 h-16 mb-4" />
-          <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-            Payment Successful!
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Thank you for your payment of ₹{orderAmount}.
-          </p>
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-            onClick={() => navigate("/userdashboard")}
-          >
-            Go to Dashboard
-          </button>
-          <p className="mt-4 text-gray-500">
-            Click on the dashboard for more details about your transaction.
-          </p>
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto space-y-8">
+          {/* Header */}
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Complete Your Payment</h1>
+            <p className="text-gray-600">Select your appointment type and proceed with the payment</p>
+          </div>
+  
+          {orderStatus === "PAID" ? (
+            <div className="bg-white rounded-lg shadow-xl p-6">
+              <div className="text-center">
+                <Confetti className="fixed inset-0" />
+                <div className="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100">
+                  <CheckCircle className="w-8 h-8 text-green-500" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  Payment Successful!
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  Your payment of ₹{orderAmount} has been processed successfully.
+                </p>
+                <button
+                  onClick={() => navigate("/userdashboard")}
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                >
+                  View Dashboard
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white rounded-lg shadow-xl">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center gap-2 text-xl font-semibold text-gray-900">
+                  <CreditCard className="w-5 h-5 text-blue-500" />
+                  Payment Details
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="space-y-6">
+                  {/* Price Selection */}
+                  <div className="space-y-2">
+                    <label htmlFor="prices" className="block text-sm font-medium text-gray-700">
+                      Select Appointment Type
+                    </label>
+                    <select
+                      id="prices"
+                      name="prices"
+                      onChange={handleOrderAmount}
+                      className="mt-1 block w-full pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md transition-colors duration-200"
+                    >
+                      <option value="">Choose your appointment type</option>
+                      {prices.map((priceObj, index) => (
+                        <option key={index} value={priceObj.price}>
+                          {priceObj.appointment_type} - {priceObj.price} {priceObj.currency}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+  
+                  {/* Amount Display */}
+                  {orderAmount && (
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <span className="text-blue-600">Total Amount:</span>
+                        <span className="text-lg font-semibold text-gray-900">₹{orderAmount}</span>
+                      </div>
+                    </div>
+                  )}
+  
+                  {/* Pay Button */}
+                  <button
+                    onClick={handlePayment}
+                    disabled={!orderAmount}
+                    className={`w-full flex items-center justify-center px-6 py-3 rounded-md text-white font-medium transition-all duration-200 ${
+                      orderAmount
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : "bg-blue-400 cursor-not-allowed"
+                    }`}
+                  >
+                    <CreditCard className="w-5 h-5 mr-2" />
+                    {orderAmount ? `Pay ₹${orderAmount}` : "Select an amount"}
+                  </button>
+  
+                  {/* Security Notice */}
+                  <div className="flex items-center justify-center text-sm text-gray-500 mt-4">
+                    <AlertCircle className="w-4 h-4 mr-2" />
+                    <span>Your payment is secured with end-to-end encryption</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    ) : (
-      <div className="flex flex-col items-center">
-        <button
-          onClick={handlePayment}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-        >
-          Pay Now ₹{orderAmount}
-        </button>
-      </div>
-    )}
-  </div>
-  </>
-);
-};
-
-export default Payment;
+    );
+  };
+  
+  export default Payment;
