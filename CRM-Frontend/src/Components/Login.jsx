@@ -5,7 +5,7 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useUser } from "../Contexts/UserContext";
 //import BASE_URL from '../../Config/apiConfig';
-const BASE_URL =import.meta.env.VITE_APIURL;
+const BASE_URL = import.meta.env.VITE_APIURL;
 
 const Login = () => {
   const { loginWithRedirect, getAccessTokenSilently } = useAuth0();
@@ -14,14 +14,13 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { setUser, setloggedIn } = useUser();
-  console.log( BASE_URL,"<=this the bknd URL");
+  console.log(BASE_URL, "<=this the bknd URL");
 
-  // Handle custom login
   const handleCustomLogin = async (e) => {
     e.preventDefault();
     try {
       console.log("jhbj");
-      
+
       const response = await axios.post(`${BASE_URL}/login`, {
         email,
         password,
@@ -32,8 +31,6 @@ const Login = () => {
         setMessage("Login successful");
         sessionStorage.setItem("jwtToken", response.data.token);
         setUser(response.data.result.user);
-       
-        
         setloggedIn(true);
         navigate("/");
       }
@@ -42,14 +39,13 @@ const Login = () => {
     }
   };
 
-  // Handle Auth0 login
   const handleLoginWithAuth0 = async () => {
-   
-     try{await loginWithRedirect();
+    try {
+      await loginWithRedirect();
       navigate("/");
-     }catch(error){
-      setMessage(error)
-     }
+    } catch (error) {
+      setMessage(error);
+    }
   };
 
   return (
@@ -62,7 +58,9 @@ const Login = () => {
 
         <form onSubmit={handleCustomLogin} className="space-y-4">
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          <Mail className=" ml-1 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+         
+
             <input
               type="email"
               value={email}
@@ -74,8 +72,8 @@ const Login = () => {
           </div>
 
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-            <input
+          <Lock className=" ml-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -98,7 +96,8 @@ const Login = () => {
           onClick={handleLoginWithAuth0}
           className="w-full py-2 px-4 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
         >
-          <LogIn className="mr-2" size={20} />
+          <LogIn className="m-2 w-5 h-5" />
+
           Continue with Google
         </button>
 

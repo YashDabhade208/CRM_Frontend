@@ -17,6 +17,8 @@ const Forgot = () => {
     }
 
     setLoading(true);
+    console.log(email);
+    
     try {
       // Send password reset userEmail request to the backend
       const response = await axios.post(`${BASE_URL}/resetpassword`, { email });
@@ -41,8 +43,8 @@ const Forgot = () => {
         <div>
           <label htmlFor="userEmail" className="block text-sm font-medium text-gray-600">Enter your userEmail address</label>
           <input
-            type="userEmail"
-            id="userEmail"
+            type="email"
+            id="email"
             value={email}
             onChange={(e) => setuserEmail(e.target.value)}
             required
