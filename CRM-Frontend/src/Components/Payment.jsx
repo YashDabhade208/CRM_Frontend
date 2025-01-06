@@ -22,47 +22,50 @@ const Payment = () => {
   const { user, setUser } = useUser();
  const [id, setId] = useState(9);
   
-
+  const token = sessionStorage.getItem("jwtToken");
    useEffect(() => {
       if (user) {
-        setEmail(user.email);
-       
-        
+        setEmail(user.email);        
       }
     }, [user]);
     console.log("email",email);
 
-
-
-    const fetchUserID = async () => {
+    const fetchUserID = React.useCallback(async () => {
       try {
         setIsLoading(true);
-        const response = await axios.post(`${BASE_URL}/getuserid`, { email:email},{headers: {
-          "Authorization": `Bearer ${token}`,
-      }});
-  
-        if (response.status === 200) {
-          const { result } = await response.data;
-          setId(result.id);
-          setIsLoading(false);
-          console.log("user id from paymet.jsx",result);
-          
+        const response = await axios.post(`${BASE_URL}/getuserid`, { email }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+    
+        console.log("API Response:", response.data);
+    
+        if (response.status === 200 && response.data && response.data.result) {
+          const { id } = response.data.result; // Destructure `id` from `result`
+          setId(id); // Set the ID in state
+          console.log("User ID from payment.jsx:", id); // Log the extracted `id`
         } else {
-          throw new Error('Error fetching user ID');
+          console.error("Unexpected API response:", response);
+          setError("Error: Unexpected response structure");
         }
       } catch (error) {
-        console.error(error);
-        setError('Failed to fetch user ID');
+        console.error("Error in fetchUserID:", error);
+        setError("Failed to fetch user ID");
       } finally {
         setIsLoading(false);
       }
-    };
+    }, [email, token]);
+    
+    
+    
   
     useEffect(() => {
-     
+      if (email) {
         fetchUserID();
-      
-    }, [email]);
+      } else {
+        console.warn("Email is empty, skipping fetchUserID call");
+      }
+    }, [email, fetchUserID]);
+    
 
   const customerDetails = {
     customerName: "Carl Johnson",
@@ -70,47 +73,86 @@ const Payment = () => {
     customerPhone: "9999999999",
   };
 
-  const token = sessionStorage.getItem("jwtToken");
+  
   const cashfree = Cashfree({
     mode: "sandbox", // or production
   });
-  const fetchAppointments = async () => {
-    console.log(id,"user id in fetchuserid");
-    
+  
+  const fetchAppointments = React.useCallback(async () => {
+    console.log("Attempting to fetch appointments for user ID:", id);
+    console.log("Using token:", token); // Remove in production
+  
     try {
+      // Log the request details
+      console.log("Making request with:", {
+        url: `${BASE_URL}/getappointmentsbyuserid`,
+        body: { id },
+        headers: { Authorization: `Bearer ${token}` }
+      });
+  
       const response = await axios.post(
         `${BASE_URL}/getappointmentsbyuserid`,
-        {id}, {headers: {
-          "Authorization": `Bearer ${token}`,
-      }}
-      );     
-      const result = response.data.data
-
-      console.log(response.data.data);
-      if (result) {
-        const ids = result.map(appointment => appointment.appointment_id);
-        setAppointmentIds(ids);
-        console.log("appointmentids",appointmentIds);
-       
-        
-       // setPatientData(patients);
-        setMessage("");
+        { id },
+        {
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+  
+      console.log("Full API Response:", response);
+  
+      // Handle the nested response structure
+      const appointments = response.data.data;
+      
+      if (Array.isArray(appointments)) {
+        if (appointments.length > 0) {
+          const ids = appointments.map((appointment) => appointment.appointment_id);
+          setAppointmentIds(ids);
+          console.log("Processed appointment IDs:", ids);
+        } else {
+          setMessage("No appointments found.");
+          setAppointmentIds([]);
+        }
+      } else if (appointments && appointments.data) {
+        // Handle the nested data structure if present
+        const nestedAppointments = appointments.data;
+        if (Array.isArray(nestedAppointments) && nestedAppointments.length > 0) {
+          const ids = nestedAppointments.map((appointment) => appointment.appointment_id);
+          setAppointmentIds(ids);
+          console.log("Processed nested appointment IDs:", ids);
+        } else {
+          setMessage(appointments.message || "No appointments found.");
+          setAppointmentIds([]);
+        }
       } else {
-        
-        setMessage("No appointments found.");
+        setMessage("Invalid response format");
+        setAppointmentIds([]);
       }
     } catch (error) {
-      setAppointments([]);
-      setMessage(
-        error.response?.data?.message || "Failed to fetch appointments."
-      );
+      console.error("Full error object:", error);
+      setMessage(error.response?.data?.message || "Failed to fetch appointments.");
+      setAppointmentIds([]);
     }
-    
-  };
+  }, [id, token]);
+  
 
   useEffect(() => {
+    if (!token) {
+      console.error("No token available");
+      setMessage("Authentication required");
+      return;
+    }
+    
+    if (!id) {
+      console.error("No user ID available");
+      setMessage("User ID required");
+      return;
+    }
+    
     fetchAppointments();
-  }, [id]);
+  }, [id, token, fetchAppointments]);
 
   
 
