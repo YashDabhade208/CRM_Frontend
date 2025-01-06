@@ -21,6 +21,7 @@ import PasswordReset from "./Components/PasswordReset";
 import Payment from "./Components/Payment";
 import ChatSupport from "./Components/ChatSupport";
 import './App.css'
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   const { isDoctorLoggedIn } = useUser();
@@ -28,6 +29,7 @@ function App() {
 
   return (
     <Router>
+      <Analytics/>
       <div className="flex flex-col min-h-screen">
         {!isDoctorLoggedIn && <Navbar />}
         <main className="flex-1 mt-20"> {/* Add top margin to account for fixed navbar */}

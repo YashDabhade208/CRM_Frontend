@@ -4,7 +4,8 @@ import { Mail, Lock, LogIn } from 'lucide-react';
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useUser } from "../Contexts/UserContext";
-import BASE_URL from '../../Config/apiConfig';
+//import BASE_URL from '../../Config/apiConfig';
+const BASE_URL =import.meta.env.VITE_APIURL;
 
 const Login = () => {
   const { loginWithRedirect, getAccessTokenSilently } = useAuth0();
@@ -13,7 +14,7 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { setUser, setloggedIn } = useUser();
-  console.log(BASE_URL,"<=this the bknd URL");
+  console.log( BASE_URL,"<=this the bknd URL");
 
   // Handle custom login
   const handleCustomLogin = async (e) => {

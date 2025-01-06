@@ -12,6 +12,7 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@cashfreepayments/cashfree-js": "^1.0.5",
+    "@vercel/analytics": "^1.4.1",
     "axios": "^1.7.8",
     "bourbon": "^7.3.0",
     "clsx": "^2.1.1",
