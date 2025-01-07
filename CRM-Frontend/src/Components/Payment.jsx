@@ -20,9 +20,10 @@ const Payment = () => {
   const [error, setError] = useState(null); // Error state
   const { user, setUser } = useUser();
   const [id, setId] = useState();
-  const { AppointmentId } =useParams();
-  console.log("AppointmentId:",AppointmentId);
+  const { appointmentId } =useParams();
+  console.log(appointmentId);
   
+ 
   
   const token = sessionStorage.getItem("jwtToken");
    useEffect(() => {
@@ -215,13 +216,22 @@ const Payment = () => {
         setOrderStatus("PAID");
   
         // Now use the newOrderId after it has been set
-        console.log("newOrderId while getting order status", generatedOrderId);
+        console.log("newOrderId while getting order status", generatedOrderId); 
+        console.log("userid before getting order status",id);
+        console.log("req obj", {
+          orderId: generatedOrderId,
+          appointmentId: appointmentId,
+          userId: id
+          
+        });
+        
         const statusResponse = await axios.post(
-          'https://crm-backend-yash208.vercel.app/getorderstatus',
+          `http://localhost:3000/getorderstatus`,
           {
             orderId: generatedOrderId,
-            userId: id,
-            appointmentId: AppointmentId,
+            appointmentId: appointmentId,
+            userId: id
+            
           }
         );
         setOrderStatus(statusResponse.data.orderStatus);
