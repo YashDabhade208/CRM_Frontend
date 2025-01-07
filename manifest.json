@@ -1,0 +1,28 @@
+{
+    "name": "My Vite React App",
+    "short_name": "ReactApp",
+    "description": "My awesome React app using Vite!",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+      {
+        "src": "https://public-files.gumroad.com/palgsg02u60959y4axi0cmmidc2c",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "https://public-files.gumroad.com/palgsg02u60959y4axi0cmmidc2c",
+        "sizes": "512x512",
+        "type": "image/png"
+      },
+      {
+        "src": "https://public-files.gumroad.com/palgsg02u60959y4axi0cmmidc2c",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any maskable"
+      }
+    ]
+  }
+  
