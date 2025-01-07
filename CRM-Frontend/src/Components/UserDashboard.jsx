@@ -24,9 +24,6 @@ const UserDashboard = () => {
     }
   }, [user]);
 
-  
-  
-
   const token = sessionStorage.getItem("jwtToken")
 
   // Fetch user ID

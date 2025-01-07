@@ -158,6 +158,35 @@ const Payment = () => {
     fetchAppointments();
   }, [id, token, fetchAppointments]);
 
+  const handleConfirmAppointment = async (appointmentId) => {
+    try {
+      const response = await fetch(`${BASE_URL}/confirmappointment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ appointment_id: appointmentId })
+      });
+  
+      const data = await response.json();
+      console.log('Appointment confirmation response:', data);
+      
+      // You might want to add success handling here
+      if (response.ok) {
+        // For example, show a success message or update UI
+        console.log('Appointment confirmed successfully');
+        return data;
+      } else {
+        throw new Error(data.message || 'Failed to confirm appointment');
+      }
+  
+    } catch (error) {
+      console.error('Error confirming appointment:', error);
+      // You might want to add error handling here
+      throw error;
+    }
+  };
+
   
 
 
@@ -236,6 +265,7 @@ const Payment = () => {
         );
         setOrderStatus(statusResponse.data.orderStatus);
         console.log("orderStatus:", statusResponse.data.orderStatus);
+        await handleConfirmAppointment(AppointmentId);
       }
     } catch (error) {
       console.error("Payment initiation failed", error);
@@ -247,7 +277,9 @@ const Payment = () => {
       setOrderAmount(e.target.value)
     }
 
-
+    const handleConfirmAppointmentandPayment  = () => {
+      handlePayment(AppointmentId);
+    };
 
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -321,7 +353,7 @@ const Payment = () => {
   
                   {/* Pay Button */}
                   <button
-                    onClick={handlePayment}
+                    onClick={handleConfirmAppointmentandPayment}
                     disabled={!orderAmount}
                     className={`w-full flex items-center justify-center px-6 py-3 rounded-md text-white font-medium transition-all duration-200 ${
                       orderAmount
