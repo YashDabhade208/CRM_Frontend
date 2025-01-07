@@ -139,9 +139,6 @@ const EditProfile = () => {
                 onChange={(e) => {
                   handleChange(e);
                   const selectedPatient = patientData.find(patient => patient.patient_id.toString() === e.target.value);
-                  console.log("Selected patient data:", selectedPatient);
-                  
-                  // Populate form with selected patient data
                   if (selectedPatient) {
                     setFormData({
                       ...formData,
@@ -150,7 +147,7 @@ const EditProfile = () => {
                       last_name: selectedPatient.last_name,
                       email: selectedPatient.email || '',
                       phone: selectedPatient.phone,
-                      dob: selectedPatient.dob ? selectedPatient.dob.split('T')[0] : '', // Format date to YYYY-MM-DD
+                      dob: selectedPatient.dob ? selectedPatient.dob.split('T')[0] : '',
                       gender: selectedPatient.gender.toLowerCase(),
                       address: selectedPatient.address,
                       user_id: selectedPatient.user_id
@@ -158,15 +155,29 @@ const EditProfile = () => {
                   }
                 }}
                 id="patient"
-                className="w-full mt-2 p-2 pl-10 border border-gray-300 rounded-md"
+                className="w-full mt-2 p-2 border border-gray-300 rounded-md 
+                           appearance-none bg-white 
+                           text-base sm:text-sm
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                           cursor-pointer"
               >
-                <option value="">Select Patient</option>
+                <option value="" className="text-gray-500">Select Patient</option>
                 {patientData.map((patient) => (
-                  <option key={patient.patient_id} value={patient.patient_id}>
+                  <option 
+                    key={patient.patient_id} 
+                    value={patient.patient_id}
+                    className="py-2"
+                  >
                     {patient.first_name} {patient.last_name}
                   </option>
                 ))}
               </select>
+              {/* Add a custom dropdown arrow */}
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                </svg>
+              </div>
             </div>
           </div>
 
