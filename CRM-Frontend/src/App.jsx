@@ -20,6 +20,7 @@ import { Cookie } from "lucide-react";
 import PasswordReset from "./Components/PasswordReset";
 import Payment from "./Components/Payment";
 import ChatSupport from "./Components/ChatSupport";
+import EditProfile from "./Components/EditProfile";
 import './App.css'
 import { Analytics } from "@vercel/analytics/react"
 
@@ -51,6 +52,7 @@ function App() {
             <Route path="*" element={<Home />} /> {/* Handle undefined routes */}
             <Route path="/passwordreset/reset-password" element={<PasswordReset />} />
             <Route path="/payment/:appointmentId" element={<Payment/>} />
+            <Route path="/edit-profile" element={<EditProfile/>}/>
             
             <Route path="/chat" element={<ChatSupport/>}/>
 

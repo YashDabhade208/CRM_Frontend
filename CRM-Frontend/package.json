@@ -12,6 +12,9 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@cashfreepayments/cashfree-js": "^1.0.5",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@vercel/analytics": "^1.4.1",
     "axios": "^1.7.8",
     "bourbon": "^7.3.0",
@@ -21,6 +24,7 @@
     "react": "^18.3.1",
     "react-confetti": "^6.2.2",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.4.0",
     "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^6.28.0",
     "react-snowfall": "^2.2.0",
@@ -45,5 +49,10 @@
     "vite": "^5.4.10",
     "vite-plugin-mkcert": "^1.17.6",
     "vite-plugin-pwa": "^0.21.1"
+  },
+  "eslintConfig": {
+    "rules": {
+      "no-unused-vars": "warn"
+    }
   }
 }

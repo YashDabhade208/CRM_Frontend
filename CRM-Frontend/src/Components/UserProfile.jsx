@@ -1,9 +1,12 @@
 import React from 'react';
 import { useUser } from '../Contexts/UserContext';
 import { User, Mail, IdCard } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
+import EditProfile from './EditProfile';
 const UserProfile = () => {
   const { user } = useUser();
+  const navigate = useNavigate();
+  
 
   return (
     <div className="flex flex-col md:flex-row items-center w-full max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6 space-y-4 md:space-y-0 md:space-x-6">
@@ -35,7 +38,9 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
-      <button className="mt-4 md:mt-0 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Edit Profile</button>
+      <button className="mt-4 md:mt-0 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+      onClick={() => navigate('/edit-profile')}
+      >Edit Profile</button>
     </div>
   );
 };
