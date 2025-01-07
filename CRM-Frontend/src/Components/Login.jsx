@@ -4,8 +4,8 @@ import { Mail, Lock, LogIn } from 'lucide-react';
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useUser } from "../Contexts/UserContext";
-//import BASE_URL from '../../Config/apiConfig';
-const BASE_URL = import.meta.env.VITE_APIURL;
+import BASE_URL from '../../Config/apiConfig';
+
 
 const Login = () => {
   const { loginWithRedirect, getAccessTokenSilently } = useAuth0();

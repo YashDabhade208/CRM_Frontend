@@ -50,7 +50,7 @@ function App() {
             <Route path="/slotselector" element={<SlotSelector />} />
             <Route path="*" element={<Home />} /> {/* Handle undefined routes */}
             <Route path="/passwordreset/reset-password" element={<PasswordReset />} />
-            <Route path="/payment" element={<Payment/>} />
+            <Route path="/payment/:AppointmentId" element={<Payment/>} />
             
             <Route path="/chat" element={<ChatSupport/>}/>
 

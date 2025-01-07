@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "../Contexts/UserContext";
-import { useNavigate } from "react-router-dom";
 import BASE_URL from '../../Config/apiConfig';
 import { DNA } from 'react-loader-spinner';
 
@@ -191,12 +190,12 @@ const Appointment = () => {
         }
       }
       );
-      console.log("appointment data",response.data.data);
+      console.log("appointment_id :",response.data.data);
       
       setIsLoading(false)
       setMessage("Appointment successfully booked!");
 
-      navigate('/payment')
+      navigate(`/payment/${response.data.data}`)
     } catch (error) {
       setMessage(
         error.response?.data?.message ||

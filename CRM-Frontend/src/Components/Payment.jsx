@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BASE_URL from "../../Config/apiConfig";
+
 import Confetti from "react-confetti";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from '../Contexts/UserContext';
 import { CheckCircle, CreditCard, AlertCircle } from "lucide-react";
 
@@ -16,11 +17,12 @@ const Payment = () => {
   const [email, setEmail] = useState('');
   const [appointmentIds, setAppointmentIds] = useState([]);
   const [message,setMessage]=useState()
-  
-   const [error, setError] = useState(null); // Error state
-  
+  const [error, setError] = useState(null); // Error state
   const { user, setUser } = useUser();
- const [id, setId] = useState(9);
+  const [id, setId] = useState();
+  const { AppointmentId } =useParams();
+  console.log("AppointmentId:",AppointmentId);
+  
   
   const token = sessionStorage.getItem("jwtToken");
    useEffect(() => {
@@ -218,6 +220,8 @@ const Payment = () => {
           'https://crm-backend-yash208.vercel.app/getorderstatus',
           {
             orderId: generatedOrderId,
+            userId: id,
+            appointmentId: AppointmentId,
           }
         );
         setOrderStatus(statusResponse.data.orderStatus);

@@ -1,6 +1,6 @@
 {
     "name": "DAMS",
-    "short_name": "DAMs",
+    "short_name": "DAMS",
     "description": "My awesome React app using Vite!",
     "start_url": "/",
     "display": "standalone",
