@@ -196,7 +196,8 @@ const Appointment = () => {
       setIsLoading(false)
       setMessage("Appointment successfully booked!");
 
-      navigate('/payment')
+      const appointmentId = response.data.data;
+      navigate(`/payment/${appointmentId}`)
     } catch (error) {
       setMessage(
         error.response?.data?.message ||
