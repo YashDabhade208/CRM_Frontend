@@ -263,9 +263,11 @@ const Payment = () => {
             
           }
         );
+
+
         setOrderStatus(statusResponse.data.orderStatus);
         console.log("orderStatus:", statusResponse.data.orderStatus);
-        await handleConfirmAppointment(AppointmentId);
+        await handleConfirmAppointment(appointmentId);
       }
     } catch (error) {
       console.error("Payment initiation failed", error);
@@ -278,7 +280,7 @@ const Payment = () => {
     }
 
     const handleConfirmAppointmentandPayment  = () => {
-      handlePayment(AppointmentId);
+      handlePayment(appointmentId);
     };
 
     return (
