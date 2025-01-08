@@ -6,6 +6,8 @@ import EditProfile from './EditProfile';
 const UserProfile = () => {
   const { user } = useUser();
   const navigate = useNavigate();
+  const token = sessionStorage.getItem("jwtToken");
+
   
 
   return (

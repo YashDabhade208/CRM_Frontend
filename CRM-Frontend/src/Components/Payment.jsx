@@ -163,7 +163,8 @@ const Payment = () => {
       const response = await fetch(`${BASE_URL}/confirmappointment`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ appointment_id: appointmentId })
       });
