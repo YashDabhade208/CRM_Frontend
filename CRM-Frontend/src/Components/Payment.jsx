@@ -21,6 +21,14 @@ const Payment = () => {
   const { user, setUser } = useUser();
   const [id, setId] = useState();
   const { appointmentId } =useParams();
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+
+  
+  // Rest of the function
+  // Reset after process completion
+
+
   console.log(appointmentId);
   
  
@@ -209,6 +217,9 @@ const Payment = () => {
   }, []);
 
   const handlePayment = async () => {
+    if (isProcessingPayment) return;
+    setIsProcessingPayment(true);
+  
     const orderId = `${Date.now()}`;
     const paymentObj = {
       orderId,
@@ -228,8 +239,8 @@ const Payment = () => {
       );
   
       const paymentSessionId = response.data.response.payment_session_id;
-      const generatedOrderId = response.data.response.order_id; // Use generatedOrderId here
-      setNewOrderId(generatedOrderId); // Set the orderId to state
+      const generatedOrderId = response.data.response.order_id;
+      setNewOrderId(generatedOrderId);
   
       let checkoutOptions = {
         paymentSessionId: paymentSessionId,
@@ -242,47 +253,47 @@ const Payment = () => {
         console.log("Payment error:", result.error);
       } else if (result.paymentDetails) {
         console.log("Payment completed:", result.paymentDetails.paymentMessage);
-        // Update order status to success
         setOrderStatus("PAID");
   
-        // Now use the newOrderId after it has been set
-        console.log("newOrderId while getting order status", generatedOrderId); 
-        console.log("userid before getting order status",id);
-        console.log("req obj", {
-          orderId: generatedOrderId,
-          appointmentId: appointmentId,
-          userId: id
-          
-        });
-        
         const statusResponse = await axios.post(
           `http://localhost:3000/getorderstatus`,
           {
             orderId: generatedOrderId,
             appointmentId: appointmentId,
-            userId: id
-            
+            userId: id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
-
-
+  
         setOrderStatus(statusResponse.data.orderStatus);
         console.log("orderStatus:", statusResponse.data.orderStatus);
-        await handleConfirmAppointment(appointmentId);
       }
     } catch (error) {
       console.error("Payment initiation failed", error);
+    } finally {
+      if (orderStatus === "PAID") {
+        console.log("orderStatus is PAID and calling handleConfirmAppointment");
+        try {
+          await handleConfirmAppointment(appointmentId);
+        } catch (error) {
+          console.log("error in handleConfirmAppointment", error);
+        }
+      }
+      setIsProcessingPayment(false);
     }
   };
+  
   
   const handleOrderAmount = (e)=>{
       
       setOrderAmount(e.target.value)
     }
 
-    const handleConfirmAppointmentandPayment  = () => {
-      handlePayment(appointmentId);
-    };
+   
 
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -356,7 +367,7 @@ const Payment = () => {
   
                   {/* Pay Button */}
                   <button
-                    onClick={handleConfirmAppointmentandPayment}
+                    onClick={handlePayment}
                     disabled={!orderAmount}
                     className={`w-full flex items-center justify-center px-6 py-3 rounded-md text-white font-medium transition-all duration-200 ${
                       orderAmount
