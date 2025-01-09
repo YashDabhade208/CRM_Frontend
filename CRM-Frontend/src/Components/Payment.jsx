@@ -255,7 +255,7 @@ const Payment = () => {
         console.log("Payment error:", result.error);
       } else if (result.paymentDetails) {
         console.log("Payment completed:", result.paymentDetails.paymentMessage);
-        setOrderStatus("PAID");
+        //setOrderStatus("PAID");
   
         const statusResponse = await axios.post(
           `http://localhost:3000/getorderstatus`,
@@ -270,7 +270,7 @@ const Payment = () => {
             },
           }
         );
-  
+   
         setOrderStatus(statusResponse.data.orderStatus);
         console.log("orderStatus:", statusResponse.data.orderStatus);
       }
