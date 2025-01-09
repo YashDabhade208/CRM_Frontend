@@ -167,6 +167,8 @@ const Payment = () => {
   }, [id, token, fetchAppointments]);
 
   const handleConfirmAppointment = async (appointmentId) => {
+    console.log("calling handleConfirmAppointment");
+    
     try {
       const response = await fetch(`${BASE_URL}/confirmappointment`, {
         method: 'POST',
@@ -264,7 +266,7 @@ const Payment = () => {
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              "Authorization": `Bearer ${token}`,
             },
           }
         );
@@ -275,7 +277,9 @@ const Payment = () => {
     } catch (error) {
       console.error("Payment initiation failed", error);
     } finally {
-      if (orderStatus === "PAID") {
+      console.log("in finally block");
+      
+      if (orderStatus === "Success") {
         console.log("orderStatus is PAID and calling handleConfirmAppointment");
         try {
           await handleConfirmAppointment(appointmentId);
@@ -304,7 +308,7 @@ const Payment = () => {
             <p className="text-gray-600">Select your appointment type and proceed with the payment</p>
           </div>
   
-          {orderStatus === "PAID" ? (
+          {orderStatus === "Success" ? (
             <div className="bg-white rounded-lg shadow-xl p-6">
               <div className="text-center">
                 <Confetti className="fixed inset-0" />
