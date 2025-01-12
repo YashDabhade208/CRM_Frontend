@@ -107,7 +107,7 @@ const Payment = () => {
         { id },
         {
           headers: { 
-            'Authorization': `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         }
@@ -174,7 +174,7 @@ const Payment = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ appointment_id: appointmentId })
       });
@@ -235,7 +235,7 @@ const Payment = () => {
         paymentObj,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
           },
         }
       );
@@ -266,7 +266,7 @@ const Payment = () => {
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              "Authorization": `Bearer ${token}`,
             },
           }
         );
