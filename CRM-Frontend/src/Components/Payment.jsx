@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BASE_URL from "../../Config/apiConfig";
@@ -107,7 +108,7 @@ const Payment = () => {
         { id },
         {
           headers: { 
-            "Authorization": `Bearer ${token}`,
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         }
@@ -167,14 +168,12 @@ const Payment = () => {
   }, [id, token, fetchAppointments]);
 
   const handleConfirmAppointment = async (appointmentId) => {
-    console.log("calling handleConfirmAppointment");
-    
     try {
       const response = await fetch(`${BASE_URL}/confirmappointment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          "Authorization": `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ appointment_id: appointmentId })
       });
@@ -218,11 +217,6 @@ const Payment = () => {
     fetchPrices();
   }, []);
 
-
-
-
-
-
   const handlePayment = async () => {
     if (isProcessingPayment) return;
     setIsProcessingPayment(true);
@@ -240,7 +234,7 @@ const Payment = () => {
         paymentObj,
         {
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -258,9 +252,9 @@ const Payment = () => {
   
       if (result.error) {
         console.log("Payment error:", result.error);
-      } 
+      } else if (result.paymentDetails) {
         console.log("Payment completed:", result.paymentDetails.paymentMessage);
-        //setOrderStatus("PAID");
+        setOrderStatus("PAID");
   
         const statusResponse = await axios.post(
           `http://localhost:3000/getorderstatus`,
@@ -271,20 +265,18 @@ const Payment = () => {
           },
           {
             headers: {
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
-   
+  
         setOrderStatus(statusResponse.data.orderStatus);
         console.log("orderStatus:", statusResponse.data.orderStatus);
-      
+      }
     } catch (error) {
       console.error("Payment initiation failed", error);
     } finally {
-      console.log("in finally block");
-      
-      if (orderStatus === "Success") {
+      if (orderStatus === "PAID") {
         console.log("orderStatus is PAID and calling handleConfirmAppointment");
         try {
           await handleConfirmAppointment(appointmentId);
@@ -297,8 +289,6 @@ const Payment = () => {
   };
   
   
-
-
   const handleOrderAmount = (e)=>{
       
       setOrderAmount(e.target.value)
@@ -315,7 +305,7 @@ const Payment = () => {
             <p className="text-gray-600">Select your appointment type and proceed with the payment</p>
           </div>
   
-          {orderStatus === "Success" ? (
+          {orderStatus === "PAID" ? (
             <div className="bg-white rounded-lg shadow-xl p-6">
               <div className="text-center">
                 <Confetti className="fixed inset-0" />
