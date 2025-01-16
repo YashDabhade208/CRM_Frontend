@@ -46,7 +46,7 @@ const Payment = () => {
       try {
         setIsLoading(true);
         const response = await axios.post(`${BASE_URL}/getuserid`, { email }, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { "Authorization": `Bearer ${token}` },
         });
     
         console.log("API Response:", response.data);
@@ -100,7 +100,7 @@ const Payment = () => {
       console.log("Making request with:", {
         url: `${BASE_URL}/getappointmentsbyuserid`,
         body: { id },
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { "Authorization": `Bearer ${token}` }
       });
   
       const response = await axios.post(
@@ -204,7 +204,7 @@ const Payment = () => {
     const fetchPrices = async () => {
       try {
         const response = await axios.get(`https://crm-backend-yash208.vercel.app/getprices`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { "Authorization": `Bearer ${token}` },
         });
         if (response.status === 200) {
           setPrices(response.data.result);
@@ -234,7 +234,7 @@ const Payment = () => {
         paymentObj,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
           },
         }
       );
