@@ -35,6 +35,8 @@ const Payment = () => {
  
   
   const token = sessionStorage.getItem("jwtToken");
+  console.log(token);
+  
    useEffect(() => {
       if (user) {
         setEmail(user.email);        
@@ -249,15 +251,15 @@ const Payment = () => {
       };
   
       const result = await cashfree.checkout(checkoutOptions);
-  
+      console.log("checoutresult",result);
+      
       if (result.error) {
         console.log("Payment error:", result.error);
       } else if (result.paymentDetails) {
         console.log("Payment completed:", result.paymentDetails.paymentMessage);
         setOrderStatus("PAID");
   
-        const statusResponse = await axios.post(
-          `http://localhost:3000/getorderstatus`,
+        const statusResponse = await axios.post( `${BASE_URL}/getorderstatus`,
           {
             orderId: generatedOrderId,
             appointmentId: appointmentId,
