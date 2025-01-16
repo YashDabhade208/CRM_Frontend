@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import BASE_URL from '../../Config/apiConfig';
+
 
 const SearchBar = () => {
   const [query, setQuery] = useState('');
@@ -10,7 +12,7 @@ const SearchBar = () => {
     e.preventDefault();
     if (!query) return;
     try {
-      const response = await axios.get(`http://localhost:3000/searchpatient`, {
+      const response = await axios.get(`${BASE_URL}/searchpatient`, {
         params: { query },
       });
       const patientResults = response.data.results[0];
@@ -37,8 +39,9 @@ const SearchBar = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
+         <button type='submit'>Search</button>
       </form>
-
+    
       <ul className="list-disc pl-5">
         {results.length > 0 && !selectedPatient ? (
           results.map((patient) => (
