@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import BASE_URL from '../../Config/apiConfig';
 
-
 const SearchBar = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -15,18 +14,18 @@ const SearchBar = () => {
       const response = await axios.get(`${BASE_URL}/searchpatient`, {
         params: { query },
       });
-      const patientResults = response.data.results[0];
+      const patientResults = Object.values(response.data.results[0]);
       setResults(patientResults);
       setSelectedPatient(null);
     } catch (error) {
       console.error('Error fetching search results:', error);
     }
   };
-
+  
   const handleSelectPatient = (patient) => {
     setSelectedPatient(patient);
     setResults([]);
-    setQuery(`${patient.first_name} `);
+    setQuery(`${patient.first_name}`);
   };
 
   return (
@@ -39,9 +38,11 @@ const SearchBar = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-         <button type='submit'>Search</button>
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded mt-2">
+          Search
+        </button>
       </form>
-    
+
       <ul className="list-disc pl-5">
         {results.length > 0 && !selectedPatient ? (
           results.map((patient) => (
@@ -60,13 +61,13 @@ const SearchBar = () => {
 
       {selectedPatient && (
         <div className="mt-4 border p-4 rounded bg-gray-100">
-          <h3 className="text-lg font-bold text-center">Patient Details</h3>
-          <p className=' text-lg'><strong>Name:</strong> {selectedPatient.first_name} {selectedPatient.last_name}</p>
+          <h3 className="text-lg font-bold">Patient Details</h3>
+          <p className='text-lg'><strong>Name:</strong> {selectedPatient.first_name} {selectedPatient.last_name}</p>
           <p className='text-lg'><strong>Email:</strong> {selectedPatient.email || 'N/A'}</p>
           <p className='text-lg'><strong>Phone:</strong> {selectedPatient.phone}</p>
           <p className='text-lg'><strong>Gender:</strong> {selectedPatient.gender || 'N/A'}</p>
           <p className='text-lg'><strong>Address:</strong> {selectedPatient.address || 'N/A'}</p>
-          <p className='text-lg'><strong>Date of Birth:</strong> {selectedPatient.dob.split('T')[0] || 'N/A'}</p>
+          <p className='text-lg'><strong>Date of Birth:</strong> {selectedPatient.dob || 'N/A'}</p>
          
         </div>
       )}
