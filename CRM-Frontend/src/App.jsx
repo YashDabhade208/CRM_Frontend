@@ -23,6 +23,7 @@ import ChatSupport from "./Components/ChatSupport";
 import EditProfile from "./Components/EditProfile";
 import './App.css'
 import { Analytics } from "@vercel/analytics/react"
+import SearchBar from "./Components/SearchBar";
 
 function App() {
   const { isDoctorLoggedIn } = useUser();
@@ -53,7 +54,7 @@ function App() {
             <Route path="/passwordreset/reset-password" element={<PasswordReset />} />
             <Route path="/payment/:appointmentId" element={<Payment/>} />
             <Route path="/edit-profile" element={<EditProfile/>}/>
-            
+            <Route path="/search" element={<SearchBar/>}/>
             <Route path="/chat" element={<ChatSupport/>}/>
 
           </Routes>

@@ -218,6 +218,11 @@ const Payment = () => {
     fetchPrices();
   }, []);
 
+
+
+
+
+
   const handlePayment = async () => {
     if (isProcessingPayment) return;
     setIsProcessingPayment(true);
@@ -253,7 +258,7 @@ const Payment = () => {
   
       if (result.error) {
         console.log("Payment error:", result.error);
-      } else if (result.paymentDetails) {
+      } 
         console.log("Payment completed:", result.paymentDetails.paymentMessage);
         //setOrderStatus("PAID");
   
@@ -273,7 +278,7 @@ const Payment = () => {
    
         setOrderStatus(statusResponse.data.orderStatus);
         console.log("orderStatus:", statusResponse.data.orderStatus);
-      }
+      
     } catch (error) {
       console.error("Payment initiation failed", error);
     } finally {
@@ -292,6 +297,8 @@ const Payment = () => {
   };
   
   
+
+
   const handleOrderAmount = (e)=>{
       
       setOrderAmount(e.target.value)

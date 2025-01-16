@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SlotSelector from "./SlotSelector";
 import { useUser } from "../Contexts/UserContext";
 import BASE_URL from '../../Config/apiConfig';
+import SearchBar from "./SearchBar";
 const Dashboard = () => {
   const [doctorInfo, setDoctorInfo] = useState({});
   const [isDoctorActive, setIsDoctorActive] = useState(false);
@@ -140,6 +141,7 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold text-gray-800">Doctor's Dashboard</h1>
         <p className="text-gray-600">Manage your appointments effectively</p>
       </header>
+      <SearchBar/>
 
       {/* Doctor Info Section */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">

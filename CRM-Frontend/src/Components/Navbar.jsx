@@ -21,7 +21,7 @@ const handleLogout = async () => {
     // Update state
     setUser(null);
     setloggedIn(false);
-    setloggedIn(false);
+   
 
   
 
@@ -29,6 +29,7 @@ const handleLogout = async () => {
    
    await logout()
    navigate('/')
+   setloggedIn(false);
   } catch (error) {
     console.error("Error during logout:", error);
   }
