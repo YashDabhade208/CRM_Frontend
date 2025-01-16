@@ -99,6 +99,10 @@ const Home = () => {
     registerUser();
   }, [isAuthenticated, user]);
 
+  const handleDoctorLogin =()=>{
+    navigate('/doctorlogin')
+  }
+
   return (
     <>
       
@@ -183,8 +187,21 @@ const Home = () => {
             >
               Register Patient
             </button>
+            
           </div>
+          
         )}
+        
+        <div className="m-3">
+        <button
+              title="Get quote now"
+              className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+              role="button"
+              onClick={handleDoctorLogin}
+            >
+              Doctor Login
+            </button>
+        </div>
       </div>
     </>
   );

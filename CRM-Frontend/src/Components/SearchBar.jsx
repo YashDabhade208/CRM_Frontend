@@ -6,13 +6,17 @@ const SearchBar = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
-
+  const token = sessionStorage.getItem('jwtToken')
+  
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!query) return;
     try {
       const response = await axios.get(`${BASE_URL}/searchpatient`, {
         params: { query },
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
       });
       const patientResults = Object.values(response.data.results[0]);
       setResults(patientResults);
