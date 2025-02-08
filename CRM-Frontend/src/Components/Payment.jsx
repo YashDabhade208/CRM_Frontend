@@ -272,17 +272,29 @@ const Payment = () => {
           }
         );
   
-        setOrderStatus(statusResponse.data.orderStatus);
+        //setOrderStatus(statusResponse.data.orderStatus);
         console.log("orderStatus:", statusResponse.data.orderStatus);
       }
     } catch (error) {
+      setOrderStatus("FAILED");
       console.error("Payment initiation failed", error);
     } finally {
       if (orderStatus === "PAID") {
         console.log("orderStatus is PAID and calling handleConfirmAppointment");
-        try {
-          await handleConfirmAppointment(appointmentId);
-        } catch (error) {
+     try  { const statusResponse = await axios.post( `${BASE_URL}/getorderstatus`,
+          {
+            orderId: generatedOrderId,
+            appointmentId: appointmentId,
+            userId: id,
+          },
+          {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+            },
+          }
+        );}
+        catch (error) {
+          setOrderStatus("FAILED");
           console.log("error in handleConfirmAppointment", error);
         }
       }
@@ -305,8 +317,12 @@ const Payment = () => {
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">Complete Your Payment</h1>
             <p className="text-gray-600">Select your appointment type and proceed with the payment</p>
+
+            <div>
+              {orderStatus === "FAILED" && <p className="text-red-500">Payment Failed</p>}
+            </div>
           </div>
-  
+        
           {orderStatus === "PAID" ? (
             <div className="bg-white rounded-lg shadow-xl p-6">
               <div className="text-center">

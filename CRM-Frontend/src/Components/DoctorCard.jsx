@@ -89,43 +89,36 @@ const DoctorCard = () => {
                 </div>
             ) : (
                 // Display doctor information using doctorInfo.map
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-24 sm:mt-4">
-                    {doctorInfo.map((doc, index) => (
+                
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-12 px-4 sm:px-6 md:px-8">
+                      {doctorInfo.map((doc, index) => (
                         <div
-                            key={index}
-                            className={`p-4 max-w-sm mx-auto bg-white rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6 ${index === 0 ? 'mt-20' : ''}`}
+                          key={index}
+                          className="p-6 max-w-sm bg-white rounded-xl shadow-lg flex flex-col items-center space-y-4 sm:space-y-2 transition-transform transform hover:scale-105"
                         >
-                            <img
-                                className="block mx-auto h-24 rounded-full sm:mx-0 sm:shrink-0"
-                                src={doc.image || "https://tailwindcss.com/img/erin-lindford.jpg"}
-                                alt={`${doc.name}'s face`}
-                            />
-                            <div className="text-center space-y-2 sm:text-left">
-                                <div className="space-y-0.5">
-                                    <p className="text-lg text-black font-semibold">
-                                        {doc.name}
-                                    </p>
-                                    <p className="text-slate-500 font-medium">
-                                        {doc.specialty || "General"}
-                                    </p>
-                                </div>
-                                <p className={`font-medium ${doc.status === 'ACTIVE' ? 'text-green-500' : 'text-red-500'}`}>
-                                    {doc.status || "Unavailable"}
-                                </p>
-                                <button className="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
-                                <motion.button
-                                        className=""
-                                        onClick={() => handleAppointment(doc.doctor_id)}
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.95 }}
-                                    >
-                                        Book Appointment
-                                    </motion.button>
-                                </button>
-                            </div>
+                          <img
+                            className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
+                            src={doc.image || "https://th.bing.com/th?id=OIP.YpBNuelwmbqd767810hHBgHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2"}
+                            
+                          />
+                          <div className="text-center">
+                            <p className="text-lg font-semibold text-gray-900">{doc.name}</p>
+                            <p className="text-sm text-gray-500">{doc.specialty || "General"}</p>
+                            <p className={`font-medium ${doc.status === "ACTIVE" ? "text-green-500" : "text-red-500"}`}>
+                              {doc.status || "Unavailable"}
+                            </p>
+                          </div>
+                          <motion.button
+                            onClick={() => handleAppointment(doc.doctor_id)}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="px-4 py-2 text-sm font-semibold text-purple-600 border border-purple-300 rounded-full hover:bg-purple-600 hover:text-white transition-all"
+                          >
+                            Book Appointment
+                          </motion.button>
                         </div>
-                    ))}
-                </div>
+                      ))}
+                    </div>
             )}
         </div>
     );
