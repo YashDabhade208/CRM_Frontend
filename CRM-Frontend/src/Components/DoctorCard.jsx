@@ -89,7 +89,7 @@ const DoctorCard = () => {
                 </div>
             ) : (
                 // Display doctor information using doctorInfo.map
-                
+                 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-12 px-4 sm:px-6 md:px-8">
                       {doctorInfo.map((doc, index) => (
                         <div
@@ -98,7 +98,7 @@ const DoctorCard = () => {
                         >
                           <img
                             className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
-                            src={doc.image || "https://th.bing.com/th?id=OIP.YpBNuelwmbqd767810hHBgHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2"}
+                            src={doc.image || "https://th.bing.com/th/id/OIP.T0nPc_C2Z0gtaD6sI1ryRQHaHp?rs=1&pid=ImgDetMain"}
                             
                           />
                           <div className="text-center">

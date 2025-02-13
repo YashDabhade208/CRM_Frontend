@@ -1,30 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Mail, Lock, LogIn } from 'lucide-react';
+import { Mail, Lock, LogIn } from "lucide-react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useUser } from "../Contexts/UserContext";
-import BASE_URL from '../../Config/apiConfig';
-
+import BASE_URL from "../../Config/apiConfig";
+import { DNA } from "react-loader-spinner";
 
 const Login = () => {
-  const { loginWithRedirect, getAccessTokenSilently } = useAuth0();
+  const { loginWithRedirect } = useAuth0();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false); // Loader state
   const navigate = useNavigate();
   const { setUser, setloggedIn } = useUser();
-  console.log(BASE_URL, "<=this the bknd URL");
 
   const handleCustomLogin = async (e) => {
     e.preventDefault();
-    try {
-      console.log("jhbj");
+    setLoading(true);
+    setMessage("");
 
+    try {
       const response = await axios.post(`${BASE_URL}/login`, {
         email,
         password,
-        loginType: "custom", // Differentiates this login type
+        loginType: "custom",
       });
 
       if (response.status === 200) {
@@ -36,6 +37,8 @@ const Login = () => {
       }
     } catch (error) {
       setMessage(error.response?.data?.message || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,7 +47,7 @@ const Login = () => {
       await loginWithRedirect();
       navigate("/");
     } catch (error) {
-      setMessage(error);
+      setMessage(error.message);
     }
   };
 
@@ -58,9 +61,7 @@ const Login = () => {
 
         <form onSubmit={handleCustomLogin} className="space-y-4">
           <div className="relative">
-          <Mail className=" ml-1 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-         
-
+            <Mail className="ml-1 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="email"
               value={email}
@@ -72,8 +73,8 @@ const Login = () => {
           </div>
 
           <div className="relative">
-          <Lock className=" ml-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
+            <Lock className="ml-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -85,11 +86,19 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center"
+            disabled={loading}
           >
-            Sign in
+            Log In
           </button>
         </form>
+
+        {/* Loader (Separate from Button) */}
+        {loading && (
+          <div className="flex justify-center">
+            <DNA visible={true} height="5" width="5" ariaLabel="dna-loading" />
+          </div>
+        )}
 
         <button
           type="button"
@@ -97,23 +106,14 @@ const Login = () => {
           className="w-full py-2 px-4 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
         >
           <LogIn className="m-2 w-5 h-5" />
-
           Continue with Google
         </button>
 
         <div className="flex justify-between text-sm">
-          <button
-            type="button"
-            onClick={() => navigate("/forgot")}
-            className="text-blue-600 hover:text-blue-500"
-          >
+          <button type="button" onClick={() => navigate("/forgot")} className="text-blue-600 hover:text-blue-500">
             Forgot password?
           </button>
-          <button
-            type="button"
-            onClick={() => navigate("/register")}
-            className="text-blue-600 hover:text-blue-500"
-          >
+          <button type="button" onClick={() => navigate("/register")} className="text-blue-600 hover:text-blue-500">
             Sign up
           </button>
         </div>
