@@ -24,6 +24,7 @@ import EditProfile from "./Components/EditProfile";
 import './App.css'
 import { Analytics } from "@vercel/analytics/react"
 import SearchBar from "./Components/SearchBar";
+import AnalyticsDashboard from "./Components/AnalyticsDashboard";
 
 function App() {
   const { isDoctorLoggedIn } = useUser();
@@ -56,6 +57,7 @@ function App() {
             <Route path="/edit-profile" element={<EditProfile/>}/>
             <Route path="/search" element={<SearchBar/>}/>
             <Route path="/chat" element={<ChatSupport/>}/>
+            <Route path="/analytics" element={<AnalyticsDashboard/>}/>
 
           </Routes>
         </main>

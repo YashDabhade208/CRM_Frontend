@@ -36,6 +36,8 @@ const DoctorLogin = () => {
          
         },
       });
+      console.log(response.status);
+      
       if (response.status === 200) {
         setMessage('Login successful');
         doctor_id = response.data.user.doctor_id;
@@ -49,6 +51,8 @@ const DoctorLogin = () => {
         navigate(`/dashboard`);
       }
     } catch (error) {
+      console.log(error);
+      
       setMessage('Login failed. Please try again.');
     }
     console.log(message); // You can remove this if you don't need to log the message
