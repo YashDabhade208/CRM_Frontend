@@ -8,9 +8,10 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 } from 'chart.js';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar, Line, Pie } from 'react-chartjs-2';
 import axios from 'axios';
 import BASE_URL from '../../Config/apiConfig';
 
@@ -23,7 +24,8 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
 const AnalyticsDashboard = () => {
@@ -41,11 +43,19 @@ const AnalyticsDashboard = () => {
     view: 'month'
   });
 
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 5 }, (_, i) => currentYear + i);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const token = sessionStorage.getItem('jwtToken');
+        const token = localStorage.getItem('token');
         const config = {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -77,15 +87,19 @@ const AnalyticsDashboard = () => {
             }
           }
         );
-        setSlotData(slotResponse.data || []);
+        setSlotData(slotResponse.data.result || []);
+        
 
-        // Get revenue data (no parameters needed as per backend)
-        // In your useEffect
-const revenueResponse = await axios.get(
-  `${BASE_URL}/getrevenue`, 
-  config
-);
-setRevenueData(revenueResponse.data.result); // The whole response object including the result array
+        // Get revenue data with month and year
+        const revenueResponse = await axios.post(
+          `${BASE_URL}/getrevenue`, 
+          {
+            month: selectedDate.month.toString(),
+            year: selectedDate.year.toString()
+          },
+          config
+        );
+        setRevenueData(revenueResponse.data.result); // The whole response object including the result array
 
         // Get monthly revenue with correct request format
         const monthlyRevenueResponse = await axios.post(
@@ -112,8 +126,8 @@ setRevenueData(revenueResponse.data.result); // The whole response object includ
             }
           }
         );
-        setMonthlyAppointments(monthlyAppointmentsResponse.data[0]?.total_appointments || 0);
-
+        setMonthlyAppointments(monthlyAppointmentsResponse.data.result[0]?.total_appointments || 0);
+        console.log(monthlyAppointmentsResponse.data.result);
         setError(null);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -138,22 +152,26 @@ setRevenueData(revenueResponse.data.result); // The whole response object includ
     }));
   };
 
-  const handleDateChange = (e) => {
-    const date = new Date(e.target.value);
+  const handleMonthChange = (e) => {
     setSelectedDate(prev => ({
       ...prev,
-      month: date.getMonth() + 1,
-      year: date.getFullYear(),
-      day: date.getDate()
+      month: months.indexOf(e.target.value) + 1
+    }));
+  };
+
+  const handleYearChange = (e) => {
+    setSelectedDate(prev => ({
+      ...prev,
+      year: parseInt(e.target.value)
     }));
   };
 
   // Chart data configuration with empty state handling
   const slotChartData = {
-    labels: Array.isArray(slotData) ? slotData.map(slot => `${slot.start_time} - ${slot.end_time}`) : [],
+    labels: Array.isArray(monthlyAppointments) ? monthlyAppointments.map(slot => `${slot.start_time} - ${slot.end_time}`) : [],
     datasets: [{
       label: 'Booked Slots',
-      data: Array.isArray(slotData) ? slotData.map(slot => slot.booked_slots) : [],
+      data: Array.isArray(monthlyAppointments) ? monthlyAppointments.map(slot => slot.booked_slots) : [],
       backgroundColor: 'rgba(75, 192, 192, 0.6)',
       borderColor: 'rgba(75, 192, 192, 1)',
       borderWidth: 1,
@@ -190,6 +208,71 @@ setRevenueData(revenueResponse.data.result); // The whole response object includ
     }
   };
 
+  // Prepare data for pie chart
+  const slotPieChartData = {
+    labels: Array.isArray(slotData) 
+      ? slotData.map(slot => `${slot.start_time} - ${slot.end_time}`)
+      : [],
+    datasets: [{
+      data: Array.isArray(slotData) 
+        ? slotData.map(slot => slot.booked_slots)
+        : [],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.8)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(255, 206, 86, 0.8)',
+        'rgba(75, 192, 192, 0.8)',
+        'rgba(153, 102, 255, 0.8)',
+        'rgba(255, 159, 64, 0.8)',
+        'rgba(199, 199, 199, 0.8)',
+        'rgba(83, 102, 255, 0.8)',
+        'rgba(40, 159, 64, 0.8)',
+        'rgba(210, 199, 199, 0.8)',
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(199, 199, 199, 1)',
+        'rgba(83, 102, 255, 1)',
+        'rgba(40, 159, 64, 1)',
+        'rgba(210, 199, 199, 1)',
+      ],
+      borderWidth: 1,
+    }],
+  };
+
+  const pieChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'right',
+        labels: {
+          boxWidth: 15,
+          padding: 15,
+          font: {
+            size: 12
+          }
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const label = context.label || '';
+            const value = context.raw || 0;
+            const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `${label}: ${value} bookings (${percentage}%)`;
+          }
+        }
+      }
+    }
+  };
+
   if (loading) {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
@@ -199,80 +282,245 @@ setRevenueData(revenueResponse.data.result); // The whole response object includ
   }
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Doctor Analytics Dashboard</h1>
+    <div style={{ 
+      padding: '30px',
+      backgroundColor: '#f5f7fb',
+      minHeight: '100vh'
+    }}>
+      {/* Header Section */}
+      <div style={{
+        marginBottom: '30px',
+        textAlign: 'center'
+      }}>
+        <h1 style={{
+          color: '#2c3e50',
+          fontSize: '2.5rem',
+          marginBottom: '20px'
+        }}>Doctor Analytics Dashboard</h1>
+        
+        {/* Date Selection Controls */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '15px',
+          marginBottom: '30px',
+          flexWrap: 'wrap'
+        }}>
+          {/* Month Selector */}
+          <select 
+            value={months[selectedDate.month - 1]}
+            onChange={handleMonthChange}
+            style={{
+              padding: '10px 20px',
+              borderRadius: '8px',
+              border: '1px solid #ddd',
+              backgroundColor: 'white',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              minWidth: '150px',
+              color: '#2c3e50',
+              outline: 'none',
+              transition: 'border-color 0.2s',
+              ':hover': {
+                borderColor: '#3498db'
+              }
+            }}
+          >
+            {months.map(month => (
+              <option key={month} value={month}>{month}</option>
+            ))}
+          </select>
 
-      {/* Date Selection Controls */}
-      <div style={{ marginBottom: '20px' }}>
-        <select 
-          value={selectedDate.view}
-          onChange={handleViewChange}
-          style={{ marginRight: '10px', padding: '5px' }}
-        >
-          <option value="day">Daily</option>
-          <option value="month">Monthly</option>
-          <option value="year">Yearly</option>
-        </select>
+          {/* Year Selector */}
+          <select 
+            value={selectedDate.year}
+            onChange={handleYearChange}
+            style={{
+              padding: '10px 20px',
+              borderRadius: '8px',
+              border: '1px solid #ddd',
+              backgroundColor: 'white',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              minWidth: '100px',
+              color: '#2c3e50',
+              outline: 'none',
+              transition: 'border-color 0.2s',
+              ':hover': {
+                borderColor: '#3498db'
+              }
+            }}
+          >
+            {years.map(year => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
 
-        <input
-          type="date"
-          onChange={handleDateChange}
-          style={{ padding: '5px' }}
-        />
-      </div>
+          {/* View Type Selector */}
+          {/* <select 
+            value={selectedDate.view}
+            onChange={handleViewChange}
+            style={{
+              padding: '10px 20px',
+              borderRadius: '8px',
+              border: '1px solid #ddd',
+              backgroundColor: 'white',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              minWidth: '120px',
+              color: '#2c3e50',
+              outline: 'none',
+              transition: 'border-color 0.2s',
+              ':hover': {
+                borderColor: '#3498db'
+              }
+            }}
+          >
+            <option value="day">Daily View</option>
+            <option value="month">Monthly View</option>
+            <option value="year">Yearly View</option>
+          </select> */}
+        </div>
 
-      {/* Monthly Revenue and Appointments */}
-      <div style={{ marginBottom: '20px' }}>
-        <h2>Monthly Overview</h2>
-        <p>Total Revenue: ${monthlyRevenue || 0}</p>
-        <p>Total Appointments: {monthlyAppointments || 0}</p>
-      </div>
-
-      {/* Slot Utilization Bar Chart */}
-      <div style={{ marginBottom: '40px', height: '400px' }}>
-        <h2>Slot Utilization</h2>
-        {Array.isArray(slotData) && slotData.length > 0 ? (
-          <Bar data={slotChartData} options={chartOptions} />
-        ) : (
-          <div style={{ 
-            height: '100%', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '8px'
+        {/* Selected Period Display */}
+        <div style={{
+          backgroundColor: 'white',
+          padding: '10px 20px',
+          borderRadius: '20px',
+          display: 'inline-block',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          marginBottom: '20px'
+        }}>
+          <p style={{
+            margin: 0,
+            color: '#2c3e50',
+            fontSize: '1.1rem'
           }}>
-            <p>No slot data available for the selected period</p>
-          </div>
-        )}
+            Viewing data for: <strong>{months[selectedDate.month - 1]} {selectedDate.year}</strong>
+          </p>
+        </div>
       </div>
 
-      {/* Revenue Trends Line Chart */}
-      <div style={{ height: '400px' }}>
-        <h2>Revenue Trends</h2>
-        {true ? (
-          <Line data={revenueChartData} options={chartOptions} />
-        ) : (
-          <div style={{ 
-            height: '100%', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '8px'
-          }}>
-            <p>No revenue data available for the selected period</p>
-          </div>
-        )}
+      {/* Stats Cards */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '20px',
+        marginBottom: '30px'
+      }}>
+        <div style={{
+          backgroundColor: 'white',
+          padding: '20px',
+          borderRadius: '12px',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          textAlign: 'center'
+        }}>
+          <h3 style={{ color: '#7f8c8d', marginBottom: '10px' }}>Monthly Revenue</h3>
+          <p style={{ 
+            fontSize: '2rem', 
+            color: '#2ecc71', 
+            fontWeight: 'bold' 
+          }}>${monthlyRevenue?.toLocaleString() || 0}</p>
+        </div>
+
+        <div style={{
+          backgroundColor: 'white',
+          padding: '20px',
+          borderRadius: '12px',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          textAlign: 'center'
+        }}>
+          <h3 style={{ color: '#7f8c8d', marginBottom: '10px' }}>Total Appointments</h3>
+          <p style={{ 
+            fontSize: '2rem', 
+            color: '#3498db', 
+            fontWeight: 'bold' 
+          }}>{monthlyAppointments || 0}</p>
+        </div>
       </div>
 
+      {/* Charts Section */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))',
+        gap: '30px',
+        marginBottom: '30px'
+      }}>
+        {/* Slot Distribution Pie Chart */}
+        <div style={{
+          backgroundColor: 'white',
+          padding: '25px',
+          borderRadius: '12px',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          height: '500px'
+        }}>
+          <h2 style={{ 
+            color: '#2c3e50', 
+            marginBottom: '20px',
+            fontSize: '1.5rem'
+          }}>Slot Utilization Distribution</h2>
+          {Array.isArray(slotData) && slotData.length > 0 ? (
+            <div style={{ height: 'calc(100% - 60px)' }}>
+              <Pie data={slotPieChartData} options={pieChartOptions} />
+            </div>
+          ) : (
+            <div style={{
+              height: 'calc(100% - 60px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#f8f9fa',
+              borderRadius: '8px',
+              color: '#7f8c8d'
+            }}>
+              <p>No slot utilization data available</p>
+            </div>
+          )}
+        </div>
+
+        {/* Revenue Trends Line Chart */}
+        <div style={{
+          backgroundColor: 'white',
+          padding: '25px',
+          borderRadius: '12px',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          height: '500px'
+        }}>
+          <h2 style={{ 
+            color: '#2c3e50', 
+            marginBottom: '20px',
+            fontSize: '1.5rem'
+          }}>Revenue Trends</h2>
+          {revenueData.length > 0 ? (
+            <div style={{ height: 'calc(100% - 60px)' }}>
+              <Line data={revenueChartData} options={chartOptions} />
+            </div>
+          ) : (
+            <div style={{
+              height: 'calc(100% - 60px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#f8f9fa',
+              borderRadius: '8px',
+              color: '#7f8c8d'
+            }}>
+              <p>No revenue data available for this period</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Error Message */}
       {error && (
-        <div style={{ 
-          padding: '10px', 
-          marginTop: '20px', 
-          backgroundColor: '#fee', 
-          color: '#c00',
-          borderRadius: '4px'
+        <div style={{
+          padding: '15px',
+          backgroundColor: '#fee',
+          color: '#e74c3c',
+          borderRadius: '8px',
+          marginTop: '20px',
+          textAlign: 'center',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
         }}>
           {error}
         </div>
