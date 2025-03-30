@@ -33,11 +33,8 @@ const UserProfile = () => {
         </div>
 
         <div className="hidden md:flex items-center space-x-3 p-3">
-          <IdCard className="w-5 h-5 text-gray-600" />
-          <div>
-            <p className="text-sm text-gray-500">User ID</p>
-            <p className="font-medium text-lg">#{user.id}</p>
-          </div>
+         
+         
         </div>
       </div>
       <button className="mt-4 md:mt-0 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"

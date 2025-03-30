@@ -17,12 +17,12 @@ const Home = () => {
     user,
     getAccessTokenSilently,
   } = useAuth0();
-
+  
   // useEffect(() => {
-  //   if (isAuthenticated && user) {
+    //   if (isAuthenticated && user) {
   //     // Auth0 login detected
   //     const fetchToken = async () => {
-  //       try {
+    //       try {
   //         const response = await axios.post("${BASE_URL}/login", {
   //           email: "ankur@ankur.com",
   //           password: "ankur",
@@ -33,17 +33,17 @@ const Home = () => {
   //         if(response.status ===200){
   //           sessionStorage.setItem("jwtToken", token);
   //         }
-
+  
   //       } catch (error) {
   //         console.error("Error during login:", error);
   //       }
   //     };
-
+  
   //   }
-
+  
   //   fetchToken()}
   // , [isAuthenticated, user, setUser, navigate, getAccessTokenSilently]);
-
+  
   useEffect(() => {
     const fetchToken = async () => {
       if (isAuthenticated && user) {
@@ -58,7 +58,7 @@ const Home = () => {
           if (response.status === 200) {
             sessionStorage.setItem("jwtToken", token);
             setUser(user);
-
+            
             setloggedIn(true); // Explicitly set loggedIn to true
             console.log("state updated");
           }
@@ -67,15 +67,15 @@ const Home = () => {
         }
       }
     };
-
+    
     fetchToken();
   }, [isAuthenticated, user, setUser, navigate]);
-
+  
   const handleLoginAlert = () => {
     alert("Please login before patient registration");
     navigate("/login");
   };
-
+  
   useEffect(() => {
     const registerUser = async () => {
       if (isAuthenticated && user) {
@@ -95,116 +95,127 @@ const Home = () => {
         }
       }
     };
-
+    
     registerUser();
   }, [isAuthenticated, user]);
-
+  
   const handleDoctorLogin =()=>{
     navigate('/doctorlogin')
   }
-
+  
   return (
     <>
-      
-      <div className="mx-auto px-4 sm:px-6 text-center">
-      <BeatLoader className="" />
-
-        <p className="mx-auto -mt-4 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">
-          Welcome to{" "}
-          <span className="border-b border-dotted border-slate-300">DAMS</span>
-        </p>
-
-        <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl">
-          <span className="inline-block">
-            Book{" "}
-            <span className="relative whitespace-nowrap text-blue-600">
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 418 42"
-                className="absolute top-2/3 left-0 h-[0.58em] w-full fill-blue-300/70"
-                preserveAspectRatio="none"
-              />
-              <span className="relative">Appointments</span>
-            </span>
-          </span>{" "}
-          <span className="inline-block">Online</span>
-        </h1>
-
-        <p className="mx-auto mt-9 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">
-          <span className="inline-block">
-            Save time spent on coordinating appointments over the phone
-          </span>
-          <span className="inline-block">Accept online bookings 24x7</span>
-        </p>
-
-        <div className="mt-12 flex flex-col justify-center items-center gap-y-5 sm:flex-row sm:gap-y-0 sm:gap-x-6">
-          {/* Book Appointment Button */}
-          {loggedin ? (
-            <div className="relative inline-flex group">
-              <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
-              <Link
-                to="/doctorCard"
-                title="Get quote now"
-                className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                role="button"
-              >
-                Book Appointment now
-              </Link>
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              title="Get quote now"
-              className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-              role="button"
-            >
-              Book Appointment now
-            </Link>
-          )}
-        </div>
-        <br />
-        {loggedin ? (
-          <div className="relative inline-flex group">
-            <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
-            <Link
-              to="/patientregistration"
-              title="Get quote now"
-              className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-              role="button"
-            >
-              Register Patient
-            </Link>
-          </div>
-        ) : (
-          <div className="relative inline-flex group">
-            <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
-
-            <button
-              title="Get quote now"
-              className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-              role="button"
-              onClick={handleLoginAlert}
-            >
-              Register Patient
-            </button>
-            
-          </div>
-          
-        )}
-        
-        <div className="m-3">
-        <button
-              title="Get quote now"
-              className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-              role="button"
-              onClick={handleDoctorLogin}
-            >
-              Doctor Login
-            </button>
-        </div>
+    
+    <div className="mx-auto px-4 sm:px-6 text-center">
+    <BeatLoader className="" />
+    
+    <p className="mx-auto -mt-4 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">
+    Welcome to{" "}
+    <span className="border-b border-dotted border-slate-300">DAMS</span>
+    </p>
+    
+    <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl">
+    <span className="inline-block">
+    Book{" "}
+    <span className="relative whitespace-nowrap text-blue-600">
+    <svg
+    aria-hidden="true"
+    viewBox="0 0 418 42"
+    className="absolute top-2/3 left-0 h-[0.58em] w-full fill-blue-300/70"
+    preserveAspectRatio="none"
+    />
+    <span className="relative">Appointments</span>
+    </span>
+    </span>{" "}
+    <span className="inline-block">Online</span>
+    </h1>
+    
+    <p className="mx-auto mt-9 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">
+    <span className="inline-block">
+    Save time spent on coordinating appointments over the phone
+    </span>
+    <span className="inline-block">Accept online bookings 24x7</span>
+    </p>
+    
+    <div className="mt-12 flex flex-col justify-center items-center gap-y-5 sm:flex-row sm:gap-y-0 sm:gap-x-6">
+    {/* Book Appointment Button */}
+    {loggedin ? (
+      <div className="relative inline-flex group">
+      <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+      <Link
+      to="/doctorCard"
+      title="Get quote now"
+      className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+      role="button"
+      >
+      Book Appointment now
+      </Link>
       </div>
-    </>
-  );
-};
-
-export default Home;
+    ) : (
+      <Link
+      to="/login"
+      title="Get quote now"
+      className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+      role="button"
+      >
+      Book Appointment now
+      </Link>
+    )}
+    </div>
+    <br />
+    {loggedin ? (
+      <div className="relative inline-flex group">
+      <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+      <Link
+      to="/patientregistration"
+      title="Get quote now"
+      className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+      role="button"
+      >
+      Register Patient
+      </Link>
+      </div>
+    ) : (
+      <div className="relative inline-flex group">
+      <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+      
+      <button
+      title="Get quote now"
+      className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+      role="button"
+      onClick={handleLoginAlert}
+      >
+      Register Patient
+      </button>
+      
+      </div>
+      
+    )}
+    
+    <div className="m-3">
+    {/* <button
+      title="Get quote now"
+      className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+      role="button"
+      onClick={handleDoctorLogin}
+      >
+      Doctor Login
+      </button> */}
+      <div className="m-3 flex justify-center p-3">
+      <div className="flex max-w-sm rounded-xl bg-gradient-to-tr from-pink-300 to-blue-300 p-0.5 shadow-lg">
+      <button 
+      onClick={handleDoctorLogin}
+      className="flex-1 font-bold text-xl bg-white px-6 py-3 rounded-xl">
+      Doctor Login
+      </button>
+      </div>
+      </div>
+      
+      </div>
+      </div>
+      </>
+    );
+  };
+  
+  export default Home;
+  

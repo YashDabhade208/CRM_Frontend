@@ -2,15 +2,20 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Calendar, Clock, User, ChevronDown, ChevronUp } from "lucide-react";
 import BASE_URL from '../../Config/apiConfig';
+import { DNA } from 'react-loader-spinner';
+
 const UpcomingAppointment = ({ id: propId }) => {
-  const [id, setId] = useState(propId || 0);
+  const [id, setId] = useState(propId || null);
   const [appointments, setAppointments] = useState([]);
   const [patientData, setPatientData] = useState([]);
   const [message, setMessage] = useState("");
   const [isOpen, setIsOpen] = useState(true);
+  const [isLoading,setIsLoading]= useState(false)
 
   useEffect(() => {
+    setIsLoading(true);
     setId(propId);
+    setIsLoading(false);
   }, [propId]);
 
  
@@ -20,6 +25,7 @@ const UpcomingAppointment = ({ id: propId }) => {
 
   const fetchAppointments = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.post(
         `${BASE_URL}/upcomingappointments`,
         {id},
@@ -35,17 +41,15 @@ const UpcomingAppointment = ({ id: propId }) => {
         
         setAppointments(result);
         setPatientData(result1)
-        
-        
-        
-   
-        
+        setIsLoading(false)
         setMessage("");
       } else {
+        setIsLoading(false)
         setAppointments([]);
         setMessage("No appointments found.");
       }
     } catch (error) {
+      setIsLoading(false)
       setAppointments([]);
       setMessage(
         error.response?.data?.message || "Failed to fetch appointments."
