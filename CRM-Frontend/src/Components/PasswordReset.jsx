@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import BASE_URL from '../../Config/apiConfig';
 
-const PasswordReset = () => {
+const 
+PasswordReset = () => {
     const [email, setEmail] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -10,7 +11,7 @@ const PasswordReset = () => {
     const [searchParams] = useSearchParams();
 
     const token = searchParams.get('token')
-    console.log(token);
+   
     
     const handleSubmit = async (e) => {
       e.preventDefault();

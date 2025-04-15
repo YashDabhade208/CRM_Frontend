@@ -42,8 +42,8 @@ export const UserProvider = ({ children }) => {
   }, [user, loggedin]);
 
   useEffect(() => {
-    saveToSessionStorage('doctor', doctor);
-    saveToSessionStorage('doctorLoginState', isDoctorLoggedIn);
+    // saveToSessionStorage('doctor', doctor);
+    // saveToSessionStorage('doctorLoginState', isDoctorLoggedIn);
   }, [doctor, isDoctorLoggedIn]);
 
   return (
