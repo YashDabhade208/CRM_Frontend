@@ -25,7 +25,7 @@ const Navbar = () => {
     <header className="fixed top-0 inset-x-0 w-full bg-white shadow-md py-3 backdrop-blur-lg z-50">
       <div className="container mx-auto px-4 lg:px-6 flex items-center justify-between">
         {/* Logo */}
-        <button onClick={() => navigate("/")} className="flex items-center">
+        <button  onClick={() => navigate("/")} className="flex items-center">
           <img className="h-10 w-auto" src={logo} alt="Logo" />
           <p className="sr-only">Website Title</p>
         </button>
