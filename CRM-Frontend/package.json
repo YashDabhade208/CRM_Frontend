@@ -12,6 +12,8 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@cashfreepayments/cashfree-js": "^1.0.5",
+    "@cloudinary/react": "^1.14.1",
+    "@cloudinary/url-gen": "^1.21.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",

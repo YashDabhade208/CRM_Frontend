@@ -8,18 +8,32 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [messageStyle, setMessageStyle] = useState("");
+
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
+      let message_style ;
       const response = await axios.post(`${BASE_URL}/register`, {
         name,
         email,
         password,
         //source,
       });
+      if (response.status === 200) {
+        setMessageStyle("text-green-500 text-center");
+      } else {
+        setMessageStyle("text-red-500 text-center");
+      }
+      
       setMessage(response.data.message);
+
+      setTimeout(() => {
+        navigate("/login")
+        
+      }, 2000);
     } catch (error) {
       setMessage(error.response?.data?.message || "Registration failed");
     }
@@ -74,7 +88,7 @@ const Register = () => {
           </div>
           {message && (
             <div className="mb-4">
-              <p className="text-red-500 text-center">{message}</p>
+              <p className={messageStyle}>{message}</p>
             </div>
           )}
           <div className="flex items-center justify-between">

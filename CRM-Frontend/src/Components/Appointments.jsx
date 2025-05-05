@@ -199,6 +199,7 @@ const Appointment = () => {
       const appointmentId = response.data.data;
       navigate(`/payment/${appointmentId}`)
     } catch (error) {
+      setIsLoading(false)
       setMessage(
         error.response?.data?.message ||
         "An error occurred while booking the appointment."

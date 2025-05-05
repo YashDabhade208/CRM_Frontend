@@ -63,7 +63,7 @@ const UserDashboard = () => {
 
   return (<>
   <div className='b1'>
-  <UserProfile />
+  <UserProfile id={id}/>
   </div>
    
     <div className="p-6 mt-8">

@@ -30,6 +30,8 @@ import AdminDashboard from "./Components/AdminDashboard";
 import PatientData from "./Components/AdminComponents/PatientData";
 import BookAppointments from "./Components/AdminComponents/BookAppointments";
 import Report from "./Components/AdminComponents/Report";
+import ProfileUploader from "./Components/ProfileUploader"
+
 
 function App() {
   const { isDoctorLoggedIn } = useUser();
@@ -67,6 +69,7 @@ function App() {
             <Route path="/admindashboard" element={<AdminDashboard />} />
             <Route path="/patientdata" element = {<PatientData />} />
             <Route path="/bookappointment" element = {<BookAppointments/>} />
+            <Route path="/profileupload/:id" element = {<ProfileUploader/>} />
           </Routes>
         </main>
       </div>
