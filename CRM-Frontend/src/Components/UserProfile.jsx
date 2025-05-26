@@ -32,7 +32,7 @@ const UserProfile = ({ id: propId }) => {
   return (
     <div className="flex flex-col md:flex-row items-center w-full max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6 space-y-4 md:space-y-0 md:space-x-6">
       <div
-        className="hidden md:flex flex-shrink-0 w-32 h-32 rounded-full overflow-hidden shadow border cursor-pointer"
+        className="flex flex-shrink-0 w-32 h-32 rounded-full overflow-hidden shadow border cursor-pointer"
         onClick={() => navigate(`/profileupload/${id}`)}
       >
         <img

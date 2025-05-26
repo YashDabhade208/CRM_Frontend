@@ -4,6 +4,7 @@ import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
 import BASE_URL from '../../Config/apiConfig';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Upload, Loader2, CheckCircle2 } from 'lucide-react';
 
 const ProfileUploader = () => {
   const [imageId, setImageId] = useState(null);
@@ -42,8 +43,8 @@ const ProfileUploader = () => {
         }
       );
 
-      setSuccessMsg('Profile picture updated!');
-      setTimeout(() => navigate('/userdashboard'), 1500); // Redirect after success
+      setSuccessMsg('Profile picture updated successfully!');
+      setTimeout(() => navigate('/userdashboard'), 2000);
     } catch (err) {
       console.error('Upload failed:', err);
       setErrorMsg('Upload failed. Please try again.');
@@ -58,33 +59,64 @@ const ProfileUploader = () => {
     : null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-center">
-        <h2 className="text-2xl font-semibold mb-4">Upload Profile Picture</h2>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleUpload}
-          className="mb-4"
-        />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center space-y-6">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">Update Profile Picture</h2>
+        
+        <div className="relative">
+          <label 
+            htmlFor="file-upload" 
+            className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
+          >
+            {transformedImg ? (
+              <div className="w-full h-full">
+                <AdvancedImage cldImg={transformedImg} className="w-full h-full object-cover rounded-lg" />
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <Upload className="w-12 h-12 text-gray-400 mb-3" />
+                <p className="mb-2 text-sm text-gray-500">
+                  <span className="font-semibold">Click to upload</span> or drag and drop
+                </p>
+                <p className="text-xs text-gray-500">PNG, JPG or JPEG (MAX. 2MB)</p>
+              </div>
+            )}
+            <input
+              id="file-upload"
+              type="file"
+              accept="image/*"
+              onChange={handleUpload}
+              className="hidden"
+            />
+          </label>
+        </div>
 
-        {transformedImg && (
-          <div className="mb-4">
-            <AdvancedImage cldImg={transformedImg} className="rounded-full mx-auto" />
+        {loading && (
+          <div className="flex items-center justify-center space-x-2 text-blue-600">
+            <Loader2 className="w-5 h-5 animate-spin" />
+            <span>Uploading...</span>
+          </div>
+        )}
+
+        {successMsg && (
+          <div className="flex items-center justify-center space-x-2 text-green-600">
+            <CheckCircle2 className="w-5 h-5" />
+            <span>{successMsg}</span>
+          </div>
+        )}
+
+        {errorMsg && (
+          <div className="flex items-center justify-center space-x-2 text-red-600">
+            <span>{errorMsg}</span>
           </div>
         )}
 
         <button
-          className={`w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition ${
-            loading ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          disabled
+          onClick={() => navigate('/userdashboard')}
+          className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
         >
-          {loading ? 'Uploading...' : 'Upload & Save'}
+          Back to Dashboard
         </button>
-
-        {successMsg && <p className="mt-4 text-green-600">{successMsg}</p>}
-        {errorMsg && <p className="mt-4 text-red-600">{errorMsg}</p>}
       </div>
     </div>
   );
